@@ -34,14 +34,21 @@
       --shadow-hover: 0 8px 32px rgba(0,0,0,.1);
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; max-width: 100%; }
     body {
       font-family: var(--font-body);
       color: var(--dark);
       background: var(--white);
       line-height: 1.55;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      max-width: 100%;
+      width: 100%;
+      position: relative;
     }
+    /* Защита: каждая section не должна вылазить */
+    section { max-width: 100%; overflow-x: clip; }
+    .cases { overflow: hidden; }
 
     /* ── LOADING SCREEN ── */
     .loader {
@@ -1108,7 +1115,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Simple screenshot grid for programs */
+    /* Programs grid — horizontal scroll on mobile */
     .prog-screens {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1137,10 +1144,35 @@
       .prog-screens { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 768px) {
-      .prog-screens { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    }
-    @media (max-width: 480px) {
-      .prog-screens { grid-template-columns: 1fr; }
+      /* Mobile: горизонтальный скролл с snap */
+      .prog-screens {
+        display: flex;
+        gap: 14px;
+        max-width: 100vw;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 4px 20px 20px;
+        margin: 0 -20px;
+        scrollbar-width: none;
+      }
+      .prog-screens::-webkit-scrollbar { display: none; }
+      .prog-screens a {
+        flex: 0 0 78%;
+        scroll-snap-align: center;
+      }
+      /* Hint снизу что можно листать */
+      .prog-panel.active::after {
+        content: '← листай вправо →';
+        display: block;
+        text-align: center;
+        font-size: 12px;
+        color: var(--mid-gray);
+        margin-top: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
     }
 
     /* Programs — cards grid like walk-walk.ru */
@@ -1276,10 +1308,10 @@
     }
     .cases__head-sub strong { color: var(--red); }
 
-    /* Marquee wrapper — full-bleed, overflow hidden */
+    /* Marquee wrapper — bezопасно для мобилки, без 100vw */
     .cases-marquee {
-      width: 100vw;
-      margin-left: calc(-50vw + 50%);
+      width: 100%;
+      max-width: 100%;
       overflow: hidden;
       position: relative;
       padding: 8px 0 16px;
@@ -1483,21 +1515,11 @@
       text-transform: uppercase;
       letter-spacing: .5px;
     }
-    .whyus__awards-photo {
-      display: block;
-      margin: 0 auto 32px;
-      width: 100%;
-      max-width: 360px;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: var(--shadow-hover);
-      background: #fff;
-    }
-    .whyus__awards-list {
-      display: flex;
-      justify-content: center;
-      gap: 48px;
-      flex-wrap: wrap;
+    .whyus__awards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: stretch;
     }
     .whyus__award {
       font-size: 14px;
@@ -1506,15 +1528,30 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 14px;
       text-decoration: none;
       transition: transform var(--transition);
+      background: #fff;
+      padding: 20px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
     }
-    .whyus__award:hover { transform: translateY(-2px); }
+    .whyus__award:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+    .whyus__award-img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #f0f0f0;
+    }
     .whyus__award-year {
       display: block;
       font-family: var(--font-head);
-      font-size: 28px;
+      font-size: 26px;
       color: var(--dark);
       font-weight: 900;
       line-height: 1;
@@ -1523,6 +1560,10 @@
       font-size: 14px;
       color: #3a3020;
       line-height: 1.4;
+      text-align: center;
+    }
+    @media (max-width: 640px) {
+      .whyus__awards-grid { grid-template-columns: 1fr; gap: 20px; }
     }
     .whyus__award-caption em {
       display: block;
@@ -1734,43 +1775,155 @@
     }
 
     @media (max-width: 768px) {
-      .header { height: 64px; padding: 0 16px; }
-      .header__logo svg { height: 30px; }
+      .header { height: 60px; padding: 0 16px; }
+      .header__logo svg { height: 28px; }
       .header__cta { font-size: 12px; padding: 10px 16px; }
-      section { padding: 64px 0; }
+      section { padding: 56px 0; }
       .pain, .why-failed, .method, .pari, .tariffs, .programs, .calc, .cases, .objections, .whyus, .why-walk, .free-training {
-        padding: 64px 0;
+        padding: 56px 0;
       }
-      .container { padding: 0 20px; }
+      .container { padding: 0 16px; }
       p { font-size: 16px; }
-      p.lead, .hero__sub, .method__lead { font-size: 17px; }
+      p.lead, .hero__sub, .method__lead { font-size: 16px; }
 
-      .hero { padding-top: 48px; padding-bottom: 56px; }
-      .hero__name-value { font-size: 20px; }
+      /* HERO mobile */
+      .hero { padding-top: 36px; padding-bottom: 48px; }
+      .hero h1 { font-size: 28px; line-height: 1.15; margin-bottom: 18px; }
+      .hero__sub { font-size: 15px; margin-bottom: 24px; }
+      .hero__name-block { padding: 14px 18px; margin-bottom: 20px; }
+      .hero__name-value { font-size: 18px; }
+      .hero__name-label { font-size: 11px; }
+      .hero__data { gap: 8px; margin-bottom: 24px; }
+      .hero__chip { padding: 8px 12px; font-size: 12px; }
+      .hero__chip-icon { font-size: 14px; }
+      .hero__chip strong { font-size: 13px; }
+      .hero__free-hint { font-size: 14px; padding: 0; margin-top: 16px; }
 
+      /* PAIN mobile */
+      .pain__grid { grid-template-columns: 1fr; gap: 24px; }
+      .pain__image-wrap { max-width: 280px; margin: 0 auto; aspect-ratio: 1/1; }
+      .pain h2 { font-size: 26px; }
+      .pain p { font-size: 15px; }
+      .pain__cta { font-size: 14px; padding: 14px 24px; width: 100%; max-width: 280px; }
+
+      /* WHY-FAILED mobile */
+      .why-failed h2 { font-size: 24px; }
+      .why-failed__intro { font-size: 16px; }
+      .fail-stack { gap: 14px; }
+      .fail-card { padding: 20px; }
+      .fail-card__title { font-size: 17px; }
+      .fail-card__text { font-size: 14px; }
+      .why-failed__conclusion {
+        font-size: 18px !important;
+        padding: 22px 18px !important;
+        margin-top: -10px;
+      }
+
+      /* METHOD mobile */
+      .method { padding: 56px 0; }
+      .method__eyebrow { font-size: 16px; margin-bottom: 12px; }
+      .method__bigtitle { font-size: 44px !important; line-height: 1.05; margin-bottom: 32px; }
       .method__features { grid-template-columns: 1fr; }
-      .method__question { padding: 40px 28px; border-radius: 24px; }
+      .method__footer {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+        padding-top: 24px;
+      }
+      .method__footer .btn { width: 100%; justify-self: stretch; }
+      .method__footnote { font-size: 13px; }
+      .method__question { padding: 32px 22px; border-radius: 20px; }
+      .method__question h3 { font-size: 20px; }
 
-      .pari__box { padding: 32px 24px; }
+      /* WHY-WALK mobile */
+      .why-walk__grid { grid-template-columns: 1fr !important; gap: 24px; }
+      .why-walk__wrap { max-width: 100%; text-align: center; }
+      .why-walk h2 { font-size: 26px; text-align: center; }
+      .why-walk__icon { font-size: 48px; padding: 14px; }
+      .why-walk__video { max-width: 320px; margin: 0 auto; }
+
+      /* PARI mobile */
+      .pari__grid { grid-template-columns: 1fr !important; gap: 28px; }
+      .pari__left { text-align: center; }
+      .pari__left h2 { text-align: center; }
+      .pari h2 { font-size: 28px; }
+      .pari__box { padding: 28px 22px; margin-bottom: 24px; }
+      .pari__promise { font-size: 16px !important; line-height: 1.5; }
+      .pari__promise-hit { font-size: 22px !important; padding: 8px 16px; margin-top: 12px; }
       .pari__cta-row { flex-direction: column; }
       .pari__cta-row .btn { width: 100%; }
+      .pari__video { max-width: 300px; margin: 0 auto; }
 
-      .tariff-grid { grid-template-columns: 1fr; max-width: 400px; }
+      /* TARIFFS mobile */
+      .tariffs h2 { font-size: 26px; }
+      .tariff-grid { grid-template-columns: 1fr; max-width: 360px; gap: 28px; }
+      .tariff-card { padding: 28px 22px; }
+      .tariff-card--popular { transform: none !important; padding-top: 48px; }
+      .tariff-card__period { font-size: 22px !important; }
+      .tariff-card__price { font-size: 36px; }
+      .tariff-card__features li { font-size: 13px; }
+      .tariff-card__btn { font-size: 14px; padding: 14px 16px; }
 
-      .programs__grid { grid-template-columns: 1fr; }
-      .programs__stats { gap: 32px; }
-      .programs__stat-num { font-size: 36px; }
-
-      .calc__box { padding: 32px 24px; }
+      /* CALC mobile */
+      .calc h2 { font-size: 26px; }
+      .calc__box { padding: 24px 18px; border-radius: 20px; }
+      .calc__question { font-size: 18px !important; margin-bottom: 24px; }
       .calc__slider-value-num { font-size: 56px; }
-      .calc__results { grid-template-columns: 1fr; }
-      .calc__result-kg { font-size: 40px; }
+      .calc__marks { font-size: 11px; margin-top: -20px; margin-bottom: 24px; }
+      .calc__divider { font-size: 16px !important; margin: 12px 0 16px; }
+      .calc__divider::before, .calc__divider::after { display: none; }
+      .calc__results { grid-template-columns: 1fr; gap: 14px; }
+      .calc__result { padding: 22px 16px; }
+      .calc__result-kg { font-size: 36px; }
 
-      .ba-card { flex: 0 0 280px; }
+      /* PROGRAMS mobile */
+      .programs h2 { font-size: 24px; }
+      .programs__stats { gap: 24px; margin: 24px 0 32px; }
+      .programs__stat-num { font-size: 32px; }
+      .prog-tabs { flex-direction: column; max-width: 100%; }
+      .prog-tab { padding: 14px 12px; font-size: 13px; border-right: none; border-bottom: 1px solid #d4d4d4; }
+      .prog-tab:last-child { border-bottom: none; }
 
-      .whyus__awards-list { flex-direction: column; gap: 20px; }
+      /* CASES mobile */
+      .cases h2 { font-size: 26px; }
+      .cases__head-sub { font-size: 15px; }
+      .ba-card { flex: 0 0 250px; border-radius: 18px; }
 
+      /* OBJECTIONS mobile */
+      .objections h2 { font-size: 24px; }
+      .obj-list { max-height: 420px; padding: 16px 8px; }
+      .obj-item { padding: 18px 20px; }
+      .obj-item__q { font-size: 15px; }
+      .obj-item__a { font-size: 14px; padding-left: 30px; }
+
+      /* WHYUS mobile */
+      .whyus h2 { font-size: 24px; }
+      .whyus__grid { grid-template-columns: 1fr; gap: 12px; }
+      .whyus__item { padding: 18px 20px; }
+      .whyus__item-text { font-size: 14px; }
+      .whyus__awards { padding: 28px 18px; }
+      .whyus__awards-grid { grid-template-columns: 1fr; gap: 18px; }
+      .whyus__award { padding: 16px; }
+
+      /* FREE TRAINING mobile */
+      .free-training h2 { font-size: 26px; }
+      .free-training__lead { font-size: 15px; }
       .free-training__after { padding: 20px 24px; }
+      .free-training__after-title { font-size: 16px !important; }
+      .free-training__expired { padding: 36px 24px; }
+      .free-training__expired-title { font-size: 22px; }
+      .free-training__expired-text { font-size: 15px; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 0 14px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 22px; }
+      .method__bigtitle { font-size: 36px !important; }
+      .method__question h3 { font-size: 18px; }
+      .pari h2 { font-size: 24px; }
+      .pari__promise-hit { font-size: 18px !important; }
+      .tariff-card { padding: 24px 18px; }
+      .tariff-card__period { font-size: 20px !important; }
+      .ba-card { flex: 0 0 230px; }
     }
   </style>
 </head>
@@ -2273,15 +2426,14 @@
     <div class="whyus__awards">
       <div class="whyus__awards-title">🏆 Наши награды</div>
 
-      <img class="whyus__awards-photo" src="./images/awards/zhit-zdorovo.jpg" alt="Наши тренеры в программе Жить здорово" loading="lazy"
-           onerror="this.src='./images/awards/getaward-2025.jpg';">
-
-      <div class="whyus__awards-list">
+      <div class="whyus__awards-grid">
         <a class="whyus__award" href="https://www.1tv.ru/shows/zhit-zdorovo/vypuski/zhit-zdorovo-vypusk-ot-22-09-2023" target="_blank" rel="noopener">
+          <img class="whyus__award-img" src="./images/awards/zhit-zdorovo.jpg" alt="Наши тренеры в программе Жить здорово" loading="lazy">
           <span class="whyus__award-year">2023</span>
-          <div class="whyus__award-caption">Выпуск программы <br>«Жить здорово» на Первом канале</div>
+          <div class="whyus__award-caption">Выпуск программы «Жить здорово»<br>на Первом канале</div>
         </a>
         <a class="whyus__award" href="https://getaward.ru/results/gcchoice#school" target="_blank" rel="noopener">
+          <img class="whyus__award-img" src="./images/awards/getaward-2025.jpg" alt="Лауреат GetAward 2025" loading="lazy">
           <span class="whyus__award-year">2025</span>
           <div class="whyus__award-caption">
             Лауреаты GetAward
