@@ -35,19 +35,21 @@
       --shadow-hover: 0 8px 32px rgba(0,0,0,.1);
     }
 
-    html { scroll-behavior: smooth; max-width: 100%; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: clip;        /* clip — не ломает sticky, в отличие от hidden */
+      background: #fff;
+    }
     body {
       font-family: var(--font-body);
       color: var(--dark);
       background: var(--white);
       line-height: 1.55;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-      max-width: 100%;
       width: 100%;
-      position: relative;
+      max-width: 100%;
     }
-    /* Защита: каждая section не должна вылазить */
+    /* Защита: каждая section не вылазит за viewport */
     section { max-width: 100%; overflow-x: clip; }
     .cases { overflow: hidden; }
 
@@ -101,9 +103,6 @@
       min-height: 20px;
       text-align: center;
     }
-
-    /* Заполнение notch safe-area цветом шапки */
-    html { background: #fff; }
 
     /* ── HEADER ── */
     .header {
@@ -1419,13 +1418,14 @@
     .obj-item {
       background: #fff;
       border-radius: 16px;
-      padding: 20px 24px;
+      padding: 18px 22px;
       margin-bottom: 12px;
       border: 2px solid transparent;
       box-shadow: var(--shadow-soft);
       transform: scale(0.95);
       opacity: 0;
       transition: transform .4s cubic-bezier(.4, .0, .2, 1), opacity .4s, border-color .25s, box-shadow .25s;
+      cursor: pointer;
     }
     .obj-item.in-view {
       transform: scale(1);
@@ -1435,27 +1435,62 @@
       border-color: var(--orange);
       box-shadow: var(--shadow-hover);
     }
+    .obj-item.open {
+      border-color: var(--orange);
+      box-shadow: var(--shadow-hover);
+    }
     .obj-item__q {
       font-family: var(--font-head);
       font-weight: 700;
-      font-size: 18px;
+      font-size: 16px;
       color: var(--dark);
-      margin-bottom: 12px;
       line-height: 1.3;
       display: flex;
       gap: 12px;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .obj-item__q-text {
+      flex: 1;
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
     .obj-item__q-icon {
       flex-shrink: 0;
-      font-size: 22px;
-      line-height: 1.1;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .obj-item__toggle {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--red);
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .25s ease;
+    }
+    .obj-item.open .obj-item__toggle {
+      transform: rotate(45deg);
     }
     .obj-item__a {
       font-size: 15px;
       color: #444;
-      line-height: 1.6;
-      padding-left: 34px;
+      line-height: 1.55;
+      padding-left: 30px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease, margin-top .3s ease;
+    }
+    .obj-item.open .obj-item__a {
+      max-height: 500px;
+      margin-top: 14px;
     }
 
     /* ═══════════════════════════════════════════
@@ -2476,78 +2511,78 @@
 
     <div class="obj-list-wrap">
     <div class="obj-list">
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>А что если я сильно ленивая?</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>А что если я сильно ленивая?</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Вместе с тобой шагают <strong>тысячи женщин</strong> в большом комьюнити клуба. Вы подбадриваете друг друга, делитесь результатами, держите друг друга в тонусе. И давай честно — ты правда не найдёшь 15 минут в день, чтобы дома, без оборудования, пошагать под весёлую музыку?
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>А если я не могу заставить себя меньше есть?</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>А если я не могу заставить себя меньше есть?</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           У нас есть <strong>большая база рецептов</strong> из тех же продуктов, которыми ты питаешься ежедневно. Надо просто правильно дозировать количество и чуть-чуть иначе готовить. Все рецепты — в базе клуба. <strong>Ты не ограничиваешь себя — ты ешь вкусную привычную еду, просто правильно.</strong>
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>А вдруг не получится?</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>А вдруг не получится?</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           У <strong>30 000 женщин</strong> уже получилось сбросить 10, 15, 20 кг и больше. Как ты думаешь — если ты будешь следовать по нашей методике, у тебя не получится? Тем более что если не получится — <strong>мы вернём тебе деньги</strong>. Мы настолько в этом уверены.
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Это не сработает на мне</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>Это не сработает на мне</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Не сработает только если ты <strong>не можешь шагать</strong>. Во всех остальных случаях это самый естественный процесс. Если будешь шагать по нашей методике — у тебя не может не получиться. Этому подтверждение — результаты 30 000 женщин по всей России.
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Шаги — это же слишком просто</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>Шаги — это же слишком просто</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Во-первых, в основе нашей методики — <strong>спортивные шаги</strong>, а не те, которыми ты обычно ходишь. Это интенсивные движения под весёлую музыку. Во-вторых, именно шаги позволят тебе сбросить вес, <strong>когда у тебя есть лишний вес</strong>. Другие способы будут излишне нагружать и травмировать тело.
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Мне неудобно тренироваться дома</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>Мне неудобно тренироваться дома</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Можно тренироваться <strong>абсолютно где угодно</strong> — дома, в офисе, в парке, в отдельной комнате, даже в ванной. Тебе нужно всего <strong>пару квадратных метров</strong> и устройство, с которого ты смотришь тренировку. Хоть с телефона.
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Это очередное инфоцыганство</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>Это очередное инфоцыганство</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Если бы мы не были уверены в нашем продукте и в результате — <strong>мы бы не обещали вернуть тебе деньги</strong>. Посмотри на результаты наших участниц. Посмотри на награды: лауреаты Премии Рунета 2024, лауреаты GetAward 2025. Наши тренеры появлялись в «Жить здорово».
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>У меня нет денег</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>У меня нет денег</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           6 месяцев клуба — <strong>3 990 ₽</strong>. Это <strong>≈22 ₽ в день</strong>. Меньше половины чашки кофе в кафе. Если на 6 месяцев сразу некомфортно — можно взять 2 месяца за 2 990 ₽ и продлить потом. Плюс <strong>доступна рассрочка</strong> — разбей платёж на части.
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>У меня и так проблемы со здоровьем</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>У меня и так проблемы со здоровьем</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Шаги — <strong>самый безопасный способ похудения</strong>. Он подходит практически всем. Тебе нельзя тренироваться только если есть прямые противопоказания к движению — в таком случае обязательно посоветуйся с врачом. Во всех остальных случаях шаги — единственная нагрузка, которая <strong>не травмирует тело</strong> при лишнем весе.
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Мне скучно, я не люблю тренироваться</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>Мне скучно, я не люблю тренироваться</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Каждая тренировка проходит <strong>под мировые хиты</strong>, с очень энергичными тренерами. Каждое занятие превращается в маленький праздник. Это не «надо себя заставить». Это то, на что ты сама побежишь через пару недель.
         </div>
       </div>
 
-      <div class="obj-item">
-        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Завтра начну</span></div>
+      <div class="obj-item" onclick="this.classList.toggle(\'open\')">
+        <div class="obj-item__q"><span class="obj-item__q-text"><span class="obj-item__q-icon">💭</span><span>Завтра начну</span></span><span class="obj-item__toggle">+</span></div>
         <div class="obj-item__a">
           Вспомни, сколько раз ты себе так говорила. А потом находилась причина перенести. Или вовсе забывалось. <strong>Сейчас будет точно так же</strong>, если ты закроешь эту страницу со словами «подумаю». Если ты решила худеть — начни сегодня. Пока есть 5 минут и желание.
         </div>
