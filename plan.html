@@ -2951,6 +2951,26 @@ function switchProgTab(btn) {
 })();
 
 /* ───────────────────────────────────────
+   3.5 Cases marquee — pause on touch (mobile)
+─────────────────────────────────────── */
+(function() {
+  const track = document.querySelector('.cases-track');
+  if (!track) return;
+  let timeoutId = null;
+  function pause() {
+    track.classList.add('touched');
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+  function resume() {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => track.classList.remove('touched'), 1500);
+  }
+  track.addEventListener('touchstart', pause, { passive: true });
+  track.addEventListener('touchend', resume, { passive: true });
+  track.addEventListener('touchcancel', resume, { passive: true });
+})();
+
+/* ───────────────────────────────────────
    4. AnimatedList — scale-in on scroll
 ─────────────────────────────────────── */
 (function() {
