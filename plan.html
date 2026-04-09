@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
   <title>Индивидуальный план похудения | ШАГАЙ ДОМА</title>
   <meta name="description" content="Индивидуальный план похудения от клуба ШАГАЙ ДОМА. Похудей минимум на 15 кг за 6 месяцев — или мы вернём деньги.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,6 +102,9 @@
       text-align: center;
     }
 
+    /* Заполнение notch safe-area цветом шапки */
+    html { background: #fff; }
+
     /* ── HEADER ── */
     .header {
       position: sticky; top: 0; z-index: 100;
@@ -108,8 +112,8 @@
       backdrop-filter: saturate(1.5) blur(12px);
       -webkit-backdrop-filter: saturate(1.5) blur(12px);
       box-shadow: 0 1px 0 rgba(0,0,0,.06);
-      padding: 0 32px;
-      height: 72px;
+      padding: env(safe-area-inset-top, 0) 32px 0;
+      height: calc(72px + env(safe-area-inset-top, 0));
       display: flex; align-items: center; justify-content: center;
     }
     .header__logo { text-decoration: none; display: flex; align-items: center; }
@@ -209,12 +213,12 @@
     .hero h1 span.strike::after {
       content: '';
       position: absolute;
-      left: -4px; right: -4px;
-      top: 52%;
-      height: 6px;
+      left: -2px; right: -2px;
+      top: 54%;
+      height: 3px;
       background: var(--red);
       transform: rotate(-2deg);
-      border-radius: 3px;
+      border-radius: 2px;
     }
     .hero__sub {
       font-size: 20px;
@@ -309,7 +313,6 @@
     .pain__image-wrap img {
       width: 100%; height: 100%;
       object-fit: cover;
-      filter: grayscale(0.35) contrast(1.02);
     }
     .pain h2 { margin-bottom: 24px; }
     .pain h2 span { color: var(--red); }
@@ -769,7 +772,7 @@
       box-shadow: 0 8px 32px rgba(255,182,0,.25);
       transform: scale(1.03);
     }
-    .tariff-card--popular { padding-top: 52px; }
+    .tariff-card--popular { padding-top: 64px; }
     .tariff-card--popular::before {
       content: '⚡️ С ГАРАНТИЕЙ РЕЗУЛЬТАТА';
       position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
@@ -1325,7 +1328,7 @@
       will-change: transform;
       animation: scrollCases 60s linear infinite;
     }
-    .cases-track:hover { animation-play-state: paused; }
+    .cases-track:hover, .cases-track.touched { animation-play-state: paused; }
     /* 10 cards × 360px + 10 gaps × 20px = 3800px per set */
     @keyframes scrollCases {
       0%   { transform: translate3d(0, 0, 0); }
@@ -1857,7 +1860,7 @@
       .tariffs h2 { font-size: 26px; }
       .tariff-grid { grid-template-columns: 1fr; max-width: 360px; gap: 28px; }
       .tariff-card { padding: 28px 22px; }
-      .tariff-card--popular { transform: none !important; padding-top: 48px; }
+      .tariff-card--popular { transform: none !important; padding-top: 60px; }
       .tariff-card__period { font-size: 22px !important; }
       .tariff-card__price { font-size: 36px; }
       .tariff-card__features li { font-size: 13px; }
@@ -1942,7 +1945,7 @@
 
 <!-- Header -->
 <header class="header">
-  <a href="./" class="header__logo">
+  <a href="#" class="header__logo">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 106.01385498046875 49.134765625" fill="none" role="img" aria-label="Шагай Дома"><path d="M27.358808471536076 36.845925992647054L22.18969762487075 37.403434147662V20.220558865808822L14.264924992934283 20.601136132970474V38.25578554170497L8.678344057574105 38.857944237994026V20.867692381046073L0 21.284763358757466V45.81220368034812L34.60441893181296 41.41300286520565V19.62206700168026L27.357561249712777 19.970216501436123L27.358808471536076 36.845925992647054Z" fill="#CF2C02"/><path d="M45.937923640136724 19.079450675235524L37.7968079107307 41.010649105009186L44.663512381089156 40.137593828699444L45.69421649586397 36.553577197265625L52.87871308679917 35.734152459357766L53.87150165814568 38.966951425350416L60.1128491063017 38.173219457002524L52.835559211713004 18.748537781077665L45.937923640136724 19.079450675235524ZM47.099586046358 31.89495424287684L49.355061991613056 24.26163240660903L51.595571274988515 31.457678271627987L47.099586046358 31.89495424287684Z" fill="#CF2C02"/><path d="M76.12243787454044 17.63037847205308L62.29498840834674 18.294249704159007V37.896835100959336L67.86932162540211 37.187415327866496V22.732463617934286L76.12343565199909 22.175030296228748L76.12243787454044 17.63037847205308Z" fill="#CF2C02"/><path d="M87.00295161664177 34.7560811055262L91.74987787612018 34.15242574304917L86.21795020105698 17.14698023777861L81.01204631060432 17.39732260215131L74.91412937212776 36.294653946748625L80.0541799503102 35.640860266974954L80.82845525821462 32.54949625574449L86.2508768571921 31.93087423138787L87.00295161664177 34.7560811055262ZM81.88460269818474 28.522715877039293L83.5848154877068 21.91663087887753L85.27729550192441 28.19344931568819L81.88460269818474 28.522715877039293Z" fill="#CF2C02"/><path d="M102.20209564410041 23.793126000904756V32.82363561250574L105.91682112261604 32.3514374302045V16.19824354123104L102.22304897073185 16.375623428940717L97.21096335161994 25.932735038775277V16.61733501829619L93.15998686954275 16.811926567167394V33.973075244858684L97.21420612836053 33.45722429874196L102.20209564410041 23.793126000904756Z" fill="#CF2C02"/><path d="M99.07356442253563 18.224255615435432L103.82448179184858 6.7536562842945775L100.66801280144188 6.764806447394876L101.31906259320426 0L96.4785946969784 11.33480181901999L99.57694315041935 11.257773399213006L99.07356442253563 18.224255615435432Z" fill="#CF2C02"/></svg>
   </a>
 </header>
@@ -1990,7 +1993,7 @@
   <div class="container">
     <div class="pain__grid">
       <div class="pain__image-wrap">
-        <img src="./images/pain-woman.jpg" alt="Уставшая женщина после тренировки" loading="lazy">
+        <img src="./images/pain-woman.jpg" alt="Уставшая женщина после тренировки" loading="eager">
       </div>
 
       <div class="pain__content">
@@ -2099,7 +2102,7 @@
     <div class="why-walk__grid">
       <div class="why-walk__wrap">
         <div class="why-walk__icon">🚶‍♀️</div>
-        <h2>Почему именно <span>шаги</span>?</h2>
+        <h2>Почему тебе подходят именно <span>шаги</span>?</h2>
         <p>
           Только шаги могут запустить <strong>естественный процесс жиросжигания</strong>, не травмируя при этом тело и нервную систему.
         </p>
@@ -2119,7 +2122,7 @@
   <div class="container">
     <div class="pari__grid">
       <div class="pari__left">
-        <h2>Давай <span>заключим пари?)</span></h2>
+        <h2>Мы уверены в твоём результате,<br>поэтому давай <span>заключим пари?)</span></h2>
 
         <div class="pari__box">
           <div class="pari__promise">
@@ -2373,7 +2376,7 @@
   </div>
 
   <div class="container">
-    <div class="cases__hint">Наведи курсор, чтобы остановить ленту</div>
+    <div class="cases__hint">Задержи палец на ленте, чтобы остановить</div>
   </div>
 </section>
 
@@ -2430,7 +2433,7 @@
         <a class="whyus__award" href="https://www.1tv.ru/shows/zhit-zdorovo/vypuski/zhit-zdorovo-vypusk-ot-22-09-2023" target="_blank" rel="noopener">
           <img class="whyus__award-img" src="./images/awards/zhit-zdorovo.jpg" alt="Наши тренеры в программе Жить здорово" loading="lazy">
           <span class="whyus__award-year">2023</span>
-          <div class="whyus__award-caption">Выпуск программы «Жить здорово»<br>на Первом канале</div>
+          <div class="whyus__award-caption">Нас пригласили в качестве экспертов<br>на программу «Жить здорово»</div>
         </a>
         <a class="whyus__award" href="https://getaward.ru/results/gcchoice#school" target="_blank" rel="noopener">
           <img class="whyus__award-img" src="./images/awards/getaward-2025.jpg" alt="Лауреат GetAward 2025" loading="lazy">
