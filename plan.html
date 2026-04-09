@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Индивидуальный план похудения | ШАГАЙ ДОМА</title>
+  <meta name="description" content="Индивидуальный план похудения от клуба ШАГАЙ ДОМА. Похудей минимум на 15 кг за 6 месяцев — или мы вернём деньги.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red: #ce2c01;
+      --red-hover: #b52700;
+      --orange: #ffb600;
+      --orange-hover: #e8a600;
+      --dark: #1f1300;
+      --white: #ffffff;
+      --light: #f8f8f6;
+      --gray: #e6e4e0;
+      --mid-gray: #888;
+      --green: #0c845a;
+      --green-light: #62c584;
+      --cream: #fff8ed;
+      --radius-btn: 30px;
+      --radius-card: 20px;
+      --font-head: 'Unbounded', sans-serif;
+      --font-body: 'Inter', Arial, sans-serif;
+      --max-w: 1080px;
+      --transition: .25s ease;
+      --shadow-soft: 0 4px 24px rgba(0,0,0,.06);
+      --shadow-hover: 0 8px 32px rgba(0,0,0,.1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      color: var(--dark);
+      background: var(--white);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LOADING SCREEN ── */
+    .loader {
+      position: fixed; inset: 0;
+      background: var(--cream);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      padding: 32px;
+      transition: opacity .5s ease, visibility .5s ease;
+    }
+    .loader.hide { opacity: 0; visibility: hidden; }
+    .loader__title {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: clamp(22px, 4vw, 32px);
+      color: var(--dark);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .loader__title span { color: var(--red); }
+    .loader__bar-wrap {
+      width: min(320px, 80%);
+      height: 10px;
+      background: rgba(206,44,1,.12);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .loader__bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--orange), var(--red));
+      border-radius: 10px;
+      animation: loadBar 1.8s cubic-bezier(.5,.1,.3,1) forwards;
+    }
+    @keyframes loadBar {
+      0%   { width: 0%; }
+      40%  { width: 65%; }
+      70%  { width: 85%; }
+      100% { width: 100%; }
+    }
+    .loader__status {
+      font-size: 13px;
+      color: var(--mid-gray);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      font-weight: 600;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: saturate(1.5) blur(12px);
+      -webkit-backdrop-filter: saturate(1.5) blur(12px);
+      box-shadow: 0 1px 0 rgba(0,0,0,.06);
+      padding: 0 32px;
+      height: 72px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header__logo { text-decoration: none; display: flex; align-items: center; }
+    .header__logo svg { height: 36px; width: auto; }
+    .header__cta {
+      background: var(--red);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 14px; font-weight: 600;
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--radius-btn);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none; white-space: nowrap;
+    }
+    .header__cta:hover { background: var(--orange); color: var(--dark); }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--font-body);
+      font-weight: 600; font-size: 16px;
+      padding: 18px 36px;
+      border-radius: var(--radius-btn);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none; border: none;
+      line-height: 1.2; text-align: center;
+    }
+    .btn--red { background: var(--red); color: #fff; box-shadow: 0 4px 20px rgba(206,44,1,.3); }
+    .btn--red:hover { background: var(--red-hover); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(206,44,1,.4); }
+    .btn--orange { background: var(--orange); color: var(--dark); box-shadow: 0 4px 20px rgba(255,182,0,.35); }
+    .btn--orange:hover { background: var(--orange-hover); transform: translateY(-2px); }
+    .btn--dark { background: var(--dark); color: #fff; }
+    .btn--dark:hover { background: #3a2a10; }
+    .btn--outline-dark {
+      background: transparent; color: var(--dark);
+      border: 2px solid var(--dark);
+    }
+    .btn--outline-dark:hover { background: var(--dark); color: #fff; }
+    .btn--outline-white {
+      background: transparent; color: #fff;
+      border: 2px solid rgba(255,255,255,.4);
+    }
+    .btn--outline-white:hover { background: #fff; color: var(--dark); border-color: #fff; }
+    .btn--large { font-size: 18px; padding: 22px 48px; }
+    .btn--full { width: 100%; }
+
+    /* ── SECTIONS ── */
+    section { padding: 80px 0; position: relative; }
+
+    h1, h2, h3 {
+      font-family: var(--font-head);
+      color: var(--dark);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: clamp(28px, 4.5vw, 52px);
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-weight: 900;
+      font-size: clamp(26px, 3.6vw, 40px);
+      margin-bottom: 20px;
+    }
+    h3 {
+      font-weight: 700;
+      font-size: clamp(18px, 2.4vw, 24px);
+      margin-bottom: 10px;
+    }
+    p { margin-bottom: 16px; font-size: 17px; color: #2a2215; }
+    p.lead { font-size: 19px; color: #3a3020; max-width: 700px; }
+    strong { font-weight: 700; }
+
+    /* ═══════════════════════════════════════════
+       1. HERO
+       ═══════════════════════════════════════════ */
+    .hero {
+      background:
+        radial-gradient(ellipse 90% 50% at 70% 0%, rgba(255,182,0,.25), transparent),
+        radial-gradient(ellipse 70% 40% at 10% 100%, rgba(206,44,1,.08), transparent),
+        linear-gradient(180deg, var(--cream) 0%, #fff 100%);
+      padding-top: 72px;
+      padding-bottom: 80px;
+      overflow: hidden;
+    }
+    .hero h1 span.accent { color: var(--red); }
+    .hero h1 span.strike {
+      position: relative;
+      white-space: nowrap;
+    }
+    .hero h1 span.strike::after {
+      content: '';
+      position: absolute;
+      left: -4px; right: -4px;
+      top: 52%;
+      height: 6px;
+      background: var(--red);
+      transform: rotate(-2deg);
+      border-radius: 3px;
+    }
+    .hero__sub {
+      font-size: 20px;
+      color: #3a3020;
+      max-width: 720px;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+    .hero__sub strong { color: var(--red); }
+
+    .hero__name-block {
+      display: inline-block;
+      background: #fff;
+      padding: 20px 28px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 28px;
+    }
+    .hero__name-label {
+      font-size: 12px;
+      color: var(--mid-gray);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .hero__name-value {
+      font-family: var(--font-head);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .hero__name-value span { color: var(--red); }
+
+    .hero__data {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .hero__chip {
+      background: #fff;
+      border: 1px solid var(--gray);
+      padding: 12px 20px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero__chip-icon { font-size: 18px; }
+    .hero__chip strong { color: var(--red); font-weight: 700; font-size: 15px; }
+
+    .hero__cta {
+      margin-top: 8px;
+    }
+    .hero__free-hint {
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #3a3020;
+    }
+    .hero__free-hint-icon { font-size: 22px; }
+    .hero__free-hint strong { color: var(--red); font-weight: 700; }
+
+    /* ═══════════════════════════════════════════
+       2. PAIN
+       ═══════════════════════════════════════════ */
+    .pain {
+      background: var(--white);
+      padding: 100px 0;
+    }
+    .pain__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .pain__image-wrap {
+      position: relative;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      background: #eee;
+      box-shadow: var(--shadow-hover);
+    }
+    .pain__image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.35) contrast(1.02);
+    }
+    .pain h2 { margin-bottom: 24px; }
+    .pain h2 span { color: var(--red); }
+    .pain p { font-size: 18px; margin-bottom: 18px; }
+    .pain__question {
+      display: inline-block;
+      margin-top: 16px;
+      font-family: var(--font-head);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--red);
+    }
+
+    /* ═══════════════════════════════════════════
+       3. WHY FAILED
+       ═══════════════════════════════════════════ */
+    .why-failed {
+      background: var(--light);
+      padding: 100px 0;
+    }
+    .why-failed h2 {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 16px;
+    }
+    .why-failed h2 em {
+      font-style: normal;
+      color: var(--red);
+    }
+    .why-failed__intro {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 48px;
+      font-size: 20px;
+      color: #3a3020;
+    }
+    .why-failed__intro strong { color: var(--red); }
+
+    /* Scroll stack — sticky cards that pile up on scroll */
+    .fail-stack {
+      max-width: 760px;
+      margin: 0 auto;
+      padding-bottom: 100px;
+    }
+    .fail-card {
+      position: sticky;
+      background: #fff;
+      padding: 44px 48px;
+      border-radius: 28px;
+      box-shadow: 0 12px 48px rgba(0,0,0,.1);
+      border-top: 5px solid var(--red);
+      margin-bottom: 40px;
+      transform-origin: top center;
+      transition: box-shadow .3s ease;
+    }
+    .fail-card:nth-child(1) { top: 120px; z-index: 1; }
+    .fail-card:nth-child(2) { top: 140px; z-index: 2; }
+    .fail-card:nth-child(3) { top: 160px; z-index: 3; }
+    .fail-card:nth-child(4) { top: 180px; z-index: 4; }
+    .fail-card__icon {
+      font-size: 48px;
+      margin-bottom: 18px;
+      display: block;
+    }
+    .fail-card__title {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: clamp(22px, 3vw, 30px);
+      margin-bottom: 14px;
+      color: var(--dark);
+    }
+    .fail-card__text {
+      font-size: 17px;
+      color: #444;
+      line-height: 1.6;
+      max-width: 540px;
+    }
+    @media (max-width: 768px) {
+      .fail-card { padding: 32px 28px; border-radius: 20px; }
+      .fail-card:nth-child(1) { top: 80px; }
+      .fail-card:nth-child(2) { top: 92px; }
+      .fail-card:nth-child(3) { top: 104px; }
+      .fail-card:nth-child(4) { top: 116px; }
+    }
+
+    .why-failed__conclusion {
+      text-align: center;
+      margin: -20px auto 0;
+      max-width: 820px;
+      font-family: var(--font-head);
+      font-size: clamp(20px, 2.8vw, 26px);
+      font-weight: 700;
+      line-height: 1.35;
+      padding: 28px 24px;
+      background: #fff;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      border-top: 4px solid var(--orange);
+      position: relative;
+      z-index: 5;
+    }
+    .why-failed__conclusion span { color: var(--red); }
+
+    /* ═══════════════════════════════════════════
+       4. METHOD + COMMITMENT
+       ═══════════════════════════════════════════ */
+    .method {
+      background: #fff;
+      padding: 120px 0;
+      text-align: left;
+    }
+    .method__eyebrow {
+      font-family: var(--font-head);
+      font-weight: 500;
+      font-size: clamp(18px, 2.6vw, 32px);
+      color: var(--dark);
+      margin-bottom: 20px;
+      letter-spacing: 0;
+    }
+    .method__bigtitle {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: clamp(42px, 10vw, 128px);
+      color: var(--dark);
+      line-height: 1.02;
+      margin: 0 0 56px;
+      letter-spacing: -0.04em;
+    }
+    .method__bigtitle .accent {
+      color: var(--red);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 0.12em;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'><polyline points='0,7 8,1 16,13 24,1 32,13 40,1 48,13 56,1 64,13 72,1 80,13 88,1 96,13 104,1 112,13 120,7' stroke='%23ffb600' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+      background-repeat: no-repeat;
+      background-position: 0 100%;
+      background-size: 100% 0.22em;
+    }
+    .method__bigtitle .row {
+      display: block;
+    }
+    /* Bottom footer row: footnotes (left) + button (right) — like walk-walk */
+    .method__footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 40px;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--gray);
+    }
+    .method__footnote {
+      font-size: 14px;
+      color: #3a3020;
+      line-height: 1.5;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .method__footnote-num {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .method__features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 780px;
+      margin: 0 auto 64px;
+      text-align: left;
+    }
+    .method__feature {
+      background: var(--cream);
+      padding: 20px 22px 20px 56px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 500;
+      position: relative;
+      line-height: 1.45;
+    }
+    .method__feature::before {
+      content: '✓';
+      position: absolute;
+      left: 20px; top: 18px;
+      width: 24px; height: 24px;
+      background: var(--red);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .method__question {
+      max-width: 780px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #1f1300 0%, #3a2a10 100%);
+      color: #fff;
+      padding: 64px 48px;
+      border-radius: 32px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-hover);
+    }
+    .method__question::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,182,0,.2), transparent);
+      pointer-events: none;
+    }
+    .method__question-text {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: clamp(22px, 3.2vw, 34px);
+      line-height: 1.2;
+      color: #fff;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .method__question-text span { color: var(--orange); }
+    .method__question .btn { position: relative; }
+
+    /* ═══════════════════════════════════════════
+       5. PARI
+       ═══════════════════════════════════════════ */
+    .pari {
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,182,0,.15), transparent),
+        linear-gradient(135deg, #1f1300 0%, #3a2a10 100%);
+      color: #fff;
+      padding: 100px 0;
+    }
+    .pari__grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 56px;
+      align-items: center;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .pari__left { text-align: left; }
+    .pari__left .pari__badge { margin-bottom: 20px; }
+    .pari__left h2 { text-align: left; }
+    @media (max-width: 900px) {
+      .pari__grid { grid-template-columns: 1fr; text-align: center; }
+      .pari__left { text-align: center; }
+      .pari__left h2 { text-align: center; }
+      .pari__video { margin: 0 auto; }
+    }
+    .pari__badge {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--dark);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 24px;
+    }
+    .pari h2 {
+      color: #fff;
+      margin-bottom: 40px;
+    }
+    .pari h2 span { color: var(--orange); }
+
+    .pari__box {
+      margin: 0 0 32px;
+      background: rgba(255,255,255,.04);
+      border: 2px dashed var(--orange);
+      border-radius: var(--radius-card);
+      padding: 36px 32px;
+    }
+    .pari__promise {
+      font-family: var(--font-head);
+      font-size: clamp(20px, 2.8vw, 26px);
+      font-weight: 700;
+      line-height: 1.35;
+      color: #fff;
+    }
+    .pari__promise em {
+      color: var(--orange);
+      font-style: normal;
+    }
+    .pari__promise-hit {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 20px;
+      background: var(--orange);
+      color: var(--dark);
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: clamp(20px, 2.6vw, 28px);
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .pari__cta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .pari__disclaimer {
+      margin-top: 24px;
+      font-size: 13px;
+      color: rgba(255,255,255,.5);
+    }
+    .pari__disclaimer a { color: var(--orange); }
+    .pari__video {
+      max-width: 360px;
+      margin: 0 auto 40px;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      background: #000;
+      position: relative;
+      aspect-ratio: 9/16;
+    }
+    .pari__video video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* ═══════════════════════════════════════════
+       6. TARIFFS
+       ═══════════════════════════════════════════ */
+    .tariffs {
+      background: var(--cream);
+      padding: 100px 0;
+    }
+    .tariffs h2 {
+      text-align: center;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+    .tariffs__sub {
+      text-align: center;
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto 48px;
+      color: #3a3020;
+    }
+    .tariff-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 780px;
+      margin: 0 auto 40px;
+    }
+    .tariff-card {
+      background: #fff;
+      border: 2px solid var(--gray);
+      border-radius: var(--radius-card);
+      padding: 36px 32px;
+      text-align: center;
+      transition: all var(--transition);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .tariff-card {
+      overflow: hidden;
+      --glow-x: 50%;
+      --glow-y: 50%;
+      --glow-intensity: 0;
+      --glow-radius: 260px;
+      --glow-color: 255, 182, 0;
+    }
+    .tariff-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(255,182,0,.25);
+    }
+    /* Border-glow overlay — follows mouse within section */
+    .tariff-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 3px;
+      background: radial-gradient(
+        var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 1)) 0%,
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.5)) 30%,
+        transparent 70%
+      );
+      border-radius: inherit;
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 1;
+      transition: opacity .25s;
+    }
+    .tariff-card > * { position: relative; z-index: 2; }
+
+    /* Particles inside card */
+    .tariff-card__particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 182, 0, 1);
+      box-shadow: 0 0 8px rgba(255, 182, 0, .8);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* Click ripple */
+    .tariff-card__ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 182, 0, .4) 0%, rgba(255, 182, 0, .2) 30%, transparent 70%);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    /* Global spotlight element */
+    .tariff-spotlight {
+      position: fixed;
+      width: 640px;
+      height: 640px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle,
+        rgba(255, 182, 0, .15) 0%,
+        rgba(255, 182, 0, .08) 25%,
+        rgba(255, 182, 0, .03) 50%,
+        transparent 70%);
+      z-index: 200;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: multiply;
+      transition: opacity .3s;
+      will-change: transform, opacity;
+    }
+    .tariff-card--popular {
+      border-color: var(--orange);
+      border-width: 3px;
+      box-shadow: 0 8px 32px rgba(255,182,0,.25);
+      transform: scale(1.03);
+    }
+    .tariff-card--popular { padding-top: 52px; }
+    .tariff-card--popular::before {
+      content: '⚡️ С ГАРАНТИЕЙ РЕЗУЛЬТАТА';
+      position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+      background: var(--orange); color: var(--dark);
+      font-family: var(--font-head); font-size: 11px; font-weight: 700;
+      padding: 6px 18px; border-radius: 20px;
+      white-space: nowrap;
+      letter-spacing: .5px;
+    }
+    .tariff-card__period {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: clamp(22px, 2.8vw, 30px);
+      color: var(--dark);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .tariff-card__promise {
+      font-size: 15px;
+      color: var(--mid-gray);
+      margin-bottom: 24px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+    .tariff-card__price {
+      font-family: var(--font-head);
+      font-weight: 900; font-size: 44px;
+      color: var(--dark); margin-bottom: 4px;
+      line-height: 1;
+    }
+    .tariff-card__price span { font-size: 22px; font-weight: 500; }
+    .tariff-card__monthly {
+      font-size: 14px;
+      color: var(--mid-gray);
+      margin-bottom: 24px;
+    }
+    .tariff-card__features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 28px;
+      flex-grow: 1;
+    }
+    .tariff-card__features li {
+      padding: 8px 0 8px 26px;
+      position: relative;
+      font-size: 14px;
+      color: #444;
+    }
+    .tariff-card__features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0; top: 8px;
+      width: 18px; height: 18px;
+      background: var(--green);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .tariff-card__btn { width: 100%; }
+
+    .tariffs__guarantee {
+      max-width: 680px;
+      margin: 40px auto 0;
+      padding: 24px 32px;
+      background: #fff;
+      border-radius: 16px;
+      border: 2px dashed var(--orange);
+      text-align: center;
+      font-size: 15px;
+      color: #3a3020;
+    }
+    .tariffs__guarantee strong { color: var(--red); }
+
+    /* ═══════════════════════════════════════════
+       7. CALCULATOR
+       ═══════════════════════════════════════════ */
+    .calc {
+      background: #fff;
+      padding: 100px 0;
+    }
+    .calc h2 {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 12px;
+    }
+    .calc h2 em {
+      font-style: normal;
+      color: var(--red);
+    }
+    .calc__sub {
+      text-align: center;
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto 48px;
+      color: var(--mid-gray);
+    }
+
+    .calc__box {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--light);
+      border-radius: 28px;
+      padding: 56px 48px;
+      box-shadow: var(--shadow-soft);
+    }
+    .calc__question {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: clamp(22px, 3.2vw, 32px);
+      color: var(--dark);
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 40px;
+    }
+    .calc__slider-label {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--mid-gray);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .calc__marks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: -28px;
+      margin-bottom: 32px;
+      padding: 0 2px;
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--mid-gray);
+    }
+    .calc__divider {
+      text-align: center;
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: clamp(18px, 2.4vw, 22px);
+      color: var(--dark);
+      margin: 16px 0 24px;
+      position: relative;
+    }
+    .calc__divider::before,
+    .calc__divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 80px;
+      height: 2px;
+      background: var(--gray);
+    }
+    .calc__divider::before { left: calc(50% - 190px); }
+    .calc__divider::after  { right: calc(50% - 190px); }
+    .calc__slider-value {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .calc__slider-value-num {
+      font-family: var(--font-head);
+      font-size: 72px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+      display: inline-flex;
+      justify-content: center;
+      align-items: baseline;
+    }
+
+    /* ── Counter (slot-machine style digits) ── */
+    .counter {
+      display: inline-flex;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      vertical-align: middle;
+    }
+    .counter__digit {
+      display: inline-block;
+      overflow: hidden;
+      position: relative;
+    }
+    .counter__strip {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    .counter__strip > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .calc__slider-value-unit {
+      display: block;
+      font-size: 14px;
+      color: var(--mid-gray);
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .calc__slider {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 10px;
+      border-radius: 6px;
+      background: linear-gradient(to right, #ffd966, var(--red));
+      outline: none;
+      margin-bottom: 40px;
+    }
+    .calc__slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      border: 4px solid var(--red);
+      box-shadow: 0 4px 12px rgba(206,44,1,.3);
+      transition: transform var(--transition);
+    }
+    .calc__slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    .calc__slider::-moz-range-thumb {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      border: 4px solid var(--red);
+    }
+    .calc__results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .calc__result {
+      background: #fff;
+      padding: 32px 24px;
+      border-radius: 18px;
+      text-align: center;
+      border: 2px solid var(--gray);
+      transition: all .2s;
+    }
+    .calc__result--highlight {
+      background: linear-gradient(135deg, var(--cream) 0%, #fff 100%);
+      border-color: var(--orange);
+      box-shadow: 0 8px 32px rgba(255,182,0,.15);
+    }
+    .calc__result-label {
+      font-size: 12px;
+      color: var(--mid-gray);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .calc__result-kg {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: 48px;
+      color: var(--dark);
+      line-height: 1;
+    }
+    .calc__result--highlight .calc__result-kg { color: var(--red); }
+
+    /* ═══════════════════════════════════════════
+       8. PROGRAMS
+       ═══════════════════════════════════════════ */
+    .programs {
+      background: var(--light);
+      padding: 100px 0;
+    }
+    .programs__head {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 16px;
+    }
+    .programs__head h2 span { color: var(--red); }
+    .programs__stats {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 32px 0 56px;
+    }
+    .programs__stat {
+      text-align: center;
+    }
+    .programs__stat-num {
+      font-family: var(--font-head);
+      font-size: 44px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+    }
+    .programs__stat-label {
+      font-size: 13px;
+      color: var(--mid-gray);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-top: 6px;
+    }
+
+    /* Program category tabs (like walk-walk.ru) */
+    .prog-tabs {
+      display: flex;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 0 auto 40px;
+      border: 1px solid #d4d4d4;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-wrap: wrap;
+      background: #faf8f5;
+    }
+    .prog-tab {
+      flex: 1;
+      min-width: 180px;
+      padding: 20px 16px;
+      background: transparent;
+      border: none;
+      border-right: 1px solid #d4d4d4;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 15px;
+      color: #666;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .prog-tab:last-child { border-right: none; }
+    .prog-tab:hover { background: #fff; color: var(--dark); }
+    .prog-tab.active {
+      background: #f50000;
+      color: #fff;
+      font-weight: 600;
+    }
+    .prog-panel { display: none; }
+    .prog-panel.active { display: block; animation: fadeIn .3s; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Simple screenshot grid for programs */
+    .prog-screens {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .prog-screens a {
+      display: block;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+    }
+    .prog-screens a:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+    .prog-screens img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    @media (max-width: 1024px) {
+      .prog-screens { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .prog-screens { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      .prog-screens { grid-template-columns: 1fr; }
+    }
+
+    /* Programs — cards grid like walk-walk.ru */
+    .prog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .prog-item {
+      background: #fff;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+      transition: all var(--transition);
+    }
+    .prog-item:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+    .prog-item__photo {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      background: var(--light);
+    }
+    .prog-item__photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .prog-item__photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .prog-item__photo--blue { background: linear-gradient(135deg, #5ec7ff 0%, #3a9ce8 100%); }
+    .prog-item__photo--red { background: linear-gradient(135deg, #ff6b6b 0%, #ce2c01 100%); }
+    .prog-item__photo--yellow { background: linear-gradient(135deg, #ffd966 0%, #ffb600 100%); }
+    .prog-item__photo--orange { background: linear-gradient(135deg, #ffa24d 0%, #ff6b1a 100%); }
+    .prog-item__photo--pink { background: linear-gradient(135deg, #ff8fc0 0%, #e5588a 100%); }
+    .prog-item__photo--green { background: linear-gradient(135deg, #8be07a 0%, #56c160 100%); }
+    .prog-item__photo--purple { background: linear-gradient(135deg, #c18aff 0%, #9155d6 100%); }
+    .prog-item__photo--dark-red { background: linear-gradient(135deg, #ce2c01 0%, #8a1b00 100%); }
+
+    .prog-item__name {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.25;
+      margin-bottom: 20px;
+      color: #000;
+      letter-spacing: -0.01em;
+    }
+    .prog-item__stats {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .prog-item__stats li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0;
+      font-size: 16px;
+      font-weight: 400;
+      color: #000;
+    }
+    .prog-item__stats-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #f50000;
+    }
+    .prog-item__stats-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+    .prog-item__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #f50000;
+      font-weight: 500;
+      font-size: 16px;
+      text-decoration: underline;
+      text-decoration-color: #f50000;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1.5px;
+    }
+    .prog-item__link:hover { color: #c00000; }
+
+    @media (max-width: 1024px) {
+      .prog-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .prog-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .prog-item { padding: 14px; }
+      .prog-item__name { font-size: 17px; }
+    }
+    @media (max-width: 480px) {
+      .prog-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ═══════════════════════════════════════════
+       9. CASES
+       ═══════════════════════════════════════════ */
+    .cases {
+      background: #fff;
+      padding: 100px 0;
+    }
+    .cases__head {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 56px;
+    }
+    .cases__head-sub {
+      font-size: 18px;
+      color: var(--mid-gray);
+      margin-top: 12px;
+    }
+    .cases__head-sub strong { color: var(--red); }
+
+    /* Marquee wrapper — full-bleed, overflow hidden */
+    .cases-marquee {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      overflow: hidden;
+      position: relative;
+      padding: 8px 0 16px;
+      mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    }
+    .cases-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      will-change: transform;
+      animation: scrollCases 60s linear infinite;
+    }
+    .cases-track:hover { animation-play-state: paused; }
+    /* 10 cards × 360px + 10 gaps × 20px = 3800px per set */
+    @keyframes scrollCases {
+      0%   { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-3800px, 0, 0); }
+    }
+
+    .ba-card {
+      flex: 0 0 360px;
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--transition), box-shadow var(--transition);
+      aspect-ratio: 1 / 1;
+      position: relative;
+    }
+    .ba-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+    .ba-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cases__hint {
+      text-align: center;
+      font-size: 14px;
+      color: var(--mid-gray);
+      margin-top: 16px;
+    }
+
+    /* ═══════════════════════════════════════════
+       10. OBJECTIONS
+       ═══════════════════════════════════════════ */
+    .objections {
+      background: var(--light);
+      padding: 80px 0;
+    }
+    .objections__head {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 32px;
+    }
+    /* Scrollable internal list with gradient edges */
+    .obj-list-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .obj-list-wrap::before,
+    .obj-list-wrap::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 60px;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .obj-list-wrap::before {
+      top: 0;
+      background: linear-gradient(to bottom, var(--light), transparent);
+    }
+    .obj-list-wrap::after {
+      bottom: 0;
+      background: linear-gradient(to top, var(--light), transparent);
+    }
+    .obj-list {
+      max-height: 480px;
+      overflow-y: auto;
+      padding: 24px 16px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange) transparent;
+    }
+    .obj-list::-webkit-scrollbar { width: 8px; }
+    .obj-list::-webkit-scrollbar-track { background: transparent; }
+    .obj-list::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 4px; }
+
+    .obj-item {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      border: 2px solid transparent;
+      box-shadow: var(--shadow-soft);
+      transform: scale(0.95);
+      opacity: 0;
+      transition: transform .4s cubic-bezier(.4, .0, .2, 1), opacity .4s, border-color .25s, box-shadow .25s;
+    }
+    .obj-item.in-view {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .obj-item:hover {
+      border-color: var(--orange);
+      box-shadow: var(--shadow-hover);
+    }
+    .obj-item__q {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--dark);
+      margin-bottom: 12px;
+      line-height: 1.3;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .obj-item__q-icon {
+      flex-shrink: 0;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+    .obj-item__a {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.6;
+      padding-left: 34px;
+    }
+
+    /* ═══════════════════════════════════════════
+       11. TEAM / WHY US
+       ═══════════════════════════════════════════ */
+    .whyus {
+      background: #fff;
+      padding: 100px 0;
+    }
+    .whyus__head {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 56px;
+    }
+    .whyus__head h2 span { color: var(--red); }
+    .whyus__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto 48px;
+    }
+    .whyus__item {
+      background: var(--light);
+      padding: 28px 24px;
+      border-radius: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .whyus__item-icon {
+      font-size: 26px;
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      background: var(--cream);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .whyus__item-text {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .whyus__item-text a {
+      color: var(--red);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .whyus__item-text a:hover { color: var(--red-hover); }
+
+    .whyus__awards {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--cream);
+      padding: 40px;
+      border-radius: var(--radius-card);
+      text-align: center;
+      border: 2px dashed var(--orange);
+    }
+    .whyus__awards-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--red);
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .whyus__awards-photo {
+      display: block;
+      margin: 0 auto 32px;
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: var(--shadow-hover);
+      background: #fff;
+    }
+    .whyus__awards-list {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .whyus__award {
+      font-size: 14px;
+      font-weight: 600;
+      color: #3a3020;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: transform var(--transition);
+    }
+    .whyus__award:hover { transform: translateY(-2px); }
+    .whyus__award-year {
+      display: block;
+      font-family: var(--font-head);
+      font-size: 28px;
+      color: var(--dark);
+      font-weight: 900;
+      line-height: 1;
+    }
+    .whyus__award-caption {
+      font-size: 14px;
+      color: #3a3020;
+      line-height: 1.4;
+    }
+    .whyus__award-caption em {
+      display: block;
+      color: var(--mid-gray);
+      font-style: normal;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════════
+       12. WHY WALKING
+       ═══════════════════════════════════════════ */
+    .why-walk {
+      background: var(--light);
+      padding: 100px 0;
+    }
+    .why-walk__grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 56px;
+      align-items: center;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .why-walk__wrap {
+      max-width: 560px;
+    }
+    .why-walk__wrap h2 { text-align: left; }
+    .why-walk__wrap p { max-width: none; margin-left: 0; margin-right: 0; }
+    @media (max-width: 900px) {
+      .why-walk__grid { grid-template-columns: 1fr; text-align: center; }
+      .why-walk__wrap { text-align: center; max-width: 760px; margin: 0 auto; }
+      .why-walk__wrap h2 { text-align: center; }
+      .why-walk__video { margin: 24px auto 0; }
+    }
+    .why-walk__icon {
+      font-size: 64px;
+      display: inline-block;
+      padding: 20px;
+      background: #fff;
+      border-radius: 28px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .why-walk h2 span { color: var(--red); }
+    .why-walk p {
+      font-size: 19px;
+      color: #3a3020;
+      line-height: 1.55;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .why-walk p strong { color: var(--dark); }
+    .why-walk__video {
+      max-width: 360px;
+      margin: 48px auto 0;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      background: #000;
+      aspect-ratio: 9/16;
+    }
+    .why-walk__video video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* ═══════════════════════════════════════════
+       13. FREE TRAINING + FINAL
+       ═══════════════════════════════════════════ */
+    .free-training {
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,182,0,.2), transparent),
+        var(--cream);
+      padding: 100px 0 120px;
+      text-align: center;
+    }
+    .free-training__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--orange);
+      color: var(--dark);
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 24px;
+    }
+    .free-training__timer {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      font-variant-numeric: tabular-nums;
+      color: var(--red);
+      text-transform: none;
+    }
+    .free-training__expired {
+      max-width: 680px;
+      margin: 0 auto 40px;
+      padding: 56px 40px;
+      background: #fff;
+      border-radius: var(--radius-card);
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      border: 2px dashed var(--red);
+    }
+    .free-training__expired-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+    .free-training__expired-title {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: clamp(22px, 3vw, 30px);
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+    .free-training__expired-text {
+      font-size: 17px;
+      color: #3a3020;
+      line-height: 1.5;
+      max-width: 540px;
+      margin: 0 auto 28px;
+    }
+    .free-training__expired-text strong { color: var(--dark); }
+    .free-training h2 {
+      margin-bottom: 16px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .free-training h2 span { color: var(--red); }
+    .free-training__lead {
+      font-size: 19px;
+      max-width: 640px;
+      margin: 0 auto 40px;
+      color: #3a3020;
+    }
+    .free-training__video {
+      max-width: 820px;
+      margin: 0 auto 40px;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 16px 48px rgba(0,0,0,.2);
+      background: #000;
+    }
+    .free-training__video > div {
+      position: relative;
+      padding-top: 56.25%;
+      width: 100%;
+    }
+    .free-training__video iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border: none;
+      display: block;
+    }
+    .free-training__after {
+      max-width: 680px;
+      margin: 48px auto 0;
+      padding: 28px 32px;
+      background: #fff;
+      border-radius: var(--radius-card);
+      border: 2px dashed var(--orange);
+      box-shadow: var(--shadow-soft);
+    }
+    .free-training__after-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: clamp(18px, 2.4vw, 22px);
+      margin: 0;
+      color: var(--dark);
+      line-height: 1.4;
+      text-align: center;
+    }
+    .free-training__after-title span { color: var(--red); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--dark);
+      color: rgba(255,255,255,.6);
+      text-align: center;
+      padding: 40px 24px;
+      font-size: 14px;
+    }
+    .footer a { color: var(--orange); text-decoration: none; }
+    .footer a:hover { color: #fff; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .pain__grid { grid-template-columns: 1fr; gap: 40px; }
+      .pain__image-wrap { max-width: 480px; margin: 0 auto; }
+      .programs__grid { grid-template-columns: repeat(2, 1fr); }
+      .whyus__grid { grid-template-columns: 1fr; }
+      .fail-grid { grid-template-columns: 1fr; }
+      .tariff-grid { gap: 32px 20px; }
+      .tariff-card--popular { transform: none; }
+    }
+
+    @media (max-width: 768px) {
+      .header { height: 64px; padding: 0 16px; }
+      .header__logo svg { height: 30px; }
+      .header__cta { font-size: 12px; padding: 10px 16px; }
+      section { padding: 64px 0; }
+      .pain, .why-failed, .method, .pari, .tariffs, .programs, .calc, .cases, .objections, .whyus, .why-walk, .free-training {
+        padding: 64px 0;
+      }
+      .container { padding: 0 20px; }
+      p { font-size: 16px; }
+      p.lead, .hero__sub, .method__lead { font-size: 17px; }
+
+      .hero { padding-top: 48px; padding-bottom: 56px; }
+      .hero__name-value { font-size: 20px; }
+
+      .method__features { grid-template-columns: 1fr; }
+      .method__question { padding: 40px 28px; border-radius: 24px; }
+
+      .pari__box { padding: 32px 24px; }
+      .pari__cta-row { flex-direction: column; }
+      .pari__cta-row .btn { width: 100%; }
+
+      .tariff-grid { grid-template-columns: 1fr; max-width: 400px; }
+
+      .programs__grid { grid-template-columns: 1fr; }
+      .programs__stats { gap: 32px; }
+      .programs__stat-num { font-size: 36px; }
+
+      .calc__box { padding: 32px 24px; }
+      .calc__slider-value-num { font-size: 56px; }
+      .calc__results { grid-template-columns: 1fr; }
+      .calc__result-kg { font-size: 40px; }
+
+      .ba-card { flex: 0 0 280px; }
+
+      .whyus__awards-list { flex-direction: column; gap: 20px; }
+
+      .free-training__after { padding: 20px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div class="loader" id="loader">
+  <div class="loader__title">
+    Формируем <span>твой план похудения</span>...
+  </div>
+  <div class="loader__bar-wrap">
+    <div class="loader__bar"></div>
+  </div>
+  <div class="loader__status" id="loaderStatus">Анализируем твои данные...</div>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <a href="./" class="header__logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 106.01385498046875 49.134765625" fill="none" role="img" aria-label="Шагай Дома"><path d="M27.358808471536076 36.845925992647054L22.18969762487075 37.403434147662V20.220558865808822L14.264924992934283 20.601136132970474V38.25578554170497L8.678344057574105 38.857944237994026V20.867692381046073L0 21.284763358757466V45.81220368034812L34.60441893181296 41.41300286520565V19.62206700168026L27.357561249712777 19.970216501436123L27.358808471536076 36.845925992647054Z" fill="#CF2C02"/><path d="M45.937923640136724 19.079450675235524L37.7968079107307 41.010649105009186L44.663512381089156 40.137593828699444L45.69421649586397 36.553577197265625L52.87871308679917 35.734152459357766L53.87150165814568 38.966951425350416L60.1128491063017 38.173219457002524L52.835559211713004 18.748537781077665L45.937923640136724 19.079450675235524ZM47.099586046358 31.89495424287684L49.355061991613056 24.26163240660903L51.595571274988515 31.457678271627987L47.099586046358 31.89495424287684Z" fill="#CF2C02"/><path d="M76.12243787454044 17.63037847205308L62.29498840834674 18.294249704159007V37.896835100959336L67.86932162540211 37.187415327866496V22.732463617934286L76.12343565199909 22.175030296228748L76.12243787454044 17.63037847205308Z" fill="#CF2C02"/><path d="M87.00295161664177 34.7560811055262L91.74987787612018 34.15242574304917L86.21795020105698 17.14698023777861L81.01204631060432 17.39732260215131L74.91412937212776 36.294653946748625L80.0541799503102 35.640860266974954L80.82845525821462 32.54949625574449L86.2508768571921 31.93087423138787L87.00295161664177 34.7560811055262ZM81.88460269818474 28.522715877039293L83.5848154877068 21.91663087887753L85.27729550192441 28.19344931568819L81.88460269818474 28.522715877039293Z" fill="#CF2C02"/><path d="M102.20209564410041 23.793126000904756V32.82363561250574L105.91682112261604 32.3514374302045V16.19824354123104L102.22304897073185 16.375623428940717L97.21096335161994 25.932735038775277V16.61733501829619L93.15998686954275 16.811926567167394V33.973075244858684L97.21420612836053 33.45722429874196L102.20209564410041 23.793126000904756Z" fill="#CF2C02"/><path d="M99.07356442253563 18.224255615435432L103.82448179184858 6.7536562842945775L100.66801280144188 6.764806447394876L101.31906259320426 0L96.4785946969784 11.33480181901999L99.57694315041935 11.257773399213006L99.07356442253563 18.224255615435432Z" fill="#CF2C02"/></svg>
+  </a>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     1. HERO
+     ═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <h1>
+      Как сбросить <span class="accent">15 кг за 6 месяцев</span><br>
+      без зала, без жёстких диет<br>
+      и <span class="strike">насилия над собой</span>
+    </h1>
+
+    <p class="hero__sub">
+      Индивидуальный план похудения, собранный под твои вводные данные. Только тот подход, который лучше всего работает с лишним весом.
+    </p>
+
+    <div class="hero__name-block">
+      <div class="hero__name-label">План для:</div>
+      <div class="hero__name-value">
+        <span data-var="name">—</span>
+      </div>
+    </div>
+
+    <div class="hero__data">
+      <div class="hero__chip"><span class="hero__chip-icon">🎂</span> Возраст: <strong data-var="age">—</strong></div>
+      <div class="hero__chip"><span class="hero__chip-icon">📏</span> Рост: <strong data-var="height">—</strong> см</div>
+      <div class="hero__chip"><span class="hero__chip-icon">⚖️</span> Вес: <strong data-var="weight">—</strong> кг</div>
+      <div class="hero__chip"><span class="hero__chip-icon">🎯</span> Цель: <strong data-var="goal">похудеть</strong></div>
+    </div>
+
+    <div class="hero__free-hint">
+      <span class="hero__free-hint-icon">🎁</span>
+      <span><strong>1 бесплатная тренировка</strong> ждёт тебя в конце плана</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     2. PAIN
+     ═══════════════════════════════════════════ -->
+<section class="pain">
+  <div class="container">
+    <div class="pain__grid">
+      <div class="pain__image-wrap">
+        <img src="./images/pain-woman.jpg" alt="Уставшая женщина после тренировки" loading="lazy">
+      </div>
+
+      <div class="pain__content">
+        <h2>Давай <span>честно</span><span class="pain__name-wrap">, <span data-var="name"></span></span></h2>
+
+        <p>
+          Каждое утро ты встаёшь, смотришь в зеркало — и снова не узнаёшь ту женщину, что когда-то свободно покупала любую одежду и не думала о цифре на весах.
+        </p>
+
+        <p>
+          Одежда, которая тебе нравилась, сейчас сидит не так, как раньше — приходится выбирать то, что хоть как-то помогает скрыть лишний вес. Спина ноет после рабочего дня. Вечером нет сил, утром нет энергии. А каждая новая попытка похудеть заканчивается одним и тем же: скинула 3 — вернулось 5.
+        </p>
+
+        <a href="#why-failed" class="btn btn--red pain__cta">Как мне быть?</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     3. WHY FAILED
+     ═══════════════════════════════════════════ -->
+<section class="why-failed">
+  <div class="container">
+    <h2>Я хочу тебя немного <em>порадовать</em>.<br>Дело не в тебе — а в подходах</h2>
+    <p class="why-failed__intro">
+      Для людей с лишним весом похудение работает <strong>иначе</strong>. А тебе продавали методы, которые рассчитаны на других.
+    </p>
+
+    <div class="fail-stack">
+      <div class="fail-card">
+        <span class="fail-card__icon">🏋️</span>
+        <div class="fail-card__title">Зал и силовые</div>
+        <div class="fail-card__text">
+          Качают мышцы, но <strong>не работают на жиросжигание</strong>. А тебе сейчас нужно убрать жир, а не набрать мышечную массу под ним.
+        </div>
+      </div>
+
+      <div class="fail-card">
+        <span class="fail-card__icon">🏃‍♀️</span>
+        <div class="fail-card__title">Бег и прыжки</div>
+        <div class="fail-card__text">
+          Травмируют суставы и спину при весе от 80 кг. И требуют огромной силы воли, чтобы загонять тело в такие жёсткие условия. <strong>Это не обязательно делать.</strong>
+        </div>
+      </div>
+
+      <div class="fail-card">
+        <span class="fail-card__icon">🥗</span>
+        <div class="fail-card__title">Жёсткие диеты</div>
+        <div class="fail-card__text">
+          Поначалу ты их соблюдаешь, а потом откатываешься. Организму не объяснишь, зачем отказываться от нормальной еды. Рано или поздно ты вернёшься к привычным продуктам — <strong>и часто с перебором</strong>.
+        </div>
+      </div>
+
+      <div class="fail-card">
+        <span class="fail-card__icon">💊</span>
+        <div class="fail-card__title">БАДы и таблетки</div>
+        <div class="fail-card__text">
+          Бьют по печени и эндокринной системе. Это можно делать только <strong>по назначению врача</strong> — и точно не как основной метод похудения.
+        </div>
+      </div>
+    </div>
+
+    <div class="why-failed__conclusion">
+      Единственный способ похудеть с лишним весом —<br>
+      <span>запустить естественный процесс жиросжигания</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     4. METHOD
+     ═══════════════════════════════════════════ -->
+<section class="method">
+  <div class="container">
+    <div class="method__eyebrow">Всё, что тебе нужно —</div>
+
+    <h2 class="method__bigtitle">
+      <span class="row">Шагать дома</span>
+      <span class="row"><span class="accent">от 15 минут в день</span></span>
+      <span class="row">чтобы похудеть</span>
+    </h2>
+
+    <div class="method__footer">
+      <div class="method__footnote">
+        <span class="method__footnote-num">1</span>
+        <span>Нужен только телефон или телевизор, чтобы смотреть видео тренировок</span>
+      </div>
+      <div class="method__footnote">
+        <span class="method__footnote-num">2</span>
+        <span>Не нужен зал, специальная форма или куда-то ехать — всё делается дома</span>
+      </div>
+      <a href="#pari" class="btn btn--red">Начать худеть на шагах</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     5. PARI
+     ═══════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════
+     12. WHY WALKING
+     ═══════════════════════════════════════════ -->
+<section class="why-walk">
+  <div class="container">
+    <div class="why-walk__grid">
+      <div class="why-walk__wrap">
+        <div class="why-walk__icon">🚶‍♀️</div>
+        <h2>Почему именно <span>шаги</span>?</h2>
+        <p>
+          Только шаги могут запустить <strong>естественный процесс жиросжигания</strong>, не травмируя при этом тело и нервную систему.
+        </p>
+        <p>
+          Именно с помощью шагов можно сбросить лишний вес <strong>без сверхусилий над собой</strong>. Это единственная физическая активность, которая работает для тебя на 100%, пока у тебя есть лишние килограммы.
+        </p>
+      </div>
+
+      <div class="why-walk__video">
+        <video src="./videos/why-walking.mov" autoplay muted loop playsinline preload="auto"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pari" id="pari">
+  <div class="container">
+    <div class="pari__grid">
+      <div class="pari__left">
+        <h2>Давай <span>заключим пари?)</span></h2>
+
+        <div class="pari__box">
+          <div class="pari__promise">
+            Будешь шагать <em>15 минут в день</em> и следовать простым советам по питанию <em>6 месяцев</em>,<br>
+            но не похудеешь на <em>15 кг</em> —<br>
+            <strong class="pari__promise-hit">МЫ ВЕРНЁМ ДЕНЬГИ</strong>
+          </div>
+        </div>
+
+        <div class="pari__cta-row">
+          <a href="#tariffs" class="btn btn--orange btn--large">А давайте!</a>
+        </div>
+
+        <p class="pari__disclaimer">
+          * Единственное правило — играть по-честному. Полные условия — <a href="#oferta">в оферте</a>.
+        </p>
+      </div>
+
+      <div class="pari__video">
+        <video src="./videos/pari.mp4" autoplay muted loop playsinline preload="auto"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     6. TARIFFS — сразу после пари
+     ═══════════════════════════════════════════ -->
+<section class="tariffs" id="tariffs">
+  <div class="container">
+    <h2>Выбери свой <span style="color: var(--red);">результат</span></h2>
+
+    <div class="tariff-grid">
+      <div class="tariff-card">
+        <div class="tariff-card__period">−5 кг за 2 месяца</div>
+        <div class="tariff-card__promise">Абонемент на 2 месяца</div>
+        <div class="tariff-card__price">2 990 <span>₽</span></div>
+        <div class="tariff-card__monthly">всего 1 495 ₽/мес · ≈ 50 ₽ в день</div>
+        <ul class="tariff-card__features">
+          <li><strong>25 программ</strong> и 320+ шагательных тренировок</li>
+          <li><strong>60 рецептов</strong> полезной еды, вебинары про здоровье</li>
+          <li><strong>30 тренировок</strong> для здоровья спины и растяжек</li>
+          <li><strong>Поддержка чата</strong> участников и куратора</li>
+          <li><strong>Доступна рассрочка</strong></li>
+          <li><strong>Бесплатное пополнение</strong> шагательных тренировок и программ</li>
+        </ul>
+        <a href="https://walk-walk.ru/training#popup:form1" target="_blank" rel="noopener" class="btn btn--red tariff-card__btn">Оформить абонемент на 2 месяца</a>
+        <a href="https://walk-walk.ru/podarok2" target="_blank" rel="noopener" class="btn btn--outline-dark tariff-card__btn" style="margin-top: 10px;">Купить в подарок</a>
+      </div>
+
+      <div class="tariff-card tariff-card--popular">
+        <div class="tariff-card__period">−15 кг за 6 месяцев</div>
+        <div class="tariff-card__promise">Абонемент на 6 месяцев</div>
+        <div class="tariff-card__price">3 990 <span>₽</span></div>
+        <div class="tariff-card__monthly">всего 665 ₽/мес · ≈ 22 ₽ в день</div>
+        <ul class="tariff-card__features">
+          <li><strong>25 программ</strong> и 320+ шагательных тренировок</li>
+          <li><strong>60 рецептов</strong> полезной еды, вебинары про здоровье</li>
+          <li><strong>30 тренировок</strong> для здоровья спины и растяжек</li>
+          <li><strong>Поддержка чата</strong> участников и куратора</li>
+          <li><strong>Доступна рассрочка</strong></li>
+          <li><strong>Бесплатное пополнение</strong> шагательных тренировок и программ</li>
+          <li><strong>⚡️ Пари — возврат денег при невыполнении</strong></li>
+        </ul>
+        <a href="https://walk-walk.ru/training#popup:form2" target="_blank" rel="noopener" class="btn btn--red tariff-card__btn">Оформить абонемент на 6 месяцев</a>
+        <a href="https://walk-walk.ru/podarok2" target="_blank" rel="noopener" class="btn btn--outline-dark tariff-card__btn" style="margin-top: 10px;">Купить в подарок</a>
+      </div>
+    </div>
+
+    <div class="tariffs__guarantee">
+      💎 <strong>Гарантия возврата денег</strong> действует на тариф 6 месяцев. Если будешь следовать плану и не похудеешь на 15 кг — вернём оплату полностью.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     7. CALCULATOR
+     ═══════════════════════════════════════════ -->
+<section class="calc">
+  <div class="container">
+    <h2><em>15 кг мало?</em></h2>
+    <p class="calc__sub">
+      Смотри, насколько ты похудеешь, если будешь шагать чуть больше
+    </p>
+
+    <div class="calc__box">
+      <div class="calc__question">Сколько ты готова шагать каждый день?</div>
+
+      <div class="calc__slider-value">
+        <div class="calc__slider-value-num">
+          <span class="counter" id="counterMinutes"></span>
+        </div>
+        <div class="calc__slider-value-unit">минут в день</div>
+      </div>
+
+      <input
+        type="range"
+        class="calc__slider"
+        id="calcSlider"
+        min="0"
+        max="3"
+        value="0"
+        step="1">
+
+      <div class="calc__marks">
+        <span>15 мин</span>
+        <span>20 мин</span>
+        <span>30 мин</span>
+        <span>45 мин</span>
+      </div>
+
+      <div class="calc__divider">За это время ты:</div>
+
+      <div class="calc__results">
+        <div class="calc__result">
+          <div class="calc__result-label">Сбросишь без усилий<br>за 2 месяца</div>
+          <div class="calc__result-kg">−<span class="counter" id="counter2m"></span> кг</div>
+        </div>
+        <div class="calc__result calc__result--highlight">
+          <div class="calc__result-label">Сбросишь без усилий<br>за 6 месяцев ⭐</div>
+          <div class="calc__result-kg">−<span class="counter" id="counter6m"></span> кг</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     8. PROGRAMS
+     ═══════════════════════════════════════════ -->
+<section class="programs">
+  <div class="container">
+    <div class="programs__head">
+      <h2>Мы разработали программу тренировок специально <span>для людей с лишним весом</span></h2>
+    </div>
+
+    <div class="programs__stats">
+      <div class="programs__stat">
+        <div class="programs__stat-num">25</div>
+        <div class="programs__stat-label">программ</div>
+      </div>
+      <div class="programs__stat">
+        <div class="programs__stat-num">320+</div>
+        <div class="programs__stat-label">тренировок</div>
+      </div>
+      <div class="programs__stat">
+        <div class="programs__stat-num">4</div>
+        <div class="programs__stat-label">уровня сложности</div>
+      </div>
+      <div class="programs__stat">
+        <div class="programs__stat-num">15 мин</div>
+        <div class="programs__stat-label">в день</div>
+      </div>
+    </div>
+
+    <div class="prog-tabs" role="tablist">
+      <button class="prog-tab active" data-tab="aerobika" onclick="switchProgTab(this)">Шагательная аэробика</button>
+      <button class="prog-tab" data-tab="fitness" onclick="switchProgTab(this)">Шагательный фитнес</button>
+      <button class="prog-tab" data-tab="cardio" onclick="switchProgTab(this)">Кардио зарядки</button>
+      <button class="prog-tab" data-tab="dance" onclick="switchProgTab(this)">Шагай и танцуй</button>
+    </div>
+
+    <!-- TAB 1: Шагательная аэробика -->
+    <div class="prog-panel active" data-panel="aerobika">
+      <div class="prog-screens">
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/1.webp" alt="Программа 1" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/2.webp" alt="Программа 2" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/3.webp" alt="Программа 3" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/4.webp" alt="Программа 4" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/5.webp" alt="Программа 5" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/6.webp" alt="Программа 6" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/7.webp" alt="Программа 7" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/8.webp" alt="Программа 8" loading="lazy"></a>
+      </div>
+    </div>
+
+    <!-- TAB 2: Шагательный фитнес -->
+    <div class="prog-panel" data-panel="fitness">
+      <div class="prog-screens">
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/1.webp" alt="Программа 1" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/2.webp" alt="Программа 2" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/3.webp" alt="Программа 3" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/4.webp" alt="Программа 4" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/5.webp" alt="Программа 5" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/6.webp" alt="Программа 6" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/7.webp" alt="Программа 7" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/8.webp" alt="Программа 8" loading="lazy"></a>
+      </div>
+    </div>
+
+    <!-- TAB 3: Кардио зарядки -->
+    <div class="prog-panel" data-panel="cardio">
+      <div class="prog-screens">
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-3" target="_blank" rel="noopener"><img src="./images/programs/cardio/1.jpg" alt="Кардио 1" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-3" target="_blank" rel="noopener"><img src="./images/programs/cardio/2.jpg" alt="Кардио 2" loading="lazy"></a>
+      </div>
+    </div>
+
+    <!-- TAB 4: Шагай и танцуй -->
+    <div class="prog-panel" data-panel="dance">
+      <div class="prog-screens">
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/1.jpg" alt="Танцы 1" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/2.jpg" alt="Танцы 2" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/3.jpg" alt="Танцы 3" loading="lazy"></a>
+        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/4.jpg" alt="Танцы 4" loading="lazy"></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     9. CASES (composite before/after images)
+     ═══════════════════════════════════════════ -->
+<section class="cases">
+  <div class="container">
+    <div class="cases__head">
+      <h2>Ещё сомневаешься?</h2>
+      <div class="cases__head-sub">
+        Посмотри, как <strong>30 000 женщин</strong> по всей России уже попали в свою лучшую форму
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cases-marquee">
+    <div class="cases-track">
+      <!-- Комплект 1 -->
+      <div class="ba-card"><img src="./images/cases/1.jpg" alt="−14 кг: У меня не было коврика" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/2.jpg" alt="−16 кг: Я шагала с ребёнком на руках" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/3.jpg" alt="−12 кг: Я шагала после работы" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/4.jpg" alt="−11 кг: Я шагала в пижаме" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/5.jpg" alt="−6 кг: Я шагала на кухне" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/6.jpg" alt="−17,5 кг: Я шагала перед работой" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/7.jpg" alt="−21 кг: Я шагала в офисе" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/8.jpg" alt="−17 кг: Я шагала на обедах" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/9.jpg" alt="−10 кг: Я шагала, когда смотрела сериал" loading="lazy"></div>
+      <div class="ba-card"><img src="./images/cases/10.jpg" alt="−8 кг: Я шагала, пока готовился ужин" loading="lazy"></div>
+
+      <!-- Комплект 2 (дубль для бесконечной прокрутки) -->
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/1.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/2.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/3.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/4.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/5.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/6.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/7.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/8.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/9.jpg" alt="" loading="lazy"></div>
+      <div class="ba-card" aria-hidden="true"><img src="./images/cases/10.jpg" alt="" loading="lazy"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="cases__hint">Наведи курсор, чтобы остановить ленту</div>
+  </div>
+</section>
+
+
+
+<!-- ═══════════════════════════════════════════
+     11. WHY US / TEAM
+     ═══════════════════════════════════════════ -->
+<section class="whyus">
+  <div class="container">
+    <div class="whyus__head">
+      <h2>В <span>ШАГАЙ ДОМА</span> над твоим результатом работает команда профессионалов</h2>
+    </div>
+
+    <div class="whyus__grid">
+      <div class="whyus__item">
+        <div class="whyus__item-icon">👩‍⚕️</div>
+        <div class="whyus__item-text">Каждый тренер — с <strong>медицинским образованием</strong></div>
+      </div>
+      <div class="whyus__item">
+        <div class="whyus__item-icon">🏥</div>
+        <div class="whyus__item-text">Программы тренировок <strong>разработаны совместно с врачами</strong></div>
+      </div>
+      <div class="whyus__item">
+        <div class="whyus__item-icon">🥗</div>
+        <div class="whyus__item-text">Планы питания <strong>разработаны дипломированными диетологами</strong></div>
+      </div>
+      <div class="whyus__item">
+        <div class="whyus__item-icon">👭</div>
+        <div class="whyus__item-text">С нами худеет уже <strong>более 30 000 женщин</strong></div>
+      </div>
+      <div class="whyus__item">
+        <div class="whyus__item-icon">📅</div>
+        <div class="whyus__item-text">На рынке <strong>более 3 лет</strong> — и за это время вывели тысячи женщин к результату</div>
+      </div>
+      <div class="whyus__item">
+        <div class="whyus__item-icon">🔬</div>
+        <div class="whyus__item-text">Методика основана на <strong>научных данных</strong> о жиросжигании</div>
+      </div>
+      <div class="whyus__item">
+        <div class="whyus__item-icon">🏆</div>
+        <div class="whyus__item-text">Команда является <strong><a href="https://premiaruneta.ru/" target="_blank" rel="noopener">лауреатом Премии Рунета</a></strong></div>
+      </div>
+      <div class="whyus__item">
+        <div class="whyus__item-icon">🏆</div>
+        <div class="whyus__item-text"><strong>2 профессиональные награды</strong> за качество продукта (см. ниже)</div>
+      </div>
+    </div>
+
+    <div class="whyus__awards">
+      <div class="whyus__awards-title">🏆 Наши награды</div>
+
+      <img class="whyus__awards-photo" src="./images/awards/zhit-zdorovo.jpg" alt="Наши тренеры в программе Жить здорово" loading="lazy"
+           onerror="this.src='./images/awards/getaward-2025.jpg';">
+
+      <div class="whyus__awards-list">
+        <a class="whyus__award" href="https://www.1tv.ru/shows/zhit-zdorovo/vypuski/zhit-zdorovo-vypusk-ot-22-09-2023" target="_blank" rel="noopener">
+          <span class="whyus__award-year">2023</span>
+          <div class="whyus__award-caption">Выпуск программы <br>«Жить здорово» на Первом канале</div>
+        </a>
+        <a class="whyus__award" href="https://getaward.ru/results/gcchoice#school" target="_blank" rel="noopener">
+          <span class="whyus__award-year">2025</span>
+          <div class="whyus__award-caption">
+            Лауреаты GetAward
+            <em>«Прорыв года. Здоровье и фитнес»</em>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ═══════════════════════════════════════════
+     13. FREE TRAINING + FINAL
+     ═══════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════
+     10. OBJECTIONS
+     ═══════════════════════════════════════════ -->
+<section class="objections">
+  <div class="container">
+    <div class="objections__head">
+      <h2>А что если...</h2>
+      <p class="lead" style="margin:0 auto;color:var(--mid-gray);">
+        Знаю, что сейчас в голове вертится куча сомнений. Давай разберём каждое 👇🏻
+      </p>
+    </div>
+
+    <div class="obj-list-wrap">
+    <div class="obj-list">
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>А что если я сильно ленивая?</span></div>
+        <div class="obj-item__a">
+          Вместе с тобой шагают <strong>тысячи женщин</strong> в большом комьюнити клуба. Вы подбадриваете друг друга, делитесь результатами, держите друг друга в тонусе. И давай честно — ты правда не найдёшь 15 минут в день, чтобы дома, без оборудования, пошагать под весёлую музыку?
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>А если я не могу заставить себя меньше есть?</span></div>
+        <div class="obj-item__a">
+          У нас есть <strong>большая база рецептов</strong> из тех же продуктов, которыми ты питаешься ежедневно. Надо просто правильно дозировать количество и чуть-чуть иначе готовить. Все рецепты — в базе клуба. <strong>Ты не ограничиваешь себя — ты ешь вкусную привычную еду, просто правильно.</strong>
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>А вдруг не получится?</span></div>
+        <div class="obj-item__a">
+          У <strong>30 000 женщин</strong> уже получилось сбросить 10, 15, 20 кг и больше. Как ты думаешь — если ты будешь следовать по нашей методике, у тебя не получится? Тем более что если не получится — <strong>мы вернём тебе деньги</strong>. Мы настолько в этом уверены.
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Это не сработает на мне</span></div>
+        <div class="obj-item__a">
+          Не сработает только если ты <strong>не можешь шагать</strong>. Во всех остальных случаях это самый естественный процесс. Если будешь шагать по нашей методике — у тебя не может не получиться. Этому подтверждение — результаты 30 000 женщин по всей России.
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Шаги — это же слишком просто</span></div>
+        <div class="obj-item__a">
+          Во-первых, в основе нашей методики — <strong>спортивные шаги</strong>, а не те, которыми ты обычно ходишь. Это интенсивные движения под весёлую музыку. Во-вторых, именно шаги позволят тебе сбросить вес, <strong>когда у тебя есть лишний вес</strong>. Другие способы будут излишне нагружать и травмировать тело.
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Мне неудобно тренироваться дома</span></div>
+        <div class="obj-item__a">
+          Можно тренироваться <strong>абсолютно где угодно</strong> — дома, в офисе, в парке, в отдельной комнате, даже в ванной. Тебе нужно всего <strong>пару квадратных метров</strong> и устройство, с которого ты смотришь тренировку. Хоть с телефона.
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Это очередное инфоцыганство</span></div>
+        <div class="obj-item__a">
+          Если бы мы не были уверены в нашем продукте и в результате — <strong>мы бы не обещали вернуть тебе деньги</strong>. Посмотри на результаты наших участниц. Посмотри на награды: лауреаты Премии Рунета 2024, лауреаты GetAward 2025. Наши тренеры появлялись в «Жить здорово».
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>У меня нет денег</span></div>
+        <div class="obj-item__a">
+          6 месяцев клуба — <strong>3 990 ₽</strong>. Это <strong>≈22 ₽ в день</strong>. Меньше половины чашки кофе в кафе. Если на 6 месяцев сразу некомфортно — можно взять 2 месяца за 2 990 ₽ и продлить потом. Плюс <strong>доступна рассрочка</strong> — разбей платёж на части.
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>У меня и так проблемы со здоровьем</span></div>
+        <div class="obj-item__a">
+          Шаги — <strong>самый безопасный способ похудения</strong>. Он подходит практически всем. Тебе нельзя тренироваться только если есть прямые противопоказания к движению — в таком случае обязательно посоветуйся с врачом. Во всех остальных случаях шаги — единственная нагрузка, которая <strong>не травмирует тело</strong> при лишнем весе.
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Мне скучно, я не люблю тренироваться</span></div>
+        <div class="obj-item__a">
+          Каждая тренировка проходит <strong>под мировые хиты</strong>, с очень энергичными тренерами. Каждое занятие превращается в маленький праздник. Это не «надо себя заставить». Это то, на что ты сама побежишь через пару недель.
+        </div>
+      </div>
+
+      <div class="obj-item">
+        <div class="obj-item__q"><span class="obj-item__q-icon">💭</span><span>Завтра начну</span></div>
+        <div class="obj-item__a">
+          Вспомни, сколько раз ты себе так говорила. А потом находилась причина перенести. Или вовсе забывалось. <strong>Сейчас будет точно так же</strong>, если ты закроешь эту страницу со словами «подумаю». Если ты решила худеть — начни сегодня. Пока есть 5 минут и желание.
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="free-training" id="free-training">
+  <div class="container">
+    <div class="free-training__badge">
+      <span id="ftBadgeText">⏳ Осталось</span>
+      <span id="ftTimer" class="free-training__timer">—</span>
+    </div>
+    <h2 id="ftTitle"><span>1 бесплатная тренировка</span><br>доступна 24 часа</h2>
+    <p class="free-training__lead" id="ftLead">
+      15 минут с нашим тренером. В тапочках, без подготовки. Почувствуй, как твоё тело наполняется энергией от музыки и движения.
+    </p>
+
+    <!-- Блок с активной тренировкой -->
+    <div class="free-training__video" id="ftVideo">
+      <div>
+        <iframe src="https://kinescope.io/embed/nShAVPdZdQQ45Cv6To1M8Q"
+                allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;"
+                frameborder="0"
+                allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- Блок после истечения 24 часов (по умолчанию скрыт) -->
+    <div class="free-training__expired" id="ftExpired" hidden>
+      <div class="free-training__expired-icon">⏰</div>
+      <div class="free-training__expired-title">Время тренировки вышло</div>
+      <div class="free-training__expired-text">
+        Но <strong>320 зажигательных тренировок</strong> под танцевальную музыку всегда будут ждать тебя в клубе <strong>Шагай дома</strong>
+      </div>
+      <a href="#tariffs" class="btn btn--red btn--large">Вступить в клуб</a>
+    </div>
+
+    <div class="free-training__after">
+      <div class="free-training__after-title">
+        Листай <span>наверх</span>, если потренировалась 👆🏻<br>
+        есть о чём поговорить
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  &copy; 2026 Шагай Дома. Все права защищены. | <a href="https://walk-walk.ru" target="_blank" rel="noopener">walk-walk.ru</a> | <a href="#oferta">Оферта</a>
+</footer>
+
+<script>
+/* ───────────────────────────────────────
+   1. LOADING SCREEN
+─────────────────────────────────────── */
+(function() {
+  const loader = document.getElementById('loader');
+  const status = document.getElementById('loaderStatus');
+  const steps = [
+    'Анализируем твои данные...',
+    'Подбираем программу тренировок...',
+    'Рассчитываем темп похудения...',
+    'План готов ⚡️'
+  ];
+  let i = 0;
+  const tick = setInterval(() => {
+    i++;
+    if (i < steps.length) status.textContent = steps[i];
+    if (i >= steps.length) clearInterval(tick);
+  }, 450);
+
+  // После полного заполнения шкалы (1.8s) — прячем лоадер
+  setTimeout(() => {
+    loader.classList.add('hide');
+    setTimeout(() => { loader.style.display = 'none'; }, 500);
+  }, 1900);
+})();
+
+/* ───────────────────────────────────────
+   2. URL-ПАРАМЕТРЫ ИЗ SALEBOT
+─────────────────────────────────────── */
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const data = {
+    name:   params.get('name')   || '',
+    age:    params.get('age')    || '—',
+    height: params.get('height') || '—',
+    weight: params.get('weight') || '—',
+    goal:   params.get('goal')   || 'похудеть',
+    sb_id:  params.get('sb_id')  || ''
+  };
+
+  Object.keys(data).forEach(key => {
+    document.querySelectorAll(`[data-var="${key}"]`).forEach(el => {
+      el.textContent = data[key];
+    });
+  });
+
+  // Скрываем обёртки с именем, если имени нет (чтобы не осталось ", " висящей)
+  if (!data.name) {
+    document.querySelectorAll('.pain__name-wrap').forEach(el => el.style.display = 'none');
+    const nameBlock = document.querySelector('.hero__name-block');
+    if (nameBlock) nameBlock.style.display = 'none';
+  }
+
+  if (data.sb_id) {
+    document.querySelectorAll('a.btn').forEach(btn => {
+      const href = btn.getAttribute('href');
+      if (!href || href === '#' || href.startsWith('#')) return;
+      const sep = href.includes('?') ? '&' : '?';
+      btn.setAttribute('href', href + sep + 'sb_id=' + encodeURIComponent(data.sb_id));
+    });
+  }
+})();
+
+/* ───────────────────────────────────────
+   3. SLOT-MACHINE COUNTER (vanilla port react-bits/Counter)
+─────────────────────────────────────── */
+class Spring {
+  constructor(initial = 0, stiffness = 170, damping = 22, mass = 1) {
+    this.current = initial;
+    this.target = initial;
+    this.velocity = 0;
+    this.stiffness = stiffness;
+    this.damping = damping;
+    this.mass = mass;
+  }
+  set(target) { this.target = target; }
+  update(dt) {
+    // Simple damped spring
+    const displacement = this.current - this.target;
+    const springForce = -this.stiffness * displacement;
+    const dampingForce = -this.damping * this.velocity;
+    const accel = (springForce + dampingForce) / this.mass;
+    this.velocity += accel * dt;
+    this.current += this.velocity * dt;
+    const done = Math.abs(displacement) < 0.0005 && Math.abs(this.velocity) < 0.005;
+    if (done) { this.current = this.target; this.velocity = 0; }
+    return !done;
+  }
+}
+
+class Counter {
+  constructor(el, { places = [10, 1], fontSize = 72, digitWidth = '0.68em' } = {}) {
+    this.el = el;
+    this.places = places;
+    this.fontSize = fontSize;
+    // Высота ячейки = fontSize * 1.2 чтобы дать запас для ascender/descender
+    this.height = Math.round(fontSize * 1.2);
+    this.digitWidth = digitWidth;
+    // Spring на каждый разряд
+    this.springs = places.map(() => new Spring(0));
+    this.strips = [];
+    this.running = false;
+    this.lastT = 0;
+    this.init();
+  }
+
+  init() {
+    this.el.innerHTML = '';
+    this.el.style.height = this.height + 'px';
+    this.el.style.fontSize = this.fontSize + 'px';
+
+    this.places.forEach(() => {
+      const digit = document.createElement('span');
+      digit.className = 'counter__digit';
+      digit.style.height = this.height + 'px';
+      digit.style.width = this.digitWidth;
+
+      const strip = document.createElement('span');
+      strip.className = 'counter__strip';
+
+      for (let i = 0; i < 10; i++) {
+        const n = document.createElement('span');
+        n.textContent = String(i);
+        n.style.height = this.height + 'px';
+        n.style.width = '100%';
+        strip.appendChild(n);
+      }
+
+      digit.appendChild(strip);
+      this.el.appendChild(digit);
+      this.strips.push(strip);
+    });
+  }
+
+  setValue(value) {
+    this.value = value;
+    this.places.forEach((place, pi) => {
+      // Целевая цифра для этого разряда (0-9)
+      const digit = Math.floor(value / place) % 10;
+      this.springs[pi].set(digit);
+    });
+    this.startLoop();
+  }
+
+  startLoop() {
+    if (this.running) return;
+    this.running = true;
+    this.lastT = performance.now();
+    const tick = (t) => {
+      const dt = Math.min(0.05, (t - this.lastT) / 1000);
+      this.lastT = t;
+      let anyActive = false;
+      this.springs.forEach(s => { if (s.update(dt)) anyActive = true; });
+      this.render();
+      if (anyActive) {
+        requestAnimationFrame(tick);
+      } else {
+        this.running = false;
+      }
+    };
+    requestAnimationFrame(tick);
+  }
+
+  render() {
+    this.places.forEach((place, pi) => {
+      const latest = this.springs[pi].current;
+      // Прямое смещение ленты: чтобы показать цифру N, ленту двигаем на -N * height
+      const y = -latest * this.height;
+      this.strips[pi].style.transform = `translate3d(0, ${y}px, 0)`;
+    });
+  }
+}
+
+const CALC_DATA = [
+  { min: 15, kg2: 5, kg6: 15 },
+  { min: 20, kg2: 6, kg6: 17 },
+  { min: 30, kg2: 7, kg6: 19 },
+  { min: 45, kg2: 8, kg6: 22 }
+];
+
+const slider = document.getElementById('calcSlider');
+
+// Создаём 3 каунтера: минуты (2 разряда), −кг за 2 мес (1 разряд), −кг за 6 мес (2 разряда)
+const counterMinutes = new Counter(document.getElementById('counterMinutes'), { places: [10, 1], fontSize: 72 });
+const counter2m      = new Counter(document.getElementById('counter2m'),      { places: [1],     fontSize: 48 });
+const counter6m      = new Counter(document.getElementById('counter6m'),      { places: [10, 1], fontSize: 48 });
+
+function updateCalc() {
+  const idx = parseInt(slider.value, 10);
+  const data = CALC_DATA[idx];
+  counterMinutes.setValue(data.min);
+  counter2m.setValue(data.kg2);
+  counter6m.setValue(data.kg6);
+}
+slider.addEventListener('input', updateCalc);
+updateCalc();
+
+/* ───────────────────────────────────────
+   Program tabs switcher
+─────────────────────────────────────── */
+function switchProgTab(btn) {
+  const tab = btn.dataset.tab;
+  document.querySelectorAll('.prog-tab').forEach(t => t.classList.toggle('active', t === btn));
+  document.querySelectorAll('.prog-panel').forEach(p => {
+    p.classList.toggle('active', p.dataset.panel === tab);
+  });
+}
+
+/* ───────────────────────────────────────
+   MagicBento эффект для тарифов
+   (spotlight + border glow + particles + click ripple)
+─────────────────────────────────────── */
+(function() {
+  const section = document.querySelector('.tariffs');
+  if (!section) return;
+  const cards = section.querySelectorAll('.tariff-card');
+  if (!cards.length) return;
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  if (isMobile) return;
+
+  const SPOTLIGHT_RADIUS = 400;
+  const PARTICLE_COUNT = 10;
+  const GLOW = '255, 182, 0';
+
+  // Global spotlight
+  const spot = document.createElement('div');
+  spot.className = 'tariff-spotlight';
+  document.body.appendChild(spot);
+
+  let particles = new WeakMap();
+
+  function spawnParticles(card) {
+    if (particles.has(card)) return;
+    const list = [];
+    const rect = card.getBoundingClientRect();
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const p = document.createElement('span');
+      p.className = 'tariff-card__particle';
+      const x = Math.random() * rect.width;
+      const y = Math.random() * rect.height;
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.opacity = '0';
+      p.style.transform = 'scale(0)';
+      p.style.transition = 'opacity .4s, transform .6s cubic-bezier(.4,0,.2,1)';
+      card.appendChild(p);
+      list.push({ el: p, baseX: x, baseY: y, vx: (Math.random()-.5)*80, vy: (Math.random()-.5)*80 });
+      requestAnimationFrame(() => {
+        p.style.opacity = '1';
+        p.style.transform = `translate(${(Math.random()-.5)*60}px, ${(Math.random()-.5)*60}px) scale(1)`;
+      });
+    }
+    particles.set(card, list);
+  }
+
+  function killParticles(card) {
+    const list = particles.get(card);
+    if (!list) return;
+    list.forEach(p => {
+      p.el.style.opacity = '0';
+      p.el.style.transform = 'scale(0)';
+      setTimeout(() => p.el.remove(), 400);
+    });
+    particles.delete(card);
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => spawnParticles(card));
+    card.addEventListener('mouseleave', () => killParticles(card));
+
+    card.addEventListener('click', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const maxDist = Math.max(
+        Math.hypot(x, y),
+        Math.hypot(x - rect.width, y),
+        Math.hypot(x, y - rect.height),
+        Math.hypot(x - rect.width, y - rect.height)
+      );
+      const ripple = document.createElement('span');
+      ripple.className = 'tariff-card__ripple';
+      ripple.style.width = maxDist * 2 + 'px';
+      ripple.style.height = maxDist * 2 + 'px';
+      ripple.style.left = (x - maxDist) + 'px';
+      ripple.style.top = (y - maxDist) + 'px';
+      ripple.style.transform = 'scale(0)';
+      ripple.style.opacity = '1';
+      ripple.style.transition = 'transform .8s cubic-bezier(.2,0,.2,1), opacity .8s';
+      card.appendChild(ripple);
+      requestAnimationFrame(() => {
+        ripple.style.transform = 'scale(1)';
+        ripple.style.opacity = '0';
+      });
+      setTimeout(() => ripple.remove(), 850);
+    });
+  });
+
+  let insideSection = false;
+  let raf = null;
+
+  function onMove(e) {
+    const sRect = section.getBoundingClientRect();
+    insideSection = e.clientX >= sRect.left && e.clientX <= sRect.right &&
+                    e.clientY >= sRect.top && e.clientY <= sRect.bottom;
+
+    if (!insideSection) {
+      spot.style.opacity = '0';
+      cards.forEach(c => c.style.setProperty('--glow-intensity', '0'));
+      return;
+    }
+
+    // Move spotlight
+    spot.style.left = e.clientX + 'px';
+    spot.style.top = e.clientY + 'px';
+
+    // Compute glow per card based on proximity
+    const proximity = SPOTLIGHT_RADIUS * 0.5;
+    const fadeDistance = SPOTLIGHT_RADIUS * 0.75;
+    let minDistance = Infinity;
+
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const distance = Math.max(0,
+        Math.hypot(e.clientX - centerX, e.clientY - centerY)
+        - Math.max(rect.width, rect.height) / 2
+      );
+      minDistance = Math.min(minDistance, distance);
+
+      let intensity = 0;
+      if (distance <= proximity) intensity = 1;
+      else if (distance <= fadeDistance) intensity = (fadeDistance - distance) / (fadeDistance - proximity);
+
+      // Update glow x/y relative to card
+      const relX = ((e.clientX - rect.left) / rect.width) * 100;
+      const relY = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--glow-x', relX + '%');
+      card.style.setProperty('--glow-y', relY + '%');
+      card.style.setProperty('--glow-intensity', intensity);
+    });
+
+    const targetOpacity = minDistance <= proximity ? 0.9
+      : minDistance <= fadeDistance ? ((fadeDistance - minDistance) / (fadeDistance - proximity)) * 0.9
+      : 0;
+    spot.style.opacity = targetOpacity;
+  }
+
+  document.addEventListener('mousemove', onMove, { passive: true });
+  document.addEventListener('mouseleave', () => {
+    spot.style.opacity = '0';
+    cards.forEach(c => c.style.setProperty('--glow-intensity', '0'));
+  });
+})();
+
+/* ───────────────────────────────────────
+   4. AnimatedList — scale-in on scroll
+─────────────────────────────────────── */
+(function() {
+  const items = document.querySelectorAll('.obj-item');
+  if (!items.length || !('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('in-view'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('in-view');
+      else e.target.classList.remove('in-view');
+    });
+  }, { threshold: 0.4 });
+  items.forEach(el => io.observe(el));
+})();
+
+/* ───────────────────────────────────────
+   5. Free training 24h timer
+   Запоминает первый визит в localStorage.
+   Через 24 часа скрывает видео и показывает expired-блок.
+─────────────────────────────────────── */
+(function() {
+  const STORAGE_KEY = 'shagay_free_training_started';
+  const DURATION_MS = 24 * 60 * 60 * 1000; // 24 часа
+
+  const timerEl   = document.getElementById('ftTimer');
+  const badgeText = document.getElementById('ftBadgeText');
+  const videoEl   = document.getElementById('ftVideo');
+  const expiredEl = document.getElementById('ftExpired');
+  const titleEl   = document.getElementById('ftTitle');
+  const leadEl    = document.getElementById('ftLead');
+
+  if (!timerEl || !videoEl || !expiredEl) return;
+
+  // Получаем или создаём время первого визита
+  let startedAt = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+  if (!startedAt || isNaN(startedAt)) {
+    startedAt = Date.now();
+    try { localStorage.setItem(STORAGE_KEY, String(startedAt)); } catch (e) {}
+  }
+
+  const expiresAt = startedAt + DURATION_MS;
+
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+  function renderExpired() {
+    // Прячем видео, подписи, показываем expired-блок
+    videoEl.hidden = true;
+    expiredEl.hidden = false;
+    if (timerEl) timerEl.textContent = '00:00:00';
+    if (badgeText) badgeText.textContent = '⏰ Истекло';
+    if (titleEl) titleEl.style.display = 'none';
+    if (leadEl) leadEl.style.display = 'none';
+  }
+
+  function tick() {
+    const now = Date.now();
+    const diff = expiresAt - now;
+
+    if (diff <= 0) {
+      renderExpired();
+      return;
+    }
+
+    const hours = Math.floor(diff / (60 * 60 * 1000));
+    const minutes = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
+    const seconds = Math.floor((diff % (60 * 1000)) / 1000);
+    timerEl.textContent = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+})();
+
+
+/* ───────────────────────────────────────
+   6. SCROLL STACK для fail-card (эффект ScrollStack)
+   Карточки уменьшаются по мере того как следующая наезжает сверху
+─────────────────────────────────────── */
+(function() {
+  const cards = document.querySelectorAll('.fail-card');
+  if (!cards.length) return;
+
+  const baseScale = 0.90;
+  const scaleStep = 0.025;
+
+  function updateStack() {
+    const viewportH = window.innerHeight;
+    const stackOffset = 120; // должно совпадать с top: в CSS
+
+    cards.forEach((card, i) => {
+      const rect = card.getBoundingClientRect();
+      // Следующая карточка
+      const next = cards[i + 1];
+      if (!next) {
+        card.style.transform = '';
+        return;
+      }
+      const nextRect = next.getBoundingClientRect();
+      // Расстояние от верха этой карточки до верха следующей
+      // Когда следующая "наезжает" на текущую — уменьшаем текущую
+      const distance = nextRect.top - rect.top;
+      const cardH = rect.height;
+
+      if (distance < cardH && distance > 0) {
+        const progress = 1 - (distance / cardH); // 0 → 1
+        const scale = 1 - progress * (1 - (baseScale + (cards.length - i - 1) * scaleStep));
+        card.style.transform = `scale(${scale})`;
+        card.style.opacity = String(1 - progress * 0.4);
+      } else if (distance <= 0) {
+        const scale = baseScale + (cards.length - i - 1) * scaleStep;
+        card.style.transform = `scale(${scale})`;
+        card.style.opacity = '0.6';
+      } else {
+        card.style.transform = '';
+        card.style.opacity = '';
+      }
+    });
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => { updateStack(); ticking = false; });
+      ticking = true;
+    }
+  }, { passive: true });
+  window.addEventListener('resize', updateStack, { passive: true });
+  updateStack();
+})();
+</script>
+
+</body>
+</html>
