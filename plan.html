@@ -772,15 +772,19 @@
       box-shadow: 0 8px 32px rgba(255,182,0,.25);
       transform: scale(1.03);
     }
-    .tariff-card--popular { padding-top: 64px; }
-    .tariff-card--popular::before {
-      content: '⚡️ С ГАРАНТИЕЙ РЕЗУЛЬТАТА';
-      position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
-      background: var(--orange); color: var(--dark);
-      font-family: var(--font-head); font-size: 11px; font-weight: 700;
-      padding: 6px 18px; border-radius: 20px;
+    .tariff-card__badge {
+      align-self: center;
+      display: inline-block;
+      background: var(--orange);
+      color: var(--dark);
+      font-family: var(--font-head);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 20px;
       white-space: nowrap;
       letter-spacing: .5px;
+      margin-bottom: 16px;
     }
     .tariff-card__period {
       font-family: var(--font-head);
@@ -802,12 +806,16 @@
       font-weight: 900; font-size: 44px;
       color: var(--dark); margin-bottom: 4px;
       line-height: 1;
+      text-align: center;
+      width: 100%;
     }
     .tariff-card__price span { font-size: 22px; font-weight: 500; }
     .tariff-card__monthly {
       font-size: 14px;
       color: var(--mid-gray);
       margin-bottom: 24px;
+      text-align: center;
+      width: 100%;
     }
     .tariff-card__features {
       list-style: none;
@@ -1860,7 +1868,7 @@
       .tariffs h2 { font-size: 26px; }
       .tariff-grid { grid-template-columns: 1fr; max-width: 360px; gap: 28px; }
       .tariff-card { padding: 28px 22px; }
-      .tariff-card--popular { transform: none !important; padding-top: 60px; }
+      .tariff-card--popular { transform: none !important; }
       .tariff-card__period { font-size: 22px !important; }
       .tariff-card__price { font-size: 36px; }
       .tariff-card__features li { font-size: 13px; }
@@ -2174,6 +2182,7 @@
       </div>
 
       <div class="tariff-card tariff-card--popular">
+        <div class="tariff-card__badge">⚡️ С ГАРАНТИЕЙ РЕЗУЛЬТАТА</div>
         <div class="tariff-card__period">−15 кг за 6 месяцев</div>
         <div class="tariff-card__promise">Абонемент на 6 месяцев</div>
         <div class="tariff-card__price">3 990 <span>₽</span></div>
