@@ -279,17 +279,37 @@
     .hero__cta {
       margin-top: 8px;
     }
-    .hero__free-hint {
-      margin-top: 20px;
-      display: inline-flex;
+    .hero__preview {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero__preview-video {
+      flex-shrink: 0;
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 3px solid var(--orange);
+    }
+    .hero__preview-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero__preview-text {
+      display: flex;
       align-items: center;
       gap: 10px;
       font-size: 16px;
       font-weight: 500;
       color: #3a3020;
     }
-    .hero__free-hint-icon { font-size: 22px; }
-    .hero__free-hint strong { color: var(--red); font-weight: 700; }
+    .hero__preview-icon { font-size: 22px; flex-shrink: 0; }
+    .hero__preview-text strong { color: var(--red); font-weight: 700; }
 
     /* ═══════════════════════════════════════════
        2. PAIN
@@ -1849,7 +1869,9 @@
       .hero__chip { padding: 8px 12px; font-size: 12px; }
       .hero__chip-icon { font-size: 14px; }
       .hero__chip strong { font-size: 13px; }
-      .hero__free-hint { font-size: 14px; padding: 0; margin-top: 16px; }
+      .hero__preview { margin-top: 20px; gap: 14px; }
+      .hero__preview-video { width: 80px; height: 80px; border-radius: 14px; }
+      .hero__preview-text { font-size: 14px; }
 
       /* PAIN mobile */
       .pain__grid { grid-template-columns: 1fr; gap: 24px; }
@@ -2011,7 +2033,7 @@
     </h1>
 
     <p class="hero__sub">
-      Индивидуальный план похудения, собранный под твои вводные данные. Только тот подход, который лучше всего работает с лишним весом.
+      Мы собрали план похудения специально под тебя
     </p>
 
     <div class="hero__name-block">
@@ -2028,9 +2050,14 @@
       <div class="hero__chip"><span class="hero__chip-icon">🎯</span> Цель: <strong data-var="goal">похудеть</strong></div>
     </div>
 
-    <div class="hero__free-hint">
-      <span class="hero__free-hint-icon">🎁</span>
-      <span><strong>1 бесплатная тренировка</strong> ждёт тебя в конце плана</span>
+    <div class="hero__preview">
+      <div class="hero__preview-video">
+        <video src="./videos/hero-preview.mp4" autoplay muted loop playsinline preload="auto"></video>
+      </div>
+      <div class="hero__preview-text">
+        <span class="hero__preview-icon">🎁</span>
+        <span><strong>1 бесплатная тренировка</strong> ждёт тебя в конце плана</span>
+      </div>
     </div>
   </div>
 </section>
@@ -2046,7 +2073,7 @@
       </div>
 
       <div class="pain__content">
-        <h2>Давай <span>честно</span><span class="pain__name-wrap">, <span data-var="name"></span></span></h2>
+        <h2>Всё ещё <span>не можешь похудеть?</span></h2>
 
         <p>
           Каждое утро ты встаёшь, смотришь в зеркало — и снова не узнаёшь ту женщину, что когда-то свободно покупала любую одежду и не думала о цифре на весах.
@@ -2067,7 +2094,7 @@
      ═══════════════════════════════════════════ -->
 <section class="why-failed" id="why-failed">
   <div class="container">
-    <h2>Я хочу тебя немного <em>порадовать</em>.<br>Дело не в тебе — а в подходах</h2>
+    <h2>Давай разберем, как на тебя будут действовать <em>разные способы похудения</em>:</h2>
     <p class="why-failed__intro">
       Для людей с лишним весом похудение работает <strong>иначе</strong>. А тебе продавали методы, которые рассчитаны на других.
     </p>
@@ -2165,13 +2192,16 @@
       </div>
     </div>
   </div>
+
+    <div style="text-align:center;margin-top:40px;"><a href="#tariffs" class="btn btn--red btn--large">Похудеть с гарантией результата</a></div>
+  </div>
 </section>
 
 <section class="pari" id="pari">
   <div class="container">
     <div class="pari__grid">
       <div class="pari__left">
-        <h2>Мы уверены, что на тебе это сработает,<br>поэтому давай <span>заключим пари?)</span></h2>
+        <h2>Мы уверены на 100%, что тебе это поможет,<br>поэтому давай <span>заключим пари?)</span></h2>
 
         <div class="pari__box">
           <div class="pari__promise">
@@ -2338,46 +2368,46 @@
     <!-- TAB 1: Шагательная аэробика -->
     <div class="prog-panel active" data-panel="aerobika">
       <div class="prog-screens">
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/3.webp" alt="Тренировки для 100 кг+" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/4.webp" alt="Тренировки для 50+ лет" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/1.webp" alt="Плавный старт" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/2.webp" alt="Мягкий фитнес" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/5.webp" alt="Программа 5" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/6.webp" alt="Программа 6" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/7.webp" alt="Программа 7" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-1" target="_blank" rel="noopener"><img src="./images/programs/aerobika/8.webp" alt="Программа 8" loading="lazy"></a>
+        <img src="./images/programs/aerobika/3.webp" alt="Тренировки для 100 кг+" loading="lazy">
+        <img src="./images/programs/aerobika/4.webp" alt="Тренировки для 50+ лет" loading="lazy">
+        <img src="./images/programs/aerobika/1.webp" alt="Плавный старт" loading="lazy">
+        <img src="./images/programs/aerobika/2.webp" alt="Мягкий фитнес" loading="lazy">
+        <img src="./images/programs/aerobika/5.webp" alt="Программа 5" loading="lazy">
+        <img src="./images/programs/aerobika/6.webp" alt="Программа 6" loading="lazy">
+        <img src="./images/programs/aerobika/7.webp" alt="Программа 7" loading="lazy">
+        <img src="./images/programs/aerobika/8.webp" alt="Программа 8" loading="lazy">
       </div>
     </div>
 
     <!-- TAB 2: Шагательный фитнес -->
     <div class="prog-panel" data-panel="fitness">
       <div class="prog-screens">
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/1.webp" alt="Программа 1" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/2.webp" alt="Программа 2" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/3.webp" alt="Программа 3" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/4.webp" alt="Программа 4" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/5.webp" alt="Программа 5" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/6.webp" alt="Программа 6" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/7.webp" alt="Программа 7" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-2" target="_blank" rel="noopener"><img src="./images/programs/fitness/8.webp" alt="Программа 8" loading="lazy"></a>
+        <img src="./images/programs/fitness/1.webp" alt="Программа 1" loading="lazy">
+        <img src="./images/programs/fitness/2.webp" alt="Программа 2" loading="lazy">
+        <img src="./images/programs/fitness/3.webp" alt="Программа 3" loading="lazy">
+        <img src="./images/programs/fitness/4.webp" alt="Программа 4" loading="lazy">
+        <img src="./images/programs/fitness/5.webp" alt="Программа 5" loading="lazy">
+        <img src="./images/programs/fitness/6.webp" alt="Программа 6" loading="lazy">
+        <img src="./images/programs/fitness/7.webp" alt="Программа 7" loading="lazy">
+        <img src="./images/programs/fitness/8.webp" alt="Программа 8" loading="lazy">
       </div>
     </div>
 
     <!-- TAB 3: Кардио зарядки -->
     <div class="prog-panel" data-panel="cardio">
       <div class="prog-screens">
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-3" target="_blank" rel="noopener"><img src="./images/programs/cardio/1.jpg" alt="Кардио 1" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-3" target="_blank" rel="noopener"><img src="./images/programs/cardio/2.jpg" alt="Кардио 2" loading="lazy"></a>
+        <img src="./images/programs/cardio/1.jpg" alt="Кардио 1" loading="lazy">
+        <img src="./images/programs/cardio/2.jpg" alt="Кардио 2" loading="lazy">
       </div>
     </div>
 
     <!-- TAB 4: Шагай и танцуй -->
     <div class="prog-panel" data-panel="dance">
       <div class="prog-screens">
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/1.jpg" alt="Танцы 1" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/2.jpg" alt="Танцы 2" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/3.jpg" alt="Танцы 3" loading="lazy"></a>
-        <a href="https://walk-walk.ru/training#!/tab/1619241721-4" target="_blank" rel="noopener"><img src="./images/programs/dance/4.jpg" alt="Танцы 4" loading="lazy"></a>
+        <img src="./images/programs/dance/1.jpg" alt="Танцы 1" loading="lazy">
+        <img src="./images/programs/dance/2.jpg" alt="Танцы 2" loading="lazy">
+        <img src="./images/programs/dance/3.jpg" alt="Танцы 3" loading="lazy">
+        <img src="./images/programs/dance/4.jpg" alt="Танцы 4" loading="lazy">
       </div>
     </div>
   </div>
@@ -2596,6 +2626,9 @@
     </div>
     </div>
   </div>
+
+    <div style="text-align:center;margin-top:40px;"><a href="#tariffs" class="btn btn--red btn--large">Похудеть с гарантией результата</a></div>
+  </div>
 </section>
 
 <section class="free-training" id="free-training">
@@ -2635,6 +2668,8 @@
         есть о чём поговорить
       </div>
     </div>
+
+    <div style="text-align:center;margin-top:40px;"><a href="#tariffs" class="btn btn--red btn--large">Похудеть с гарантией результата</a></div>
   </div>
 </section>
 
