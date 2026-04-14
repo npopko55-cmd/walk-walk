@@ -1151,6 +1151,90 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+
+    /* Program cards — photo header + text body */
+    .pc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .pc {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .pc:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+    .pc__photo {
+      width: 100%;
+      aspect-ratio: 5/3;
+      overflow: hidden;
+    }
+    .pc__photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .pc__body {
+      padding: 18px 20px 22px;
+    }
+    .pc__name {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 18px;
+      color: #000;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .pc__stats {
+      list-style: none;
+    }
+    .pc__stats li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 0;
+      font-size: 14px;
+      color: #1a1a1a;
+    }
+    .pc__stats svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      fill: #f50000;
+    }
+    @media (max-width: 1024px) {
+      .pc-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .pc-grid {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 4px 20px 20px;
+        margin: 0 -20px;
+        scrollbar-width: none;
+      }
+      .pc-grid::-webkit-scrollbar { display: none; }
+      .pc {
+        flex: 0 0 72%;
+        scroll-snap-align: center;
+      }
+      .pc__name { font-size: 16px; }
+      .pc__stats li { font-size: 13px; }
+      .pc__body { padding: 14px 16px 18px; }
+    }
+
     /* Programs grid — horizontal scroll on mobile */
     .prog-screens {
       display: grid;
@@ -2364,31 +2448,205 @@
       <button class="prog-tab" data-tab="dance" onclick="switchProgTab(this)">Шагай и танцуй</button>
     </div>
 
-    <!-- TAB 1: Шагательная аэробика -->
     <div class="prog-panel active" data-panel="aerobika">
-      <div class="prog-screens">
-        <img src="./images/programs/aerobika/3.webp" alt="Тренировки для 100 кг+" loading="lazy">
-        <img src="./images/programs/aerobika/4.webp" alt="Тренировки для 50+ лет" loading="lazy">
-        <img src="./images/programs/aerobika/1.webp" alt="Плавный старт" loading="lazy">
-        <img src="./images/programs/aerobika/2.webp" alt="Мягкий фитнес" loading="lazy">
-        <img src="./images/programs/aerobika/5.webp" alt="Программа 5" loading="lazy">
-        <img src="./images/programs/aerobika/6.webp" alt="Программа 6" loading="lazy">
-        <img src="./images/programs/aerobika/7.webp" alt="Программа 7" loading="lazy">
-        <img src="./images/programs/aerobika/8.webp" alt="Программа 8" loading="lazy">
+      <div class="pc-grid">
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/3.webp" alt="Тренировки для 100 кг+" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Тренировки для 100 кг+</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>7 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–20 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>2000–2500 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: средний</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/4.webp" alt="Тренировки для 50+ лет" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Тренировки для 50+ лет</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>7 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–20 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>2000–2500 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: средний</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/1.webp" alt="Плавный старт" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Плавный старт</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>10 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>8–75 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000–10000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: низкий, средний</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/2.webp" alt="Мягкий фитнес" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Мягкий фитнес</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>5 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–18 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000–2000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: средний</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/5.webp" alt="Шагай дома. База" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Шагай дома. База</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>8 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–20 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>2000–2500 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: низкий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/6.webp" alt="Шагай дома. Активно" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Шагай дома. Активно</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>7 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–40 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>2000–6000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: высокий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/7.webp" alt="Аэробика в стиле Ретро" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Аэробика в стиле Ретро</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>15 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–50 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>2000–6000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: средний-высокий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/aerobika/8.webp" alt="Всё только начинается" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Всё только начинается</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>9 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>13–25 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>2000–4000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: средний</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- TAB 2: Шагательный фитнес -->
     <div class="prog-panel" data-panel="fitness">
-      <div class="prog-screens">
-        <img src="./images/programs/fitness/1.webp" alt="Программа 1" loading="lazy">
-        <img src="./images/programs/fitness/2.webp" alt="Программа 2" loading="lazy">
-        <img src="./images/programs/fitness/3.webp" alt="Программа 3" loading="lazy">
-        <img src="./images/programs/fitness/4.webp" alt="Программа 4" loading="lazy">
-        <img src="./images/programs/fitness/5.webp" alt="Программа 5" loading="lazy">
-        <img src="./images/programs/fitness/6.webp" alt="Программа 6" loading="lazy">
-        <img src="./images/programs/fitness/7.webp" alt="Программа 7" loading="lazy">
-        <img src="./images/programs/fitness/8.webp" alt="Программа 8" loading="lazy">
+      <div class="pc-grid">
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/1.webp" alt="Плоский живот" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Плоский живот</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>6 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–25 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000–2000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: высокий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/2.webp" alt="Сильное и рельефное тело" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Сильное и рельефное тело</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>8 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–25 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000–2500 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: высокий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/3.webp" alt="Красивые ягодицы и стройные ноги" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Красивые ягодицы и стройные ноги</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>8 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–40 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000–4000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: высокий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/4.webp" alt="В стиле тай-бо" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">В стиле тай-бо</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>12 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–25 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000–2000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: средний</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/5.webp" alt="Лимфодренажные тренировки" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Лимфодренажные тренировки</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>10 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–30 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>2000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: средний</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/6.webp" alt="Шагательная табата" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Шагательная табата</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>21 тренировка</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>15–30 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000–4000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: низкий-высокий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/7.webp" alt="Интервальные тренировки" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Интервальные тренировки</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>6 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>25 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>1000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: высокий</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pc">
+          <div class="pc__photo"><img src="./images/programs/fitness/8.webp" alt="Зумбавидные тренировки" loading="lazy"></div>
+          <div class="pc__body">
+            <div class="pc__name">Зумбавидные тренировки</div>
+            <ul class="pc__stats">
+              <li><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 6.9 1.4z"/></svg>7 тренировок</li>
+              <li><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>20–60 минут</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 18h20v-2H2v2zm1.15-4.05L4 11h16l.85 2.95c.1.35.15.7.15 1.05H3c0-.35.05-.7.15-1.05zM22 9H2V7h5l2-3h6l2 3h5v2z"/></svg>3000–6000 шагов</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>Темп: высокий</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2409,6 +2667,7 @@
         <img src="./images/programs/dance/4.jpg" alt="Танцы 4" loading="lazy">
       </div>
     </div>
+
   </div>
 </section>
 
