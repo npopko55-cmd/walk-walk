@@ -290,6 +290,109 @@
       .option__emoji { font-size: 24px; }
       .option__text { font-size: 15px; }
     }
+
+    /* ── Preframe overlay (перед requestWriteAccess) ── */
+    .preframe {
+      position: fixed;
+      inset: 0;
+      background: var(--cream);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 20px 32px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+    .preframe.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .preframe__inner {
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      transform: translateY(12px);
+      transition: transform .4s cubic-bezier(.25,.1,.25,1);
+    }
+    .preframe.show .preframe__inner { transform: translateY(0); }
+
+    .preframe__emoji {
+      font-size: 56px;
+      line-height: 1;
+      margin-bottom: 20px;
+      display: inline-block;
+      animation: giftPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes giftPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .preframe__title {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      color: var(--dark);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      text-wrap: balance;
+    }
+    .preframe__title .accent { color: var(--red); }
+    .preframe__body {
+      font-size: 15px;
+      color: var(--dark);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      font-weight: 500;
+      text-wrap: balance;
+    }
+    .preframe__body strong { color: var(--red); }
+    .preframe__note {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.45;
+      margin-bottom: 28px;
+      padding: 12px 16px;
+      background: rgba(12,132,90,.08);
+      border-radius: 14px;
+      border-left: 3px solid var(--green, #0c845a);
+      text-align: left;
+    }
+    .preframe__note::before {
+      content: '🤝 ';
+    }
+    .preframe__btn {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      padding: 20px 18px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 12px 36px rgba(206,44,1,.32);
+      transition: background .2s ease, transform .1s ease;
+      line-height: 1.25;
+      text-align: center;
+    }
+    .preframe__btn:hover { background: var(--red-hover); }
+    .preframe__btn:active { transform: scale(.98); }
+
+    @media (max-width: 360px) {
+      .preframe__title { font-size: 21px; }
+      .preframe__emoji { font-size: 48px; }
+      .preframe__btn { font-size: 14px; padding: 18px 14px; }
+    }
   </style>
 </head>
 <body>
@@ -417,6 +520,23 @@
           </div>
         </div>
       </section>
+
+      <!-- Preframe перед requestWriteAccess -->
+      <div class="preframe" id="preframe" aria-hidden="true">
+        <div class="preframe__inner">
+          <div class="preframe__emoji" aria-hidden="true">🎁</div>
+          <h2 class="preframe__title">Твой план <span class="accent">почти готов!</span></h2>
+          <p class="preframe__body">
+            Чтобы получить индивидуальный план похудения, разреши боту отправку сообщений — просто <strong>нажми «OK»</strong> в следующем окне.
+          </p>
+          <p class="preframe__note">
+            Обещаем — никакого спама. Только полезная информация по похудению и напоминание про бесплатную тренировку.
+          </p>
+          <button type="button" class="preframe__btn" id="preframeBtn">
+            Разрешить и открыть план →
+          </button>
+        </div>
+      </div>
 
       <!-- Q7: Readiness -->
       <section class="step" data-step="7" data-type="choice" data-key="readiness" data-final>
@@ -580,19 +700,8 @@
         return './plan.html?' + params.toString();
       }
 
-      function submit() {
-        haptic('medium');
-
-        // Metrika
-        try {
-          if (typeof ym === 'function') {
-            ym(108598378, 'reachGoal', 'quiz_complete', state.answers);
-          }
-        } catch (e) {}
-
-        var url = buildPlanUrl();
-
-        // Telegram Mini App: спросить разрешение боту писать для дожимов
+      function doRedirectWithTgAccess(url) {
+        // Telegram Mini App: нативный попап разрешения → редирект
         if (tg && typeof tg.requestWriteAccess === 'function') {
           try {
             tg.requestWriteAccess(function (granted) {
@@ -606,8 +715,43 @@
             return;
           } catch (e) {}
         }
-
         window.location.href = url;
+      }
+
+      function submit() {
+        haptic('medium');
+
+        // Metrika
+        try {
+          if (typeof ym === 'function') {
+            ym(108598378, 'reachGoal', 'quiz_complete', state.answers);
+          }
+        } catch (e) {}
+
+        var url = buildPlanUrl();
+
+        // Показываем pre-frame экран перед нативным попапом
+        var preframe = document.getElementById('preframe');
+        var preframeBtn = document.getElementById('preframeBtn');
+        if (preframe && preframeBtn) {
+          preframe.setAttribute('aria-hidden', 'false');
+          preframe.classList.add('show');
+          // Прячем TG-BackButton на этом экране
+          if (tg && tg.BackButton) { try { tg.BackButton.hide(); } catch (_) {} }
+
+          try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'preframe_shown'); } catch (e) {}
+
+          preframeBtn.addEventListener('click', function onClick() {
+            preframeBtn.removeEventListener('click', onClick);
+            haptic('medium');
+            try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'preframe_continue'); } catch (e) {}
+            doRedirectWithTgAccess(url);
+          });
+          return;
+        }
+
+        // Фолбэк (если preframe не найден)
+        doRedirectWithTgAccess(url);
       }
 
       // Bind events

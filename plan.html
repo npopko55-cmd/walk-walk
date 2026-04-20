@@ -2315,7 +2315,7 @@
       </div>
 
       <div class="why-walk__video">
-        <video src="./videos/why-walking.mp4" autoplay muted loop playsinline preload="none"></video>
+        <video src="./videos/why-walking.mp4" autoplay muted loop playsinline preload="auto"></video>
       </div>
     </div>
   </div>
@@ -2348,7 +2348,7 @@
       </div>
 
       <div class="pari__video">
-        <video src="./videos/pari.mp4" autoplay muted loop playsinline preload="none"></video>
+        <video src="./videos/pari.mp4" autoplay muted loop playsinline preload="auto"></video>
       </div>
     </div>
   </div>
@@ -3112,6 +3112,25 @@
       try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'free_training_play'); } catch (e) {}
     }, { once: true });
   }
+
+  // Autoplay-страховка: стартуем muted-видео как только попадают в экран
+  // (кинескопный iframe не трогаем)
+  try {
+    var autoVids = document.querySelectorAll('video[autoplay][muted]');
+    if ('IntersectionObserver' in window && autoVids.length) {
+      var vObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting) {
+            if (v.paused) { try { v.play().catch(function(){}); } catch(_){} }
+          } else {
+            if (!v.paused) { try { v.pause(); } catch(_){} }
+          }
+        });
+      }, { threshold: 0.25 });
+      autoVids.forEach(function (v) { vObs.observe(v); });
+    }
+  } catch (e) {}
 
   if (!tg) return;
 
