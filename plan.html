@@ -3159,23 +3159,51 @@
     });
   } catch (e) {}
 
-  // Autoplay-страховка: стартуем muted-видео как только попадают в экран
-  // (кинескопный iframe не трогаем)
+  // Autoplay-страховка для muted-видео (Kinescope-iframe не трогаем)
   try {
     var autoVids = document.querySelectorAll('video[autoplay][muted]');
+
+    function tryPlay(v) {
+      if (!v) return;
+      try { v.muted = true; } catch (_) {}
+      try { v.setAttribute('playsinline', ''); } catch (_) {}
+      try {
+        var p = v.play();
+        if (p && typeof p.catch === 'function') p.catch(function(){});
+      } catch (_) {}
+    }
+
+    // Попытка 1 — сразу при загрузке
+    autoVids.forEach(tryPlay);
+
+    // Попытка 2 — IntersectionObserver: при появлении в экране
     if ('IntersectionObserver' in window && autoVids.length) {
       var vObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
-          var v = e.target;
-          if (e.isIntersecting) {
-            if (v.paused) { try { v.play().catch(function(){}); } catch(_){} }
-          } else {
-            if (!v.paused) { try { v.pause(); } catch(_){} }
-          }
+          if (e.isIntersecting) tryPlay(e.target);
+          else { try { if (!e.target.paused) e.target.pause(); } catch (_) {} }
         });
-      }, { threshold: 0.25 });
+      }, { threshold: 0.1 });
       autoVids.forEach(function (v) { vObs.observe(v); });
     }
+
+    // Попытка 3 — форс-старт на первое касание экрана
+    // (iOS WebApp блокирует autoplay до первого user-gesture)
+    function forcePlayAll() {
+      autoVids.forEach(tryPlay);
+      document.removeEventListener('touchstart', forcePlayAll, { passive: true });
+      document.removeEventListener('pointerdown', forcePlayAll, { passive: true });
+      document.removeEventListener('scroll', forcePlayAll, { passive: true });
+    }
+    document.addEventListener('touchstart', forcePlayAll, { passive: true });
+    document.addEventListener('pointerdown', forcePlayAll, { passive: true });
+    document.addEventListener('scroll', forcePlayAll, { passive: true });
+
+    // Попытка 4 — когда видео загрузится (canplay), повторить play
+    autoVids.forEach(function (v) {
+      v.addEventListener('canplay', function () { tryPlay(v); }, { once: true });
+      v.addEventListener('loadeddata', function () { tryPlay(v); }, { once: true });
+    });
   } catch (e) {}
 
   if (!tg) return;
