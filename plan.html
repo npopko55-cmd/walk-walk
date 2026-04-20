@@ -31,6 +31,9 @@
   <meta name="twitter:description" content="Индивидуальный план похудения от клуба ШАГАЙ ДОМА. Похудей минимум на 15 кг за 6 месяцев — или мы вернём деньги.">
   <meta name="twitter:image" content="https://npopko55-cmd.github.io/walk-walk/images/pain-woman.jpg">
 
+  <!-- Telegram Mini App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
       (function(m,e,t,r,i,k,a){
@@ -3079,6 +3082,47 @@
     loader.classList.add('hide');
     setTimeout(() => { loader.style.display = 'none'; }, 500);
   }, 1900);
+})();
+
+/* ───────────────────────────────────────
+   1.5. TELEGRAM MINI APP
+─────────────────────────────────────── */
+(function() {
+  var tg = window.Telegram && window.Telegram.WebApp;
+  if (!tg) return;
+  try {
+    tg.ready();
+    tg.expand();
+    if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+    if (tg.setHeaderColor) tg.setHeaderColor('#fff8ed');
+    if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
+  } catch (e) {}
+
+  // Внешние ссылки (оплата тарифов, офферта, награды) открываем через TG
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest && e.target.closest('a[target="_blank"]');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || !/^https?:/i.test(href)) return;
+    e.preventDefault();
+    try {
+      // Платёжные ссылки открываем в браузере (Stripe, walk-walk.ru)
+      if (/walk-walk\.ru|stripe|yookassa|tinkoff/i.test(href)) {
+        tg.openLink(href, { try_instant_view: false });
+      } else {
+        tg.openLink(href);
+      }
+    } catch (_) {
+      window.open(href, '_blank', 'noopener');
+    }
+  });
+
+  // Haptic feedback на основные CTA
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest && e.target.closest('.btn--red, .btn--orange');
+    if (!btn) return;
+    try { if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium'); } catch (_) {}
+  });
 })();
 
 /* ───────────────────────────────────────

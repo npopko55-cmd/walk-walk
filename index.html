@@ -36,6 +36,9 @@
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
+  <!-- Telegram Mini App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -276,7 +279,20 @@
   </div>
 
   <script>
-    // Preserve query params (utm, sb_id) when navigating to quiz
+    // Telegram Mini App init
+    (function () {
+      var tg = window.Telegram && window.Telegram.WebApp;
+      if (!tg) return;
+      try {
+        tg.ready();
+        tg.expand();
+        if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+        if (tg.setHeaderColor) tg.setHeaderColor('#fff8ed');
+        if (tg.setBackgroundColor) tg.setBackgroundColor('#fff8ed');
+      } catch (e) {}
+    })();
+
+    // Preserve query params (utm, sb_id) when navigating to quiz + haptic on tap
     (function () {
       var cta = document.getElementById('cta-quiz-start');
       if (!cta) return;
@@ -284,6 +300,12 @@
       if (qs) {
         cta.href = './quiz.html' + qs;
       }
+      cta.addEventListener('click', function () {
+        try {
+          var tg = window.Telegram && window.Telegram.WebApp;
+          if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        } catch (e) {}
+      });
     })();
   </script>
 </body>

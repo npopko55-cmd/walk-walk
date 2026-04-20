@@ -20,6 +20,9 @@
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
+  <!-- Telegram Mini App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -440,6 +443,26 @@
   </main>
 
   <script>
+    // Telegram Mini App: early init
+    var tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
+      try {
+        tg.ready();
+        tg.expand();
+        if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+        if (tg.setHeaderColor) tg.setHeaderColor('#fffcf7');
+        if (tg.setBackgroundColor) tg.setBackgroundColor('#fffcf7');
+      } catch (e) {}
+    }
+    function haptic(type) {
+      try {
+        if (tg && tg.HapticFeedback) {
+          if (type === 'selection') tg.HapticFeedback.selectionChanged();
+          else tg.HapticFeedback.impactOccurred(type || 'light');
+        }
+      } catch (e) {}
+    }
+
     (function () {
       var state = {
         currentStep: 1,
@@ -471,6 +494,11 @@
         state.currentStep = n;
         setProgress(n);
         backBtn.disabled = n === 1;
+        // Telegram native back button
+        if (tg && tg.BackButton) {
+          if (n === 1) tg.BackButton.hide();
+          else tg.BackButton.show();
+        }
         // Auto-focus numeric inputs
         var inp = el.querySelector('input.num-input');
         if (inp) { setTimeout(function () { inp.focus({ preventScroll: true }); }, 220); }
@@ -520,39 +548,66 @@
         show(state.currentStep - 1);
       }
 
-      function submit() {
-        // Preserve any incoming query params (utm, sb_id, etc)
+      function buildPlanUrl() {
         var incoming = new URLSearchParams(window.location.search);
         var params = new URLSearchParams();
 
-        // Existing plan.html params
         params.set('age', state.answers.age);
         params.set('height', state.answers.height);
         params.set('weight', state.answers.weight);
         params.set('goal', state.answers.goal);
-
-        // New params (for analytics / future use)
         params.set('tries', state.answers.tries);
         params.set('lifestyle', state.answers.lifestyle);
         params.set('readiness', state.answers.readiness);
 
-        // Source tag
         if (!incoming.has('sb_id')) params.set('sb_id', 'site');
         if (!incoming.has('utm_source')) params.set('utm_source', 'site_quiz');
 
-        // Carry over utm/sb_id if they existed
+        // TG user id — если открыто как Mini App, протащим в plan.html
+        try {
+          if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
+            params.set('tg_id', tg.initDataUnsafe.user.id);
+            if (tg.initDataUnsafe.user.first_name) {
+              params.set('name', tg.initDataUnsafe.user.first_name);
+            }
+          }
+        } catch (e) {}
+
         incoming.forEach(function (val, key) {
           if (!params.has(key)) params.set(key, val);
         });
 
-        // Metrika event
+        return './plan.html?' + params.toString();
+      }
+
+      function submit() {
+        haptic('medium');
+
+        // Metrika
         try {
           if (typeof ym === 'function') {
             ym(108598378, 'reachGoal', 'quiz_complete', state.answers);
           }
         } catch (e) {}
 
-        window.location.href = './plan.html?' + params.toString();
+        var url = buildPlanUrl();
+
+        // Telegram Mini App: спросить разрешение боту писать для дожимов
+        if (tg && typeof tg.requestWriteAccess === 'function') {
+          try {
+            tg.requestWriteAccess(function (granted) {
+              try {
+                if (typeof ym === 'function') {
+                  ym(108598378, 'reachGoal', granted ? 'tg_write_granted' : 'tg_write_denied');
+                }
+              } catch (e) {}
+              window.location.href = url;
+            });
+            return;
+          } catch (e) {}
+        }
+
+        window.location.href = url;
       }
 
       // Bind events
