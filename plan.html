@@ -1932,69 +1932,6 @@
       border: none;
       display: block;
     }
-    .free-training__poster {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #1f1300 0%, #3a2416 50%, var(--red) 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      cursor: pointer;
-      color: #fff;
-      text-align: center;
-      padding: 24px;
-      transition: filter .2s ease;
-      overflow: hidden;
-    }
-    .free-training__poster::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,182,0,.18), transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(206,44,1,.3), transparent 50%);
-      pointer-events: none;
-    }
-    .free-training__poster:hover { filter: brightness(1.05); }
-    .free-training__poster:active { transform: scale(.99); }
-    .free-training__play {
-      position: relative;
-      width: 84px;
-      height: 84px;
-      border-radius: 50%;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 12px 48px rgba(0,0,0,.4);
-      transition: transform .2s ease;
-    }
-    .free-training__poster:hover .free-training__play { transform: scale(1.06); }
-    .free-training__play::after {
-      content: '';
-      width: 0; height: 0;
-      border-left: 26px solid var(--red);
-      border-top: 16px solid transparent;
-      border-bottom: 16px solid transparent;
-      margin-left: 6px;
-    }
-    .free-training__poster-text {
-      position: relative;
-      font-family: var(--font-head);
-      font-weight: 700;
-      font-size: clamp(15px, 2vw, 18px);
-      letter-spacing: .02em;
-      line-height: 1.3;
-      max-width: 420px;
-    }
-    .free-training__poster-sub {
-      position: relative;
-      font-size: 13px;
-      opacity: .8;
-      font-weight: 500;
-    }
     .free-training__after {
       max-width: 680px;
       margin: 48px auto 0;
@@ -3074,15 +3011,10 @@
     <!-- Блок с активной тренировкой -->
     <div class="free-training__video" id="ftVideo">
       <div>
-        <button type="button"
-                id="ftPoster"
-                class="free-training__poster"
-                data-kinescope-id="nShAVPdZdQQ45Cv6To1M8Q"
-                aria-label="Запустить бесплатную тренировку">
-          <div class="free-training__play" aria-hidden="true"></div>
-          <div class="free-training__poster-text">Бесплатная тренировка · 15 минут</div>
-          <div class="free-training__poster-sub">Нажми Play — включится со звуком</div>
-        </button>
+        <iframe src="https://kinescope.io/embed/nShAVPdZdQQ45Cv6To1M8Q"
+                allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;"
+                frameborder="0"
+                allowfullscreen></iframe>
       </div>
     </div>
 
@@ -3628,31 +3560,6 @@ function switchProgTab(btn) {
 
   tick();
   setInterval(tick, 1000);
-})();
-
-/* ───────────────────────────────────────
-   5.5. CLICK-TO-PLAY для Kinescope (чтоб звук был)
-─────────────────────────────────────── */
-(function() {
-  const poster = document.getElementById('ftPoster');
-  if (!poster) return;
-
-  poster.addEventListener('click', function() {
-    const id = poster.getAttribute('data-kinescope-id');
-    if (!id) return;
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://kinescope.io/embed/' + id + '?autoplay=1&muted=0';
-    iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write; screen-wake-lock;');
-    iframe.setAttribute('allowfullscreen', '');
-    iframe.frameBorder = '0';
-    poster.replaceWith(iframe);
-
-    try {
-      if (typeof ym === 'function') ym(108598378, 'reachGoal', 'free_training_play');
-      var tg = window.Telegram && window.Telegram.WebApp;
-      if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-    } catch (e) {}
-  });
 })();
 
 
