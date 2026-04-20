@@ -279,6 +279,54 @@
   </div>
 
   <script>
+    // Возврат пользователя, прошедшего квиз ранее: сразу на plan.html с ответами
+    (function () {
+      try {
+        var incoming = new URLSearchParams(window.location.search);
+        if (incoming.get('retake') === '1') return;
+        var _tg = window.Telegram && window.Telegram.WebApp;
+        var tgId = (_tg && _tg.initDataUnsafe && _tg.initDataUnsafe.user && _tg.initDataUnsafe.user.id) || '';
+        var saved = null;
+        if (tgId) {
+          var a = localStorage.getItem('shagay_quiz_v1_' + tgId);
+          if (a) saved = JSON.parse(a);
+        }
+        if (!saved) {
+          var b = localStorage.getItem('shagay_quiz_v1');
+          if (b) saved = JSON.parse(b);
+        }
+        if (!saved || saved.age == null) return;
+
+        var params = new URLSearchParams();
+        ['age','height','weight','goal','tries','lifestyle','readiness'].forEach(function (k) {
+          if (saved[k] != null) params.set(k, saved[k]);
+        });
+
+        // TG user → name + tg_id
+        if (_tg && _tg.initDataUnsafe && _tg.initDataUnsafe.user) {
+          var u = _tg.initDataUnsafe.user;
+          if (u.id) params.set('tg_id', u.id);
+          if (u.first_name) params.set('name', u.first_name);
+        }
+
+        // startapp → utm_source для возвращенцев
+        if (_tg && _tg.initDataUnsafe && _tg.initDataUnsafe.start_param) {
+          if (!incoming.get('utm_source')) params.set('utm_source', _tg.initDataUnsafe.start_param);
+          if (!incoming.get('utm_medium')) params.set('utm_medium', 'tg_miniapp');
+        }
+
+        incoming.forEach(function (val, key) {
+          if (!params.has(key)) params.set(key, val);
+        });
+        if (!params.has('sb_id')) params.set('sb_id', 'site');
+        params.set('returning', '1');
+
+        try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'returning_user'); } catch (e) {}
+
+        window.location.replace('./plan.html?' + params.toString());
+      } catch (e) {}
+    })();
+
     // Telegram Mini App init + startapp → utm_source
     (function () {
       var tg = window.Telegram && window.Telegram.WebApp;

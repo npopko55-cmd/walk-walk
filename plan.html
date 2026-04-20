@@ -2375,7 +2375,7 @@
           <li><strong>Доступна рассрочка</strong></li>
           <li><strong>Бесплатное пополнение</strong> шагательных тренировок и программ</li>
         </ul>
-        <a href="https://walk-walk.ru/2-months/?utm_source=tg_plan" target="_blank" rel="noopener" class="btn btn--red tariff-card__btn">Оформить абонемент на 2 месяца</a>
+        <a href="https://walk-walk.ru/2-months/?utm_source=tg_plan" data-tariff="tariff_2mo" target="_blank" rel="noopener" class="btn btn--red tariff-card__btn">Оформить абонемент на 2 месяца</a>
       </div>
 
       <div class="tariff-card tariff-card--popular">
@@ -2393,7 +2393,7 @@
           <li><strong>Бесплатное пополнение</strong> шагательных тренировок и программ</li>
           <li><strong>⚡️ Пари — возврат денег при невыполнении</strong></li>
         </ul>
-        <a href="https://walk-walk.ru/6-months-nik/?utm_source=tg_plan" target="_blank" rel="noopener" class="btn btn--red tariff-card__btn">Оформить абонемент на 6 месяцев</a>
+        <a href="https://walk-walk.ru/6-months-nik/?utm_source=tg_plan" data-tariff="tariff_6mo" target="_blank" rel="noopener" class="btn btn--red tariff-card__btn">Оформить абонемент на 6 месяцев</a>
       </div>
     </div>
 
@@ -3112,6 +3112,52 @@
       try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'free_training_play'); } catch (e) {}
     }, { once: true });
   }
+
+  // UTM-прокидывание в тарифные ссылки (для ГетКурса)
+  try {
+    var urlParams = new URLSearchParams(window.location.search);
+    var utmSource = urlParams.get('utm_source') || '';
+    var utmMedium = urlParams.get('utm_medium') || '';
+    var utmCampaign = urlParams.get('utm_campaign') || '';
+    var utmContent = urlParams.get('utm_content') || '';
+    var utmTerm = urlParams.get('utm_term') || '';
+    var tgIdParam = urlParams.get('tg_id') || '';
+
+    document.querySelectorAll('a[data-tariff]').forEach(function (a) {
+      try {
+        var href = a.getAttribute('href');
+        if (!href) return;
+        var u = new URL(href, window.location.origin);
+        if (utmSource) u.searchParams.set('utm_source', utmSource);
+        if (utmMedium) u.searchParams.set('utm_medium', utmMedium);
+        // Если utm_campaign уже был — не затираем, иначе ставим тариф как кампанию
+        if (utmCampaign) {
+          u.searchParams.set('utm_campaign', utmCampaign);
+          u.searchParams.set('utm_content', a.dataset.tariff); // 2mo/6mo в content
+        } else {
+          u.searchParams.set('utm_campaign', a.dataset.tariff);
+        }
+        if (utmContent && !u.searchParams.get('utm_content')) u.searchParams.set('utm_content', utmContent);
+        if (utmTerm) u.searchParams.set('utm_term', utmTerm);
+        if (tgIdParam) u.searchParams.set('tg_id', tgIdParam);
+        a.setAttribute('href', u.toString());
+      } catch (_) {}
+    });
+
+    // Трекаем клики в метрику
+    document.querySelectorAll('a[data-tariff]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try {
+          if (typeof ym === 'function') {
+            ym(108598378, 'reachGoal', 'tariff_click', {
+              tariff: a.dataset.tariff,
+              utm_source: utmSource
+            });
+          }
+        } catch (_) {}
+      });
+    });
+  } catch (e) {}
 
   // Autoplay-страховка: стартуем muted-видео как только попадают в экран
   // (кинескопный iframe не трогаем)
