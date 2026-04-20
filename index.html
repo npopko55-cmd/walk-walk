@@ -279,7 +279,7 @@
   </div>
 
   <script>
-    // Telegram Mini App init
+    // Telegram Mini App init + startapp → utm_source
     (function () {
       var tg = window.Telegram && window.Telegram.WebApp;
       if (!tg) return;
@@ -290,20 +290,48 @@
         if (tg.setHeaderColor) tg.setHeaderColor('#fff8ed');
         if (tg.setBackgroundColor) tg.setBackgroundColor('#fff8ed');
       } catch (e) {}
+
+      // Достаём startapp-параметр из прямой ссылки t.me/bot/plan?startapp=XXX
+      // и прокидываем в URL как utm_source, чтобы подхватила метрика
+      try {
+        var startParam = tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+        if (startParam) {
+          var url = new URL(window.location.href);
+          if (!url.searchParams.get('utm_source')) {
+            url.searchParams.set('utm_source', startParam);
+          }
+          if (!url.searchParams.get('utm_medium')) {
+            url.searchParams.set('utm_medium', 'tg_miniapp');
+          }
+          window.history.replaceState({}, '', url);
+          // Оповещаем метрику о кастомном параметре визита
+          try {
+            if (typeof ym === 'function') {
+              ym(108598378, 'params', { utm_source: startParam, tg_miniapp: 1 });
+              ym(108598378, 'reachGoal', 'app_open', { utm_source: startParam });
+            }
+          } catch (e) {}
+        } else {
+          try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'app_open'); } catch (e) {}
+        }
+      } catch (e) {}
     })();
 
-    // Preserve query params (utm, sb_id) when navigating to quiz + haptic on tap
+    // Preserve query params (utm, sb_id, startapp) when navigating to quiz + haptic on tap
     (function () {
       var cta = document.getElementById('cta-quiz-start');
       if (!cta) return;
-      var qs = window.location.search || '';
-      if (qs) {
+      function updateHref() {
+        var qs = window.location.search || '';
         cta.href = './quiz.html' + qs;
       }
+      updateHref();
       cta.addEventListener('click', function () {
+        updateHref();
         try {
           var tg = window.Telegram && window.Telegram.WebApp;
           if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+          if (typeof ym === 'function') ym(108598378, 'reachGoal', 'cta_to_quiz');
         } catch (e) {}
       });
     })();

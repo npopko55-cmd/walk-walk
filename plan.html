@@ -3089,14 +3089,31 @@
 ─────────────────────────────────────── */
 (function() {
   var tg = window.Telegram && window.Telegram.WebApp;
+  if (tg) {
+    try {
+      tg.ready();
+      tg.expand();
+      if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+      if (tg.setHeaderColor) tg.setHeaderColor('#fff8ed');
+      if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
+    } catch (e) {}
+  }
+
+  // Goal: user seen plan (fires once on load)
+  try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'plan_view'); } catch (e) {}
+
+  // Goal: free_training_play — первый тап по области видео
+  var ftVideo = document.getElementById('ftVideo');
+  if (ftVideo) {
+    var fired = false;
+    ftVideo.addEventListener('pointerdown', function () {
+      if (fired) return;
+      fired = true;
+      try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'free_training_play'); } catch (e) {}
+    }, { once: true });
+  }
+
   if (!tg) return;
-  try {
-    tg.ready();
-    tg.expand();
-    if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
-    if (tg.setHeaderColor) tg.setHeaderColor('#fff8ed');
-    if (tg.setBackgroundColor) tg.setBackgroundColor('#ffffff');
-  } catch (e) {}
 
   // Внешние ссылки (оплата тарифов, офферта, награды) открываем через TG
   document.addEventListener('click', function(e) {
