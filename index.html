@@ -283,8 +283,20 @@
     (function () {
       try {
         var incoming = new URLSearchParams(window.location.search);
-        if (incoming.get('retake') === '1') return;
         var _tg = window.Telegram && window.Telegram.WebApp;
+        var startParam = _tg && _tg.initDataUnsafe && _tg.initDataUnsafe.start_param;
+
+        // Retake-триггер: ?retake=1 в URL или startapp=retake|reset в TG
+        if (incoming.get('retake') === '1' || startParam === 'retake' || startParam === 'reset') {
+          try {
+            localStorage.removeItem('shagay_quiz_v1');
+            Object.keys(localStorage).forEach(function (k) {
+              if (k.indexOf('shagay_quiz_v1_') === 0) localStorage.removeItem(k);
+            });
+          } catch (_) {}
+          return;
+        }
+
         var tgId = (_tg && _tg.initDataUnsafe && _tg.initDataUnsafe.user && _tg.initDataUnsafe.user.id) || '';
         var saved = null;
         if (tgId) {
