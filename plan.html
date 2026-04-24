@@ -3362,6 +3362,45 @@
 })();
 
 /* ───────────────────────────────────────
+   1.7. СЕГМЕНТАЦИЯ ПО ВЕСУ (hero, тарифы, пари, calc)
+─────────────────────────────────────── */
+window.__WEIGHT_SEGMENT__ = (function () {
+  var p = new URLSearchParams(window.location.search);
+  var w = parseInt(p.get('weight'), 10);
+  var seg;
+  if (!w || isNaN(w) || w < 60) seg = 'light';         // <60
+  else if (w < 65) seg = 'small';                       // 60-64
+  else if (w < 75) seg = 'medium';                      // 65-74
+  else seg = 'heavy';                                    // 75+
+
+  var CONFIG = {
+    light:  { kg2: 0,  kg6: 0,  kicker: 'Твой <span class="accent">план движения</span>: шагать дома и поддерживать стройность', pariPromise: '2 месяца', pariKg: '', tariff2mo: '−2 кг', tariff6mo: '−5 кг', calcH2: 'Хочешь не только поддерживать, но и немного сбросить?' },
+    small:  { kg2: 2,  kg6: 5,  kicker: 'Индивидуальный <span class="accent">план похудения</span>',  pariPromise: '6 месяцев',   pariKg: '5 кг',  tariff2mo: '−2 кг', tariff6mo: '−5 кг',  calcH2: '5 кг мало?' },
+    medium: { kg2: 5,  kg6: 10, kicker: 'Индивидуальный <span class="accent">план похудения</span>',  pariPromise: '6 месяцев',   pariKg: '10 кг', tariff2mo: '−5 кг', tariff6mo: '−10 кг', calcH2: '10 кг мало?' },
+    heavy:  { kg2: 5,  kg6: 15, kicker: 'Индивидуальный <span class="accent">план похудения</span>',  pariPromise: '6 месяцев',   pariKg: '15 кг', tariff2mo: '−5 кг', tariff6mo: '−15 кг', calcH2: '15 кг мало?' }
+  };
+
+  var c = CONFIG[seg];
+
+  // Hero kicker
+  var kickerEl = document.querySelector('[data-seg-kicker]');
+  if (kickerEl) kickerEl.innerHTML = c.kicker;
+
+  // Milestones: если light — скрываем кг-плашки, показываем альтернативный сабтитр
+  var ms = document.querySelector('[data-seg-milestones]');
+  var kg2El = document.querySelector('[data-seg-kg2]');
+  var kg6El = document.querySelector('[data-seg-kg6]');
+  if (seg === 'light' && ms) {
+    ms.style.display = 'none';
+  } else if (ms) {
+    if (kg2El) kg2El.innerHTML = '−' + c.kg2 + ' <span class="milestone__unit">кг</span>';
+    if (kg6El) kg6El.innerHTML = '−' + c.kg6 + ' <span class="milestone__unit">кг</span>';
+  }
+
+  return { seg: seg, weight: w, config: c };
+})();
+
+/* ───────────────────────────────────────
    2. URL-ПАРАМЕТРЫ ИЗ SALEBOT
 ─────────────────────────────────────── */
 (function() {
