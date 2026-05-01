@@ -3228,6 +3228,15 @@
   // Goal: user seen plan (fires once on load)
   try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'plan_view'); } catch (e) {}
 
+  // Если пришли из MAX-воронки — отдельная цель для аналитики платформы
+  try {
+    var _platformParam = new URLSearchParams(window.location.search).get('platform');
+    var _utmMediumParam = new URLSearchParams(window.location.search).get('utm_medium');
+    if (_platformParam === 'max' || _utmMediumParam === 'max_miniapp') {
+      if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_plan_view');
+    }
+  } catch (e) {}
+
   // Goal: free_training_play — первый тап по области видео
   var ftVideo = document.getElementById('ftVideo');
   if (ftVideo) {
@@ -3248,6 +3257,8 @@
     var utmContent = urlParams.get('utm_content') || '';
     var utmTerm = urlParams.get('utm_term') || '';
     var tgIdParam = urlParams.get('tg_id') || '';
+    var maxIdParam = urlParams.get('max_id') || '';
+    var platformParam = urlParams.get('platform') || '';
 
     document.querySelectorAll('a[data-tariff]').forEach(function (a) {
       try {
@@ -3266,6 +3277,8 @@
         if (utmContent && !u.searchParams.get('utm_content')) u.searchParams.set('utm_content', utmContent);
         if (utmTerm) u.searchParams.set('utm_term', utmTerm);
         if (tgIdParam) u.searchParams.set('tg_id', tgIdParam);
+        if (maxIdParam) u.searchParams.set('max_id', maxIdParam);
+        if (platformParam) u.searchParams.set('platform', platformParam);
         a.setAttribute('href', u.toString());
       } catch (_) {}
     });
@@ -3279,6 +3292,13 @@
               tariff: a.dataset.tariff,
               utm_source: utmSource
             });
+            // Дубль-цель для MAX-воронки
+            if (platformParam === 'max' || utmMedium === 'max_miniapp') {
+              ym(108598378, 'reachGoal', 'max_tariff_click', {
+                tariff: a.dataset.tariff,
+                utm_source: utmSource
+              });
+            }
           }
         } catch (_) {}
       });
