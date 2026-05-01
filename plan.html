@@ -1001,11 +1001,19 @@
       gap: 16px;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: inherit;
     }
     .pari__cta-row .btn--orange {
-      padding: 18px 40px;
-      font-size: 18px;
-      box-shadow: 0 16px 44px rgba(255,182,0,.38);
+      padding: 22px 48px;
+      font-size: 19px;
+      min-width: 280px;
+      letter-spacing: 0.01em;
+      box-shadow: 0 18px 50px rgba(255,182,0,.42);
+    }
+    /* В стек-режиме (узкий iframe) — кнопку центрируем и делаем заметнее */
+    @media (max-width: 1180px) {
+      .pari__cta-row { justify-content: center; }
+      .pari__cta-row .btn--orange { min-width: 320px; padding: 22px 56px; }
     }
     .pari__disclaimer {
       margin-top: 22px;
@@ -2553,7 +2561,7 @@
     <!-- Персональный «паспорт» вместо россыпи chip'ов -->
     <div class="hero__profile">
       <div class="hero__profile__header">
-        <span class="hero__profile__label">Твой профиль</span>
+        <span class="hero__profile__label">Твои данные</span>
         <span class="hero__profile__name"><span data-var="name">—</span></span>
       </div>
       <div class="hero__profile__grid">
@@ -3680,7 +3688,7 @@ window.__WEIGHT_SEGMENT__ = (function () {
   else seg = 'heavy';                                    // 75+
 
   var CONFIG = {
-    light:  { kg2: 0,  kg6: 0,  kicker: 'Твой <span class="accent">план движения</span>: шагать дома и поддерживать стройность', pariPromise: '2 месяца', pariKg: '', tariff2mo: '−2 кг', tariff6mo: '−5 кг', calcH2: 'Хочешь не только поддерживать, но и немного сбросить?' },
+    light:  { kg2: 1,  kg6: 3,  kicker: 'Индивидуальный <span class="accent">план похудения</span>',  pariPromise: '2 месяца',   pariKg: '',     tariff2mo: '−1 кг', tariff6mo: '−3 кг', calcH2: 'Хочешь сбросить чуть больше?' },
     small:  { kg2: 2,  kg6: 5,  kicker: 'Индивидуальный <span class="accent">план похудения</span>',  pariPromise: '6 месяцев',   pariKg: '5 кг',  tariff2mo: '−2 кг', tariff6mo: '−5 кг',  calcH2: '5 кг мало?' },
     medium: { kg2: 5,  kg6: 10, kicker: 'Индивидуальный <span class="accent">план похудения</span>',  pariPromise: '6 месяцев',   pariKg: '10 кг', tariff2mo: '−5 кг', tariff6mo: '−10 кг', calcH2: '10 кг мало?' },
     heavy:  { kg2: 5,  kg6: 15, kicker: 'Индивидуальный <span class="accent">план похудения</span>',  pariPromise: '6 месяцев',   pariKg: '15 кг', tariff2mo: '−5 кг', tariff6mo: '−15 кг', calcH2: '15 кг мало?' }
@@ -3692,20 +3700,16 @@ window.__WEIGHT_SEGMENT__ = (function () {
   var kickerEl = document.querySelector('[data-seg-kicker]');
   if (kickerEl) kickerEl.innerHTML = c.kicker;
 
-  // Milestones: если light — скрываем кг-плашки и показываем benefits-блок (15 мин/дома/в телефоне)
+  // Milestones: показываем для всех сегментов с разными кг
   var ms = document.querySelector('[data-seg-milestones]');
   var benefits = document.querySelector('[data-seg-benefits]');
   var kg2El = document.querySelector('[data-seg-kg2]');
   var kg6El = document.querySelector('[data-seg-kg6]');
-  if (seg === 'light') {
-    if (ms) ms.style.display = 'none';
-    if (benefits) benefits.style.display = 'grid';
-  } else {
-    if (benefits) benefits.style.display = 'none';
-    if (ms) {
-      if (kg2El) kg2El.innerHTML = '−' + c.kg2 + ' <span class="milestone__unit">кг</span>';
-      if (kg6El) kg6El.innerHTML = '−' + c.kg6 + ' <span class="milestone__unit">кг</span>';
-    }
+  if (benefits) benefits.style.display = 'none'; // benefits-блок скрыт на всех сегментах
+  if (ms) {
+    ms.style.display = '';
+    if (kg2El) kg2El.innerHTML = '−' + c.kg2 + ' <span class="milestone__unit">кг</span>';
+    if (kg6El) kg6El.innerHTML = '−' + c.kg6 + ' <span class="milestone__unit">кг</span>';
   }
 
   return { seg: seg, weight: w, config: c };
