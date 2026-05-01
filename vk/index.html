@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#fff8ed">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Индивидуальный план похудения | ШАГАЙ ДОМА</title>
+  <meta name="description" content="Ответь на 7 простых вопросов и получи бесплатный индивидуальный план похудения. Похудей, просто шагая дома по 15 минут в день.">
+  <meta name="robots" content="noindex,follow">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="apple-touch-icon" href="../favicon.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ШАГАЙ ДОМА">
+  <meta property="og:title" content="Получи индивидуальный план похудения | ШАГАЙ ДОМА">
+  <meta property="og:description" content="Ответь на 7 простых вопросов и получи бесплатный план похудения. 1 шагательная тренировка в подарок.">
+  <meta property="og:image" content="https://npopko55-cmd.github.io/walk-walk/images/pain-woman.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://npopko55-cmd.github.io/walk-walk/vk/">
+  <meta property="og:locale" content="ru_RU">
+
+  <!-- Yandex.Metrika -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for (var j=0;j<document.scripts.length;j++){if (document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108598378','ym');
+    ym(108598378,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",accurateTrackBounce:true,trackLinks:true});
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+
+  <!-- VK Bridge SDK (для VK Mini App контекста) -->
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red: #ce2c01;
+      --red-hover: #b52700;
+      --orange: #ffb600;
+      --dark: #1f1300;
+      --cream: #fff8ed;
+      --text-soft: #4a3a2a;
+    }
+
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    .font-display { font-family: 'Unbounded', sans-serif; letter-spacing: -0.02em; }
+
+    .page {
+      min-height: 100svh;
+      max-width: 430px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding-inline: 20px;
+    }
+
+    .header { padding: 24px 0 12px; display: flex; justify-content: center; }
+    .header svg { height: 36px; width: auto; display: block; }
+
+    .cases-wrap {
+      margin: 16px -20px 28px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    }
+    .cases-track {
+      display: flex;
+      gap: 12px;
+      width: max-content;
+      animation: scroll 40s linear infinite;
+    }
+    .cases-track:hover { animation-play-state: paused; }
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 6px)); }
+    }
+    .case-card {
+      width: 180px;
+      height: 180px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,.14);
+      flex-shrink: 0;
+      background: #eee;
+    }
+    .case-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero { text-align: center; padding: 0 4px; }
+    .hero h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(24px, 6.6vw, 30px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--dark);
+      text-wrap: balance;
+      margin-bottom: 14px;
+    }
+    .hero h1 .accent { color: var(--red); }
+    .hero p {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text-soft);
+      font-weight: 500;
+      max-width: 340px;
+      margin: 0 auto;
+      text-wrap: balance;
+    }
+
+    .cta-block { margin-top: 36px; padding: 0 0 20px; }
+    .btn-primary {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--red);
+      color: #fff;
+      font-weight: 700;
+      font-size: 17px;
+      font-family: 'Inter', sans-serif;
+      padding: 20px 18px;
+      border: none;
+      border-radius: 999px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 10px 36px rgba(206,44,1,.38);
+      transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+    .btn-primary__label { text-align: center; }
+    .btn-primary:hover { background: var(--red-hover); }
+    .btn-primary:active { transform: scale(.98); }
+    .btn-primary__arrow { display: inline-flex; font-size: 18px; line-height: 1; }
+
+    .gift-caption {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--red);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .gift-caption__emoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
+    .gift-caption__text { text-align: center; line-height: 1.3; }
+
+    .footer {
+      padding: 16px 0 28px;
+      text-align: center;
+      color: #b9b3a8;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 360px) {
+      .case-card { width: 160px; height: 160px; }
+      .hero h1 { font-size: 22px; }
+      .btn-primary { font-size: 15px; padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/walk-walk/vk/" aria-label="ШАГАЙ ДОМА">
+        <svg viewBox="0 0 106.01 49.13" fill="none" aria-hidden="true">
+          <path d="M27.36 36.85L22.19 37.4V20.22L14.26 20.6V38.26L8.68 38.86V20.87L0 21.28V45.81L34.6 41.41V19.62L27.36 19.97V36.85Z" fill="#CF2C02"/>
+          <path d="M45.94 19.08L37.8 41.01L44.66 40.14L45.69 36.55L52.88 35.73L53.87 38.97L60.11 38.17L52.84 18.75L45.94 19.08ZM47.1 31.89L49.36 24.26L51.6 31.46L47.1 31.89Z" fill="#CF2C02"/>
+          <path d="M76.12 17.63L62.29 18.29V37.9L67.87 37.19V22.73L76.12 22.18V17.63Z" fill="#CF2C02"/>
+          <path d="M87 34.76L91.75 34.15L86.22 17.15L81.01 17.4L74.91 36.29L80.05 35.64L80.83 32.55L86.25 31.93L87 34.76ZM81.88 28.52L83.58 21.92L85.28 28.19L81.88 28.52Z" fill="#CF2C02"/>
+          <path d="M102.2 23.79V32.82L105.92 32.35V16.2L102.22 16.38L97.21 25.93V16.62L93.16 16.81V33.97L97.21 33.46L102.2 23.79Z" fill="#CF2C02"/>
+          <path d="M99.07 18.22L103.82 6.75L100.67 6.76L101.32 0L96.48 11.33L99.58 11.26L99.07 18.22Z" fill="#CF2C02"/>
+        </svg>
+      </a>
+    </header>
+
+    <div class="cases-wrap">
+      <div class="cases-track">
+        <div class="case-card"><img src="../images/cases/1.webp" alt="Результат −14 кг" loading="eager"></div>
+        <div class="case-card"><img src="../images/cases/2.webp" alt="Результат −12 кг" loading="eager"></div>
+        <div class="case-card"><img src="../images/cases/3.webp" alt="Результат −16 кг" loading="eager"></div>
+        <div class="case-card"><img src="../images/cases/4.webp" alt="Результат −11 кг" loading="eager"></div>
+        <div class="case-card"><img src="../images/cases/5.webp" alt="Результат" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/6.webp" alt="Результат" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/7.webp" alt="Результат" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/8.webp" alt="Результат" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/1.webp" alt="" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/2.webp" alt="" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/3.webp" alt="" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/4.webp" alt="" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/5.webp" alt="" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/6.webp" alt="" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/7.webp" alt="" loading="lazy"></div>
+        <div class="case-card"><img src="../images/cases/8.webp" alt="" loading="lazy"></div>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h1>Ответь на 7 простых вопросов — получи <span class="accent">индивидуальный план похудения</span></h1>
+      <p>И узнай, сможешь ли ты похудеть, просто шагая дома по 15 минут в день</p>
+    </section>
+
+    <div class="cta-block">
+      <a id="cta-quiz-start" href="./quiz.html" class="btn-primary">
+        <span class="btn-primary__label">Получить план похудения бесплатно</span>
+        <span class="btn-primary__arrow" aria-hidden="true">→</span>
+      </a>
+      <div class="gift-caption">
+        <span class="gift-caption__emoji">🎁</span>
+        <span class="gift-caption__text">1 шагательная тренировка в подарок</span>
+      </div>
+    </div>
+
+    <footer class="footer">
+      Более 30 000 уже похудели в клубе ШАГАЙ ДОМА
+    </footer>
+  </div>
+
+  <script>
+    // ─────────────────────────────────────────────────────────────
+    // VK Mini App: дубль воронки (TG/MAX) под VK Bridge
+    // ─────────────────────────────────────────────────────────────
+
+    // Парсим launch params VK один раз
+    var __vkParams = (function () {
+      var p = new URLSearchParams(window.location.search);
+      return {
+        vk_app_id: p.get('vk_app_id') || '',
+        vk_user_id: p.get('vk_user_id') || '',
+        vk_ref: p.get('vk_ref') || '',          // источник запуска (menu/box/widget/community/...)
+        vk_platform: p.get('vk_platform') || '', // mobile_web/mobile_iphone/mobile_android/desktop_web
+        sign: p.get('sign') || '',
+        isVK: !!p.get('vk_app_id')
+      };
+    })();
+
+    // VK Bridge init (если SDK подгрузился)
+    (function () {
+      function init() {
+        try {
+          if (window.vkBridge && typeof window.vkBridge.send === 'function') {
+            window.vkBridge.send('VKWebAppInit').catch(function(){});
+          }
+        } catch (e) {}
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+
+    // Возврат пользователя, прошедшего квиз ранее: сразу на plan.html
+    (function () {
+      try {
+        var incoming = new URLSearchParams(window.location.search);
+
+        // Retake-триггер: ?retake=1 в URL
+        if (incoming.get('retake') === '1') {
+          try {
+            localStorage.removeItem('shagay_quiz_v1');
+            Object.keys(localStorage).forEach(function (k) {
+              if (k.indexOf('shagay_quiz_v1_') === 0) localStorage.removeItem(k);
+            });
+          } catch (_) {}
+          return;
+        }
+
+        var vkId = __vkParams.vk_user_id;
+        var saved = null;
+        if (vkId) {
+          var a = localStorage.getItem('shagay_quiz_v1_' + vkId);
+          if (a) saved = JSON.parse(a);
+        }
+        if (!saved) {
+          var b = localStorage.getItem('shagay_quiz_v1');
+          if (b) saved = JSON.parse(b);
+        }
+        if (!saved || saved.age == null) return;
+
+        var params = new URLSearchParams();
+        ['age','height','weight','goal','tries','lifestyle','readiness'].forEach(function (k) {
+          if (saved[k] != null) params.set(k, saved[k]);
+        });
+
+        if (vkId) params.set('vk_id', vkId);
+        if (!incoming.get('utm_source')) {
+          params.set('utm_source', __vkParams.vk_ref || 'vk_quiz');
+        }
+        if (!incoming.get('utm_medium')) params.set('utm_medium', 'vk_miniapp');
+
+        incoming.forEach(function (val, key) {
+          if (!params.has(key)) params.set(key, val);
+        });
+        if (!params.has('sb_id')) params.set('sb_id', 'vk');
+        params.set('returning', '1');
+        params.set('platform', 'vk');
+
+        try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_returning_user'); } catch (e) {}
+
+        window.location.replace('../plan.html?' + params.toString());
+      } catch (e) {}
+    })();
+
+    // Прокидываем VK launch params в utm для метрики
+    (function () {
+      try {
+        if (__vkParams.isVK) {
+          var url = new URL(window.location.href);
+          if (!url.searchParams.get('utm_source') && __vkParams.vk_ref) {
+            url.searchParams.set('utm_source', __vkParams.vk_ref);
+          }
+          if (!url.searchParams.get('utm_medium')) {
+            url.searchParams.set('utm_medium', 'vk_miniapp');
+          }
+          window.history.replaceState({}, '', url);
+
+          if (typeof ym === 'function') {
+            ym(108598378, 'params', {
+              utm_source: __vkParams.vk_ref || 'direct',
+              vk_miniapp: 1,
+              vk_platform: __vkParams.vk_platform
+            });
+            ym(108598378, 'reachGoal', 'vk_app_open', {
+              utm_source: __vkParams.vk_ref || 'direct',
+              vk_platform: __vkParams.vk_platform
+            });
+          }
+        } else {
+          if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_app_open');
+        }
+      } catch (e) {}
+    })();
+
+    // CTA → передача query в quiz
+    (function () {
+      var cta = document.getElementById('cta-quiz-start');
+      if (!cta) return;
+      function updateHref() {
+        var qs = window.location.search || '';
+        cta.href = './quiz.html' + qs;
+      }
+      updateHref();
+      cta.addEventListener('click', function () {
+        updateHref();
+        try {
+          if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_cta_to_quiz');
+        } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>

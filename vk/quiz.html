@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#fffcf7">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <title>Квиз похудения | ШАГАЙ ДОМА</title>
+  <meta name="description" content="Ответь на 7 коротких вопросов и получи индивидуальный план похудения.">
+  <meta name="robots" content="noindex,follow">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="apple-touch-icon" href="../favicon.svg">
+
+  <!-- Yandex.Metrika -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for (var j=0;j<document.scripts.length;j++){if (document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108598378','ym');
+    ym(108598378,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",accurateTrackBounce:true,trackLinks:true});
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+
+  <!-- VK Bridge SDK -->
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red: #ce2c01;
+      --red-hover: #b52700;
+      --orange: #ffb600;
+      --dark: #1f1300;
+      --cream: #fffcf7;
+      --gray-100: #f3f0ea;
+      --gray-200: #e6e2db;
+      --gray-400: #a8a396;
+      --text-soft: #6b6456;
+    }
+
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: var(--cream);
+      color: var(--dark);
+      min-height: 100svh;
+      overflow-x: hidden;
+    }
+    .font-head { font-family: 'Unbounded', sans-serif; letter-spacing: -0.02em; }
+
+    .shell {
+      min-height: 100svh;
+      max-width: 430px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px 24px;
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-top: 8px;
+      margin-bottom: 32px;
+    }
+    .back-btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--gray-100);
+      background: #fff;
+      color: var(--dark);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+      cursor: pointer;
+      transition: opacity .15s ease, transform .15s ease;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .back-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .back-btn:not(:disabled):active { transform: scale(0.95); }
+
+    .progress-wrap {
+      flex: 1;
+      height: 6px;
+      background: var(--gray-100);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--red);
+      border-radius: 999px;
+      transition: width .5s cubic-bezier(.4,.0,.2,1);
+      box-shadow: 0 0 12px rgba(206,44,1,.35);
+    }
+    .progress-pct {
+      flex-shrink: 0;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--gray-400);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .steps { flex: 1; display: flex; flex-direction: column; }
+    .step { display: none; flex: 1; flex-direction: column; }
+    .step.active { display: flex; animation: stepIn .35s cubic-bezier(.25,.1,.25,1); }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step__inner { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    .step__label {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 10px;
+    }
+
+    .step__title {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      line-height: 1.2;
+      color: var(--dark);
+      text-wrap: balance;
+      margin-bottom: 32px;
+    }
+
+    .num-input {
+      width: 100%;
+      padding: 16px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--gray-200);
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 800;
+      font-size: 42px;
+      color: var(--red);
+      outline: none;
+      text-align: left;
+      transition: border-color .2s ease;
+      letter-spacing: -0.02em;
+      -moz-appearance: textfield;
+    }
+    .num-input::-webkit-outer-spin-button,
+    .num-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .num-input::placeholder { color: #d8d3c8; font-weight: 700; font-size: 22px; }
+    .num-input:focus { border-bottom-color: var(--orange); }
+
+    .num-hint { margin-top: 12px; font-size: 13px; color: var(--text-soft); }
+    .num-error {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--red);
+      font-weight: 600;
+      min-height: 16px;
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+    .num-error.show { opacity: 1; }
+
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 20px 22px;
+      background: #fff;
+      border: 2px solid transparent;
+      border-radius: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .15s ease, box-shadow .2s ease, transform .1s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .option:hover { border-color: rgba(255,182,0,.4); }
+    .option:active { transform: scale(.98); }
+    .option.selected {
+      border-color: var(--red);
+      box-shadow: 0 8px 24px rgba(206,44,1,.15);
+    }
+    .option__emoji { font-size: 28px; line-height: 1; flex-shrink: 0; transition: transform .2s ease; }
+    .option:hover .option__emoji { transform: scale(1.1); }
+    .option__text { font-size: 16px; font-weight: 600; color: var(--dark); line-height: 1.3; }
+
+    .cta-wrap { padding-top: 24px; padding-bottom: 8px; }
+    .btn-primary {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+      padding: 20px 18px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 10px 32px rgba(206,44,1,.28);
+      transition: background .2s ease, transform .1s ease, opacity .2s ease;
+    }
+    .btn-primary:hover { background: var(--red-hover); }
+    .btn-primary:active { transform: scale(.98); }
+    .btn-primary:disabled {
+      background: var(--gray-200);
+      color: var(--gray-400);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .hint { margin-top: 16px; text-align: center; font-size: 13px; color: var(--gray-400); line-height: 1.45; }
+
+    @media (max-width: 360px) {
+      .step__title { font-size: 22px; }
+      .num-input { font-size: 34px; }
+      .option { padding: 16px 18px; }
+      .option__emoji { font-size: 24px; }
+      .option__text { font-size: 15px; }
+    }
+
+    /* ─── Loading screen (вместо preframe) ─── */
+    .loader {
+      position: fixed;
+      inset: 0;
+      background: var(--cream);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 24px 48px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+    .loader.show { opacity: 1; visibility: visible; }
+    .loader__inner {
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+    }
+    .loader__circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid var(--gray-100);
+      border-top-color: var(--red);
+      margin: 0 auto 28px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loader__title {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      color: var(--dark);
+      margin-bottom: 24px;
+      text-wrap: balance;
+    }
+    .loader__title .accent { color: var(--red); }
+
+    .loader__steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      margin: 0 auto;
+      max-width: 280px;
+    }
+    .loader__step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--gray-400);
+      transition: color .25s ease, opacity .25s ease;
+      opacity: .55;
+    }
+    .loader__step.is-active { color: var(--dark); opacity: 1; font-weight: 600; }
+    .loader__step.is-done { color: var(--text-soft); opacity: 1; }
+    .loader__step__icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: transparent;
+      transition: background .25s ease, color .25s ease;
+    }
+    .loader__step.is-active .loader__step__icon {
+      background: var(--orange);
+      color: transparent;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    .loader__step.is-done .loader__step__icon {
+      background: var(--red);
+      color: #fff;
+    }
+    .loader__step.is-done .loader__step__icon::before {
+      content: '✓';
+      font-size: 12px;
+      font-weight: 700;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    @media (max-width: 360px) {
+      .loader__title { font-size: 19px; }
+      .loader__circle { width: 64px; height: 64px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <nav class="top-nav">
+      <button type="button" class="back-btn" id="backBtn" aria-label="Назад" disabled>←</button>
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progressBar" style="width: 14%"></div>
+      </div>
+      <span class="progress-pct" id="progressPct">14%</span>
+    </nav>
+
+    <div class="steps" id="steps">
+      <!-- Q1: Age -->
+      <section class="step active" data-step="1" data-type="number" data-key="age" data-min="16" data-max="90">
+        <div class="step__inner">
+          <p class="step__label">Вопрос 1 из 7</p>
+          <h1 class="step__title">Напиши свой возраст 👇</h1>
+          <input class="num-input" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="например: 48" data-input autocomplete="off">
+          <p class="num-hint">🔒 Все данные строго конфиденциальны</p>
+          <p class="num-error" data-error></p>
+        </div>
+        <div class="cta-wrap">
+          <button type="button" class="btn-primary" data-next disabled>Далее →</button>
+        </div>
+      </section>
+
+      <!-- Q2: Height -->
+      <section class="step" data-step="2" data-type="number" data-key="height" data-min="130" data-max="220">
+        <div class="step__inner">
+          <p class="step__label">Вопрос 2 из 7</p>
+          <h1 class="step__title">Укажи свой рост в&nbsp;сантиметрах 👇</h1>
+          <input class="num-input" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="например: 163" data-input autocomplete="off">
+          <p class="num-hint">🔒 Все данные строго конфиденциальны</p>
+          <p class="num-error" data-error></p>
+        </div>
+        <div class="cta-wrap">
+          <button type="button" class="btn-primary" data-next disabled>Далее →</button>
+        </div>
+      </section>
+
+      <!-- Q3: Weight -->
+      <section class="step" data-step="3" data-type="number" data-key="weight" data-min="35" data-max="250">
+        <div class="step__inner">
+          <p class="step__label">Вопрос 3 из 7</p>
+          <h1 class="step__title">Укажи свой текущий вес в&nbsp;килограммах 👇</h1>
+          <input class="num-input" type="number" inputmode="numeric" pattern="[0-9]*" placeholder="например: 84" data-input autocomplete="off">
+          <p class="num-hint">🔒 Все данные строго конфиденциальны</p>
+          <p class="num-error" data-error></p>
+        </div>
+        <div class="cta-wrap">
+          <button type="button" class="btn-primary" data-next disabled>Далее →</button>
+        </div>
+      </section>
+
+      <!-- Q4: Goal -->
+      <section class="step" data-step="4" data-type="choice" data-key="goal">
+        <div class="step__inner">
+          <p class="step__label">Вопрос 4 из 7</p>
+          <h1 class="step__title">Что для тебя сейчас важнее всего?</h1>
+          <div class="options">
+            <button type="button" class="option" data-option data-value="влезть в одежду">
+              <span class="option__emoji">👗</span>
+              <span class="option__text">Хочу влезть в любимую одежду</span>
+            </button>
+            <button type="button" class="option" data-option data-value="полюбить себя">
+              <span class="option__emoji">🪞</span>
+              <span class="option__text">Хочу нравиться себе в зеркале</span>
+            </button>
+            <button type="button" class="option" data-option data-value="больше энергии">
+              <span class="option__emoji">⚡</span>
+              <span class="option__text">Хочу энергию и лёгкость</span>
+            </button>
+            <button type="button" class="option" data-option data-value="укрепить здоровье">
+              <span class="option__emoji">💚</span>
+              <span class="option__text">Хочу улучшить здоровье</span>
+            </button>
+          </div>
+          <p class="hint">Твой выбор поможет нам составить идеальный план ✨</p>
+        </div>
+      </section>
+
+      <!-- Q5: Tries -->
+      <section class="step" data-step="5" data-type="choice" data-key="tries">
+        <div class="step__inner">
+          <p class="step__label">Вопрос 5 из 7</p>
+          <h1 class="step__title">Сколько раз ты пробовала похудеть?</h1>
+          <div class="options">
+            <button type="button" class="option" data-option data-value="first">
+              <span class="option__emoji">🙋‍♀️</span>
+              <span class="option__text">Это будет первый раз</span>
+            </button>
+            <button type="button" class="option" data-option data-value="2-5">
+              <span class="option__emoji">🔄</span>
+              <span class="option__text">2–5 раз</span>
+            </button>
+            <button type="button" class="option" data-option data-value="lost">
+              <span class="option__emoji">♾️</span>
+              <span class="option__text">Сбилась со счёта</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q6: Lifestyle -->
+      <section class="step" data-step="6" data-type="choice" data-key="lifestyle">
+        <div class="step__inner">
+          <p class="step__label">Вопрос 6 из 7</p>
+          <h1 class="step__title">Как проходит твой обычный день?</h1>
+          <div class="options">
+            <button type="button" class="option" data-option data-value="sedentary">
+              <span class="option__emoji">💻</span>
+              <span class="option__text">Сижу целый день (офис / дом)</span>
+            </button>
+            <button type="button" class="option" data-option data-value="light">
+              <span class="option__emoji">🚶‍♀️</span>
+              <span class="option__text">Двигаюсь, но мало</span>
+            </button>
+            <button type="button" class="option" data-option data-value="home">
+              <span class="option__emoji">🛋️</span>
+              <span class="option__text">В основном дом и дети</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q7: Readiness -->
+      <section class="step" data-step="7" data-type="choice" data-key="readiness" data-final>
+        <div class="step__inner">
+          <p class="step__label">Последний вопрос · 7 из 7</p>
+          <h1 class="step__title">Если бы существовал способ похудеть за&nbsp;15 минут в&nbsp;день, дома, без диет — ты&nbsp;бы попробовала?</h1>
+          <div class="options">
+            <button type="button" class="option" data-option data-value="yes">
+              <span class="option__emoji">🔥</span>
+              <span class="option__text">Конечно!</span>
+            </button>
+            <button type="button" class="option" data-option data-value="doubt">
+              <span class="option__emoji">🤔</span>
+              <span class="option__text">Звучит нереально</span>
+            </button>
+            <button type="button" class="option" data-option data-value="nope">
+              <span class="option__emoji">😅</span>
+              <span class="option__text">Уже ни во что не верю</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Loader: показывается после 7-го вопроса -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <div class="loader__circle" aria-hidden="true"></div>
+      <h2 class="loader__title">Готовим твой <span class="accent">персональный план</span></h2>
+      <ul class="loader__steps" id="loaderSteps">
+        <li class="loader__step is-active" data-l-step="1">
+          <span class="loader__step__icon" aria-hidden="true"></span>
+          <span>Анализируем твои ответы</span>
+        </li>
+        <li class="loader__step" data-l-step="2">
+          <span class="loader__step__icon" aria-hidden="true"></span>
+          <span>Подбираем программу тренировок</span>
+        </li>
+        <li class="loader__step" data-l-step="3">
+          <span class="loader__step__icon" aria-hidden="true"></span>
+          <span>Считаем калории и питание</span>
+        </li>
+        <li class="loader__step" data-l-step="4">
+          <span class="loader__step__icon" aria-hidden="true"></span>
+          <span>Открываем доступ к плану</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // VK Mini App: парсим launch params VK
+    var __vkParams = (function () {
+      var p = new URLSearchParams(window.location.search);
+      return {
+        vk_app_id: p.get('vk_app_id') || '',
+        vk_user_id: p.get('vk_user_id') || '',
+        vk_ref: p.get('vk_ref') || '',
+        vk_platform: p.get('vk_platform') || '',
+        sign: p.get('sign') || '',
+        isVK: !!p.get('vk_app_id')
+      };
+    })();
+
+    // VK Bridge init
+    (function () {
+      function init() {
+        try {
+          if (window.vkBridge && typeof window.vkBridge.send === 'function') {
+            window.vkBridge.send('VKWebAppInit').catch(function(){});
+          }
+        } catch (e) {}
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+
+    // Возвращенцы — сразу на plan.html
+    (function () {
+      try {
+        var incoming = new URLSearchParams(window.location.search);
+
+        if (incoming.get('retake') === '1') {
+          try {
+            localStorage.removeItem('shagay_quiz_v1');
+            Object.keys(localStorage).forEach(function (k) {
+              if (k.indexOf('shagay_quiz_v1_') === 0) localStorage.removeItem(k);
+            });
+          } catch (_) {}
+          return;
+        }
+
+        var vkId = __vkParams.vk_user_id;
+        var saved = null;
+        if (vkId) {
+          var a = localStorage.getItem('shagay_quiz_v1_' + vkId);
+          if (a) saved = JSON.parse(a);
+        }
+        if (!saved) {
+          var b = localStorage.getItem('shagay_quiz_v1');
+          if (b) saved = JSON.parse(b);
+        }
+        if (!saved || saved.age == null) return;
+
+        var params = new URLSearchParams();
+        ['age','height','weight','goal','tries','lifestyle','readiness'].forEach(function (k) {
+          if (saved[k] != null) params.set(k, saved[k]);
+        });
+        if (vkId) params.set('vk_id', vkId);
+        if (!incoming.has('utm_medium')) params.set('utm_medium', 'vk_miniapp');
+        if (!incoming.has('utm_source') && __vkParams.vk_ref) {
+          params.set('utm_source', __vkParams.vk_ref);
+        }
+        incoming.forEach(function (val, key) {
+          if (!params.has(key)) params.set(key, val);
+        });
+        if (!params.has('sb_id')) params.set('sb_id', 'vk');
+        params.set('returning', '1');
+        params.set('platform', 'vk');
+
+        try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_returning_user'); } catch (e) {}
+
+        window.location.replace('../plan.html?' + params.toString());
+      } catch (e) {}
+    })();
+
+    (function () {
+      var state = {
+        currentStep: 1,
+        totalSteps: 7,
+        answers: {}
+      };
+
+      var stepsEl = document.getElementById('steps');
+      var steps = stepsEl.querySelectorAll('.step');
+      var progressBar = document.getElementById('progressBar');
+      var progressPct = document.getElementById('progressPct');
+      var backBtn = document.getElementById('backBtn');
+
+      function getStepEl(n) { return stepsEl.querySelector('[data-step="' + n + '"]'); }
+      function setProgress(n) {
+        var pct = Math.round((n / state.totalSteps) * 100);
+        progressBar.style.width = pct + '%';
+        progressPct.textContent = pct + '%';
+      }
+
+      function show(n) {
+        steps.forEach(function (s) { s.classList.remove('active'); });
+        var el = getStepEl(n);
+        if (!el) return;
+        el.classList.add('active');
+        state.currentStep = n;
+        setProgress(n);
+        backBtn.disabled = n === 1;
+        var inp = el.querySelector('input.num-input');
+        if (inp) { setTimeout(function () { inp.focus({ preventScroll: true }); }, 220); }
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      function validateNumber(input, min, max) {
+        var v = parseInt(input.value, 10);
+        if (isNaN(v)) return { ok: false, msg: 'Введи число' };
+        if (v < min) return { ok: false, msg: 'Минимум ' + min };
+        if (v > max) return { ok: false, msg: 'Максимум ' + max };
+        return { ok: true, value: v };
+      }
+
+      function goNext() {
+        var el = getStepEl(state.currentStep);
+        var type = el.dataset.type;
+        var key = el.dataset.key;
+
+        if (type === 'number') {
+          var input = el.querySelector('[data-input]');
+          var err = el.querySelector('[data-error]');
+          var res = validateNumber(input, parseInt(el.dataset.min, 10), parseInt(el.dataset.max, 10));
+          if (!res.ok) { err.textContent = res.msg; err.classList.add('show'); return; }
+          err.classList.remove('show');
+          state.answers[key] = res.value;
+        }
+
+        if (el.hasAttribute('data-final')) { submit(); return; }
+        show(state.currentStep + 1);
+      }
+
+      function goBack() {
+        if (state.currentStep === 1) return;
+        show(state.currentStep - 1);
+      }
+
+      function buildPlanUrl() {
+        var incoming = new URLSearchParams(window.location.search);
+        var params = new URLSearchParams();
+
+        params.set('age', state.answers.age);
+        params.set('height', state.answers.height);
+        params.set('weight', state.answers.weight);
+        params.set('goal', state.answers.goal);
+        params.set('tries', state.answers.tries);
+        params.set('lifestyle', state.answers.lifestyle);
+        params.set('readiness', state.answers.readiness);
+
+        if (!incoming.has('sb_id')) params.set('sb_id', 'vk');
+        if (!incoming.has('utm_source')) {
+          params.set('utm_source', __vkParams.vk_ref || 'vk_quiz');
+        }
+        if (!incoming.has('utm_medium')) params.set('utm_medium', 'vk_miniapp');
+
+        if (__vkParams.vk_user_id) params.set('vk_id', __vkParams.vk_user_id);
+
+        incoming.forEach(function (val, key) {
+          if (!params.has(key)) params.set(key, val);
+        });
+        params.set('platform', 'vk');
+
+        return '../plan.html?' + params.toString();
+      }
+
+      function saveAnswersLocal() {
+        try {
+          var vkId = __vkParams.vk_user_id || '';
+          var key = 'shagay_quiz_v1' + (vkId ? ('_' + vkId) : '');
+          var toSave = {};
+          ['age','height','weight','goal','tries','lifestyle','readiness'].forEach(function (k) {
+            if (state.answers[k] != null) toSave[k] = state.answers[k];
+          });
+          toSave.completed_at = Date.now();
+          localStorage.setItem(key, JSON.stringify(toSave));
+          if (vkId) localStorage.setItem('shagay_quiz_v1', JSON.stringify(toSave));
+        } catch (e) {}
+      }
+
+      // Loader: 4 этапа по ~700 мс, итого ~2.8 сек
+      function runLoader(targetUrl) {
+        var loader = document.getElementById('loader');
+        if (!loader) { window.location.href = targetUrl; return; }
+
+        loader.setAttribute('aria-hidden', 'false');
+        loader.classList.add('show');
+
+        try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_loader_shown'); } catch (e) {}
+
+        var stepEls = loader.querySelectorAll('.loader__step');
+        var idx = 0;
+        var interval = 700;
+
+        function activate(n) {
+          stepEls.forEach(function (s, i) {
+            s.classList.remove('is-active', 'is-done');
+            if (i < n) s.classList.add('is-done');
+            else if (i === n) s.classList.add('is-active');
+          });
+        }
+
+        var timer = setInterval(function () {
+          idx++;
+          if (idx >= stepEls.length) {
+            clearInterval(timer);
+            stepEls.forEach(function (s) { s.classList.remove('is-active'); s.classList.add('is-done'); });
+            setTimeout(function () {
+              try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_loader_complete'); } catch (e) {}
+              window.location.href = targetUrl;
+            }, 400);
+            return;
+          }
+          activate(idx);
+        }, interval);
+      }
+
+      function submit() {
+        try {
+          if (typeof ym === 'function') {
+            ym(108598378, 'reachGoal', 'vk_quiz_complete', state.answers);
+          }
+        } catch (e) {}
+
+        saveAnswersLocal();
+        var url = buildPlanUrl();
+        runLoader(url);
+      }
+
+      // Bind events
+      steps.forEach(function (step) {
+        var type = step.dataset.type;
+        if (type === 'number') {
+          var input = step.querySelector('[data-input]');
+          var btn = step.querySelector('[data-next]');
+          var err = step.querySelector('[data-error]');
+          input.addEventListener('input', function () {
+            err.classList.remove('show');
+            btn.disabled = input.value.trim() === '';
+          });
+          input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); goNext(); }
+          });
+          btn.addEventListener('click', goNext);
+        }
+        if (type === 'choice') {
+          var opts = step.querySelectorAll('[data-option]');
+          opts.forEach(function (opt) {
+            opt.addEventListener('click', function () {
+              opts.forEach(function (o) { o.classList.remove('selected'); });
+              opt.classList.add('selected');
+              state.answers[step.dataset.key] = opt.dataset.value;
+              setTimeout(goNext, 180);
+            });
+          });
+        }
+      });
+
+      backBtn.addEventListener('click', goBack);
+      setProgress(1);
+
+      try {
+        if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_quiz_start');
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

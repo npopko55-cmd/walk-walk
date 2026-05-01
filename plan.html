@@ -3498,10 +3498,14 @@
 
   // Если пришли из MAX-воронки — отдельная цель для аналитики платформы
   try {
-    var _platformParam = new URLSearchParams(window.location.search).get('platform');
-    var _utmMediumParam = new URLSearchParams(window.location.search).get('utm_medium');
+    var _qsPlan = new URLSearchParams(window.location.search);
+    var _platformParam = _qsPlan.get('platform');
+    var _utmMediumParam = _qsPlan.get('utm_medium');
     if (_platformParam === 'max' || _utmMediumParam === 'max_miniapp') {
       if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_plan_view');
+    }
+    if (_platformParam === 'vk' || _utmMediumParam === 'vk_miniapp') {
+      if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_plan_view');
     }
   } catch (e) {}
 
@@ -3526,6 +3530,7 @@
     var utmTerm = urlParams.get('utm_term') || '';
     var tgIdParam = urlParams.get('tg_id') || '';
     var maxIdParam = urlParams.get('max_id') || '';
+    var vkIdParam = urlParams.get('vk_id') || '';
     var platformParam = urlParams.get('platform') || '';
 
     document.querySelectorAll('a[data-tariff]').forEach(function (a) {
@@ -3546,6 +3551,7 @@
         if (utmTerm) u.searchParams.set('utm_term', utmTerm);
         if (tgIdParam) u.searchParams.set('tg_id', tgIdParam);
         if (maxIdParam) u.searchParams.set('max_id', maxIdParam);
+        if (vkIdParam) u.searchParams.set('vk_id', vkIdParam);
         if (platformParam) u.searchParams.set('platform', platformParam);
         a.setAttribute('href', u.toString());
       } catch (_) {}
@@ -3563,6 +3569,13 @@
             // Дубль-цель для MAX-воронки
             if (platformParam === 'max' || utmMedium === 'max_miniapp') {
               ym(108598378, 'reachGoal', 'max_tariff_click', {
+                tariff: a.dataset.tariff,
+                utm_source: utmSource
+              });
+            }
+            // Дубль-цель для VK-воронки
+            if (platformParam === 'vk' || utmMedium === 'vk_miniapp') {
+              ym(108598378, 'reachGoal', 'vk_tariff_click', {
                 tariff: a.dataset.tariff,
                 utm_source: utmSource
               });
