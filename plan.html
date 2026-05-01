@@ -238,29 +238,30 @@
        1. HERO
        ═══════════════════════════════════════════ */
     .hero {
+      position: relative;
       background:
-        radial-gradient(ellipse 90% 50% at 70% 0%, rgba(255,182,0,.25), transparent),
+        radial-gradient(ellipse 90% 50% at 70% 0%, rgba(255,182,0,.28), transparent 60%),
         radial-gradient(ellipse 70% 40% at 10% 100%, rgba(206,44,1,.08), transparent),
         linear-gradient(180deg, var(--cream) 0%, #fff 100%);
-      padding-top: 72px;
-      padding-bottom: 80px;
+      padding: 56px 0 64px;
       overflow: hidden;
     }
+    .hero .container { position: relative; z-index: 2; }
     .hero h1 span.accent { color: var(--red); }
 
     /* ═══════════════════════════════════════════
-       HERO: новый kicker + milestone-карточки
+       HERO: kicker + milestone/benefits + profile-card
        ═══════════════════════════════════════════ */
     .hero__kicker {
       font-family: var(--font-head);
-      font-weight: 700;
-      font-size: clamp(20px, 4vw, 32px);
-      line-height: 1.25;
-      letter-spacing: -0.02em;
+      font-weight: 800;
+      font-size: clamp(22px, 4.6vw, 36px);
+      line-height: 1.18;
+      letter-spacing: -0.025em;
       color: var(--dark);
-      margin: 0 0 28px;
+      margin: 0 0 24px;
       text-wrap: balance;
-      max-width: 680px;
+      max-width: 720px;
     }
     .hero__kicker .accent { color: var(--red); }
 
@@ -382,68 +383,172 @@
     }
     .hero__sub strong { color: var(--red); }
 
-    .hero__name-block {
-      display: inline-block;
-      background: #fff;
-      padding: 20px 28px;
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-soft);
-      margin-bottom: 28px;
+    /* ═══════════════════════════════════════════
+       HERO: benefits-карточки (для light-сегмента,
+       когда milestones кг скрыты) + персональный профиль
+       ═══════════════════════════════════════════ */
+    .hero__benefits {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 680px;
+      margin: 0 0 28px;
     }
-    .hero__name-label {
+    .hero__benefit {
+      background: #fff;
+      border: 2px solid var(--gray);
+      border-radius: 20px;
+      padding: 18px 14px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,.05);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .hero__benefit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(255,182,0,.18);
+      border-color: var(--orange);
+    }
+    .hero__benefit__icon {
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .hero__benefit__value {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: clamp(18px, 4vw, 22px);
+      color: var(--red);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .hero__benefit__label {
       font-size: 12px;
       color: var(--mid-gray);
-      text-transform: uppercase;
-      letter-spacing: .8px;
-      margin-bottom: 4px;
       font-weight: 600;
+      letter-spacing: 0.02em;
     }
-    .hero__name-value {
-      font-family: var(--font-head);
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--dark);
-    }
-    .hero__name-value span { color: var(--red); }
 
-    .hero__data {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 36px;
-    }
-    .hero__chip {
+    /* Профиль-карта вместо россыпи chip'ов */
+    .hero__profile {
       background: #fff;
-      border: 1px solid var(--gray);
-      padding: 12px 20px;
-      border-radius: 16px;
-      font-size: 14px;
-      font-weight: 500;
-      box-shadow: var(--shadow-soft);
+      border: 2px solid var(--gray);
+      border-radius: 24px;
+      padding: 20px 22px;
+      box-shadow: 0 12px 36px rgba(0,0,0,.06);
+      max-width: 680px;
+      margin: 0 0 24px;
+    }
+    .hero__profile__header {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px dashed rgba(0,0,0,.08);
     }
-    .hero__chip-icon { font-size: 18px; }
-    .hero__chip strong { color: var(--red); font-weight: 700; font-size: 15px; }
+    .hero__profile__label {
+      font-family: var(--font-head);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--mid-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+    .hero__profile__name {
+      font-family: var(--font-head);
+      font-size: clamp(18px, 3.6vw, 22px);
+      font-weight: 800;
+      color: var(--red);
+      letter-spacing: -0.02em;
+      max-width: 60%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: right;
+    }
+    .hero__profile__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .hero__profile__cell {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      padding: 8px 4px;
+    }
+    .hero__profile__cell + .hero__profile__cell {
+      border-left: 1px solid rgba(0,0,0,.06);
+      padding-left: 10px;
+    }
+    .hero__profile__cell-label {
+      font-size: 11px;
+      color: var(--mid-gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hero__profile__cell-value {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: clamp(15px, 3.4vw, 18px);
+      color: var(--dark);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    .hero__profile__cell-value strong {
+      color: var(--red);
+      font-weight: 800;
+    }
+    .hero__profile__cell-unit {
+      font-size: 0.65em;
+      color: var(--mid-gray);
+      font-weight: 600;
+    }
 
-    .hero__cta {
-      margin-top: 8px;
-    }
+    .hero__cta { margin-top: 8px; }
+
+    /* Превью бесплатной тренировки — крупнее, premium */
     .hero__preview {
       margin-top: 28px;
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 18px;
+      background: linear-gradient(135deg, #fff 0%, var(--cream) 100%);
+      border: 2px solid var(--orange);
+      border-radius: 24px;
+      padding: 16px 18px;
+      box-shadow: 0 16px 44px rgba(255,182,0,.22);
+      max-width: 560px;
     }
     .hero__preview-video {
       flex-shrink: 0;
-      width: 120px;
-      height: 120px;
-      border-radius: 20px;
+      width: 110px;
+      height: 110px;
+      border-radius: 18px;
       overflow: hidden;
-      box-shadow: var(--shadow-soft);
-      border: 3px solid var(--orange);
+      box-shadow: 0 8px 24px rgba(0,0,0,.18);
+      position: relative;
+    }
+    .hero__preview-video::after {
+      content: '▶';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 22px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.6);
+      pointer-events: none;
+      opacity: .85;
     }
     .hero__preview-video video {
       width: 100%;
@@ -455,8 +560,9 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 500;
+      line-height: 1.4;
       color: #3a3020;
     }
     .hero__preview-icon { font-size: 22px; flex-shrink: 0; }
@@ -722,99 +828,212 @@
     /* ═══════════════════════════════════════════
        5. PARI
        ═══════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════
+       BLOCK PARI: премиум-«сертификат пари»,
+       тёмный шоколадный + золото, без пунктира
+       ═══════════════════════════════════════════ */
     .pari {
+      position: relative;
       background:
-        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,182,0,.15), transparent),
-        linear-gradient(135deg, #1f1300 0%, #3a2a10 100%);
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,182,0,.18), transparent 70%),
+        radial-gradient(ellipse 50% 30% at 0% 100%, rgba(206,44,1,.12), transparent),
+        linear-gradient(135deg, #1a0f04 0%, #2b1a08 50%, #1a0f04 100%);
       color: #fff;
-      padding: 100px 0;
+      padding: 80px 0 88px;
+      overflow: hidden;
     }
+    /* Декоративный «штамп» на фоне */
+    .pari::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 460px;
+      height: 460px;
+      border: 3px solid rgba(255,182,0,.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .pari::after {
+      content: '';
+      position: absolute;
+      bottom: -180px;
+      left: -180px;
+      width: 520px;
+      height: 520px;
+      border: 2px solid rgba(255,182,0,.05);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .pari .container { position: relative; z-index: 2; }
+
     .pari__grid {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 56px;
+      gap: 48px;
       align-items: center;
-      max-width: 1080px;
+      max-width: 1100px;
       margin: 0 auto;
     }
     .pari__left { text-align: left; }
-    .pari__left .pari__badge { margin-bottom: 20px; }
     .pari__left h2 { text-align: left; }
     @media (max-width: 900px) {
-      .pari__grid { grid-template-columns: 1fr; text-align: center; }
+      .pari__grid { grid-template-columns: 1fr; text-align: center; gap: 32px; }
       .pari__left { text-align: center; }
       .pari__left h2 { text-align: center; }
       .pari__video { margin: 0 auto; }
     }
+
     .pari__badge {
-      display: inline-block;
-      background: var(--orange);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--orange) 0%, #ffd14a 100%);
       color: var(--dark);
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-family: var(--font-head);
+      font-size: 12px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .8px;
-      margin-bottom: 24px;
+      letter-spacing: .14em;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px rgba(255,182,0,.32);
     }
+    .pari__badge::before {
+      content: '✺';
+      font-size: 14px;
+    }
+
     .pari h2 {
       color: #fff;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
+      font-size: clamp(26px, 4.2vw, 40px);
+      line-height: 1.15;
     }
-    .pari h2 span { color: var(--orange); }
+    .pari h2 span {
+      color: var(--orange);
+      background: linear-gradient(180deg, var(--orange) 0%, #ffd14a 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
+    /* Сертификат-карточка вместо пунктирной рамки */
     .pari__box {
-      margin: 0 0 32px;
-      background: rgba(255,255,255,.04);
-      border: 2px dashed var(--orange);
-      border-radius: var(--radius-card);
-      padding: 36px 32px;
+      position: relative;
+      margin: 0 0 28px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 100%);
+      border: 1px solid rgba(255,182,0,.35);
+      border-radius: 24px;
+      padding: 32px 28px 36px;
+      backdrop-filter: blur(4px);
+    }
+    /* Угловые декорации в стиле сертификата */
+    .pari__box::before,
+    .pari__box::after {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--orange);
+    }
+    .pari__box::before {
+      top: -2px;
+      left: -2px;
+      border-right: 0;
+      border-bottom: 0;
+      border-top-left-radius: 24px;
+    }
+    .pari__box::after {
+      bottom: -2px;
+      right: -2px;
+      border-left: 0;
+      border-top: 0;
+      border-bottom-right-radius: 24px;
+    }
+    .pari__promise-label {
+      display: block;
+      font-family: var(--font-head);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
     }
     .pari__promise {
       font-family: var(--font-head);
-      font-size: clamp(20px, 2.8vw, 26px);
-      font-weight: 700;
-      line-height: 1.35;
-      color: #fff;
+      font-size: clamp(18px, 2.4vw, 24px);
+      font-weight: 600;
+      line-height: 1.4;
+      color: rgba(255,255,255,.92);
+      margin-bottom: 20px;
     }
     .pari__promise em {
       color: var(--orange);
       font-style: normal;
+      font-weight: 800;
     }
     .pari__promise-hit {
-      display: inline-block;
-      margin-top: 16px;
-      padding: 10px 20px;
-      background: var(--orange);
+      display: block;
+      margin-top: 14px;
+      padding: 14px 22px;
+      background: linear-gradient(135deg, var(--orange) 0%, #ffd14a 100%);
       color: var(--dark);
       font-family: var(--font-head);
       font-weight: 900;
-      font-size: clamp(20px, 2.6vw, 28px);
-      border-radius: 12px;
-      letter-spacing: 0.5px;
+      font-size: clamp(20px, 2.8vw, 28px);
+      border-radius: 14px;
+      letter-spacing: 0.04em;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(255,182,0,.32);
     }
 
     .pari__cta-row {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
+      align-items: center;
+    }
+    .pari__cta-row .btn--orange {
+      padding: 18px 40px;
+      font-size: 18px;
+      box-shadow: 0 16px 44px rgba(255,182,0,.38);
     }
     .pari__disclaimer {
-      margin-top: 24px;
+      margin-top: 22px;
       font-size: 13px;
-      color: rgba(255,255,255,.5);
+      color: rgba(255,255,255,.55);
+      line-height: 1.5;
     }
-    .pari__disclaimer a { color: var(--orange); }
+    .pari__disclaimer a {
+      color: var(--orange);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Видео-медальон */
     .pari__video {
-      max-width: 360px;
-      margin: 0 auto 40px;
-      border-radius: var(--radius-card);
+      width: min(380px, 100%);
+      margin: 0 auto;
+      border-radius: 28px;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      box-shadow:
+        0 0 0 6px rgba(255,182,0,.14),
+        0 30px 80px rgba(0,0,0,.55);
       background: #000;
       position: relative;
       aspect-ratio: 9/16;
+      transform: rotate(-1.5deg);
+    }
+    .pari__video::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,.4) 100%);
+      pointer-events: none;
     }
     .pari__video video {
       width: 100%;
@@ -2099,19 +2318,40 @@
       p.lead, .hero__sub, .method__lead { font-size: 16px; }
 
       /* HERO mobile */
-      .hero { padding-top: 36px; padding-bottom: 48px; }
-      .hero h1 { font-size: 28px; line-height: 1.15; margin-bottom: 18px; }
-      .hero__sub { font-size: 15px; margin-bottom: 24px; }
-      .hero__name-block { padding: 14px 18px; margin-bottom: 20px; }
-      .hero__name-value { font-size: 18px; }
-      .hero__name-label { font-size: 11px; }
-      .hero__data { gap: 8px; margin-bottom: 24px; }
-      .hero__chip { padding: 8px 12px; font-size: 12px; }
-      .hero__chip-icon { font-size: 14px; }
-      .hero__chip strong { font-size: 13px; }
-      .hero__preview { margin-top: 20px; gap: 14px; }
-      .hero__preview-video { width: 80px; height: 80px; border-radius: 14px; }
-      .hero__preview-text { font-size: 14px; }
+      .hero { padding: 28px 0 40px; }
+      .hero__kicker { font-size: 24px; line-height: 1.18; margin-bottom: 20px; }
+      .hero__benefits { grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
+      .hero__benefit { padding: 14px 8px; border-radius: 16px; }
+      .hero__benefit__icon { font-size: 22px; margin-bottom: 6px; }
+      .hero__benefit__value { font-size: 15px; }
+      .hero__benefit__label { font-size: 10px; }
+      .hero__profile { padding: 14px 16px; border-radius: 20px; margin-bottom: 20px; }
+      .hero__profile__header { padding-bottom: 10px; margin-bottom: 10px; }
+      .hero__profile__label { font-size: 10px; letter-spacing: 0.12em; }
+      .hero__profile__name { font-size: 15px; max-width: 55%; }
+      .hero__profile__grid { grid-template-columns: repeat(2, 1fr); gap: 10px 8px; }
+      .hero__profile__cell { padding: 6px 0; }
+      .hero__profile__cell + .hero__profile__cell { padding-left: 0; border-left: 0; }
+      .hero__profile__cell:nth-child(2n) { padding-left: 10px; border-left: 1px solid rgba(0,0,0,.06); }
+      .hero__profile__cell-label { font-size: 10px; }
+      .hero__profile__cell-value { font-size: 15px; }
+      .hero__preview { margin-top: 22px; gap: 14px; padding: 12px 14px; border-radius: 18px; }
+      .hero__preview-video { width: 88px; height: 88px; border-radius: 14px; }
+      .hero__preview-video::after { font-size: 18px; }
+      .hero__preview-text { font-size: 13px; line-height: 1.35; }
+      .hero__preview-icon { font-size: 18px; }
+
+      /* PARI mobile */
+      .pari { padding: 56px 0 64px; }
+      .pari__badge { font-size: 11px; padding: 8px 14px; margin-bottom: 16px; }
+      .pari h2 { font-size: 26px; margin-bottom: 24px; line-height: 1.2; }
+      .pari__box { padding: 24px 20px 28px; border-radius: 20px; margin-bottom: 22px; }
+      .pari__promise-label { font-size: 10px; letter-spacing: 0.16em; margin-bottom: 12px; }
+      .pari__promise { font-size: 16px; line-height: 1.45; margin-bottom: 14px; }
+      .pari__promise-hit { font-size: 19px; padding: 12px 16px; margin-top: 10px; }
+      .pari__cta-row .btn--orange { padding: 16px 28px; font-size: 16px; min-height: 52px; width: 100%; justify-content: center; }
+      .pari__disclaimer { font-size: 12px; }
+      .pari__video { width: min(280px, 88%); border-radius: 22px; transform: rotate(-1deg); }
 
       /* PAIN mobile */
       .pain__grid { grid-template-columns: 1fr; gap: 24px; }
@@ -2286,27 +2526,54 @@
       Просто шагая <strong>дома по 15 минут в день</strong>
     </p>
 
-    <p class="hero__sub">
-      Мы собрали план похудения специально под тебя:
-    </p>
-
-    <div class="hero__name-block">
-      <div class="hero__name-label">План для:</div>
-      <div class="hero__name-value">
-        <span data-var="name">—</span>
+    <!-- Benefits-блок: показывается для light-сегмента (когда milestones кг скрыты) -->
+    <div class="hero__benefits" data-seg-benefits style="display:none;">
+      <div class="hero__benefit">
+        <span class="hero__benefit__icon" aria-hidden="true">⏱️</span>
+        <div class="hero__benefit__value">15 мин</div>
+        <div class="hero__benefit__label">в день</div>
+      </div>
+      <div class="hero__benefit">
+        <span class="hero__benefit__icon" aria-hidden="true">🏠</span>
+        <div class="hero__benefit__value">дома</div>
+        <div class="hero__benefit__label">без зала</div>
+      </div>
+      <div class="hero__benefit">
+        <span class="hero__benefit__icon" aria-hidden="true">📱</span>
+        <div class="hero__benefit__value">в телефоне</div>
+        <div class="hero__benefit__label">когда удобно</div>
       </div>
     </div>
 
-    <div class="hero__data">
-      <div class="hero__chip"><span class="hero__chip-icon">🎂</span> Возраст: <strong data-var="age">—</strong></div>
-      <div class="hero__chip"><span class="hero__chip-icon">📏</span> Рост: <strong data-var="height">—</strong> см</div>
-      <div class="hero__chip"><span class="hero__chip-icon">⚖️</span> Вес: <strong data-var="weight">—</strong> кг</div>
-      <div class="hero__chip"><span class="hero__chip-icon">🎯</span> Цель: <strong data-var="goal">похудеть</strong></div>
+    <!-- Персональный «паспорт» вместо россыпи chip'ов -->
+    <div class="hero__profile">
+      <div class="hero__profile__header">
+        <span class="hero__profile__label">Твой профиль</span>
+        <span class="hero__profile__name"><span data-var="name">—</span></span>
+      </div>
+      <div class="hero__profile__grid">
+        <div class="hero__profile__cell">
+          <span class="hero__profile__cell-label">🎂 Возраст</span>
+          <span class="hero__profile__cell-value"><strong data-var="age">—</strong></span>
+        </div>
+        <div class="hero__profile__cell">
+          <span class="hero__profile__cell-label">📏 Рост</span>
+          <span class="hero__profile__cell-value"><strong data-var="height">—</strong> <span class="hero__profile__cell-unit">см</span></span>
+        </div>
+        <div class="hero__profile__cell">
+          <span class="hero__profile__cell-label">⚖️ Вес</span>
+          <span class="hero__profile__cell-value"><strong data-var="weight">—</strong> <span class="hero__profile__cell-unit">кг</span></span>
+        </div>
+        <div class="hero__profile__cell">
+          <span class="hero__profile__cell-label">🎯 Цель</span>
+          <span class="hero__profile__cell-value" data-var="goal" style="font-size: 0.85em;">похудеть</span>
+        </div>
+      </div>
     </div>
 
     <div class="hero__preview">
       <div class="hero__preview-video">
-        <video src="./videos/hero-preview.mp4" autoplay muted loop playsinline preload="auto"></video>
+        <video src="./videos/hero-preview.mp4" autoplay muted loop playsinline preload="metadata" poster="./images/cases/1.webp"></video>
       </div>
       <div class="hero__preview-text">
         <span class="hero__preview-icon">🎁</span>
@@ -2314,7 +2581,7 @@
       </div>
     </div>
 
-    <div style="text-align:center;margin:24px 0 0;font-size:28px;color:var(--mid-gray);animation:bounce 2s infinite;">⬇️</div>
+    <div style="text-align:center;margin:32px 0 0;font-size:28px;color:var(--mid-gray);animation:bounce 2s infinite;">⬇️</div>
   </div>
 </section>
 
@@ -2454,13 +2721,14 @@
   <div class="container">
     <div class="pari__grid">
       <div class="pari__left">
-        <h2>Мы уверены на 100%, что тебе это поможет,<br>поэтому давай <span>заключим пари?)</span></h2>
+        <span class="pari__badge">Гарантия результата</span>
+        <h2>Мы уверены на 100%, что тебе это поможет.<br>Давай <span>заключим пари?</span></h2>
 
         <div class="pari__box">
+          <span class="pari__promise-label">Условия пари</span>
           <div class="pari__promise">
-            Если ты будешь шагать по <em>15 минут в день</em> и следовать простым советам по питанию <em>6 месяцев</em>,<br>
-            но не похудеешь на <em>15 кг</em> —<br>
-            <strong class="pari__promise-hit">МЫ ВЕРНЁМ ДЕНЬГИ</strong>
+            Если ты будешь шагать по <em>15 минут в день</em> и следовать простым советам по питанию <em>6 месяцев</em>, но не похудеешь на <em>15 кг</em> —
+            <strong class="pari__promise-hit">мы вернём деньги</strong>
           </div>
         </div>
 
@@ -2474,7 +2742,7 @@
       </div>
 
       <div class="pari__video">
-        <video src="./videos/pari.mp4" autoplay muted loop playsinline preload="auto"></video>
+        <video src="./videos/pari.mp4" autoplay muted loop playsinline preload="metadata"></video>
       </div>
     </div>
   </div>
@@ -3406,15 +3674,20 @@ window.__WEIGHT_SEGMENT__ = (function () {
   var kickerEl = document.querySelector('[data-seg-kicker]');
   if (kickerEl) kickerEl.innerHTML = c.kicker;
 
-  // Milestones: если light — скрываем кг-плашки, показываем альтернативный сабтитр
+  // Milestones: если light — скрываем кг-плашки и показываем benefits-блок (15 мин/дома/в телефоне)
   var ms = document.querySelector('[data-seg-milestones]');
+  var benefits = document.querySelector('[data-seg-benefits]');
   var kg2El = document.querySelector('[data-seg-kg2]');
   var kg6El = document.querySelector('[data-seg-kg6]');
-  if (seg === 'light' && ms) {
-    ms.style.display = 'none';
-  } else if (ms) {
-    if (kg2El) kg2El.innerHTML = '−' + c.kg2 + ' <span class="milestone__unit">кг</span>';
-    if (kg6El) kg6El.innerHTML = '−' + c.kg6 + ' <span class="milestone__unit">кг</span>';
+  if (seg === 'light') {
+    if (ms) ms.style.display = 'none';
+    if (benefits) benefits.style.display = 'grid';
+  } else {
+    if (benefits) benefits.style.display = 'none';
+    if (ms) {
+      if (kg2El) kg2El.innerHTML = '−' + c.kg2 + ' <span class="milestone__unit">кг</span>';
+      if (kg6El) kg6El.innerHTML = '−' + c.kg6 + ' <span class="milestone__unit">кг</span>';
+    }
   }
 
   return { seg: seg, weight: w, config: c };
