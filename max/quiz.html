@@ -689,7 +689,7 @@
         } catch (e) {}
       }
 
-      // Loader: 4 этапа по ~700 мс, итого ~2.8 сек
+      // Loader: 4 этапа по ~700 мс + параллельный prefetch plan.html
       function runLoader(targetUrl) {
         var loader = document.getElementById('loader');
         if (!loader) { window.location.href = targetUrl; return; }
@@ -699,9 +699,27 @@
 
         try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_loader_shown'); } catch (e) {}
 
+        // ─── Prefetch plan.html в фоне ───
+        // Чтобы при редиректе HTML уже был в HTTP-кэше — нет белого экрана
+        var planReady = false;
+        try {
+          var prefLink = document.createElement('link');
+          prefLink.rel = 'prefetch';
+          prefLink.href = targetUrl;
+          prefLink.as = 'document';
+          document.head.appendChild(prefLink);
+        } catch (_) {}
+        try {
+          fetch(targetUrl, { credentials: 'same-origin', cache: 'force-cache' })
+            .then(function () { planReady = true; })
+            .catch(function () { planReady = true; }); // ошибка fetch — всё равно пускаем
+        } catch (_) { planReady = true; }
+
         var stepEls = loader.querySelectorAll('.loader__step');
         var idx = 0;
         var interval = 700;
+        var loaderDoneAt = null;
+        var maxWaitMs = 6000; // hard timeout
 
         function activate(n) {
           stepEls.forEach(function (s, i) {
@@ -711,16 +729,23 @@
           });
         }
 
+        function tryRedirect() {
+          if (planReady || (Date.now() - loaderDoneAt) >= maxWaitMs) {
+            try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_loader_complete'); } catch (e) {}
+            window.location.href = targetUrl;
+          } else {
+            setTimeout(tryRedirect, 150);
+          }
+        }
+
         var timer = setInterval(function () {
           idx++;
           if (idx >= stepEls.length) {
             clearInterval(timer);
-            // Все этапы завершены — отмечаем done и переходим
             stepEls.forEach(function (s) { s.classList.remove('is-active'); s.classList.add('is-done'); });
-            setTimeout(function () {
-              try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_loader_complete'); } catch (e) {}
-              window.location.href = targetUrl;
-            }, 400);
+            loaderDoneAt = Date.now();
+            // Если plan.html ещё не догрузился — ждём (но не дольше maxWaitMs)
+            setTimeout(tryRedirect, 400);
             return;
           }
           activate(idx);
