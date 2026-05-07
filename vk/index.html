@@ -25,10 +25,10 @@
   <meta property="og:url" content="https://npopko55-cmd.github.io/walk-walk/vk/">
   <meta property="og:locale" content="ru_RU">
 
-  <!-- Yandex.Metrika -->
+  <!-- Yandex.Metrika (config for cross-domain iframe — VK Mini App) -->
   <script type="text/javascript">
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for (var j=0;j<document.scripts.length;j++){if (document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108598378','ym');
-    ym(108598378,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",accurateTrackBounce:true,trackLinks:true});
+    ym(108598378,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",accurateTrackBounce:true,trackLinks:true,trackHash:true,trustedDomains:["vk.com","vk.ru","m.vk.com"]});
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
@@ -252,13 +252,19 @@
     // Парсим launch params VK один раз
     var __vkParams = (function () {
       var p = new URLSearchParams(window.location.search);
+      // hash-якорь после vk.com/app54574304#abc → window.location.hash = "#abc"
+      // Снимаем "#" — получаем "abc". Это наш кастомный source-tag.
+      var hashTag = (window.location.hash || '').replace(/^#/, '').trim();
       return {
         vk_app_id: p.get('vk_app_id') || '',
         vk_user_id: p.get('vk_user_id') || '',
-        vk_ref: p.get('vk_ref') || '',          // источник запуска (menu/box/widget/community/...)
+        vk_ref: p.get('vk_ref') || '',           // системный VK (menu/box/widget/community)
         vk_platform: p.get('vk_platform') || '', // mobile_web/mobile_iphone/mobile_android/desktop_web
         sign: p.get('sign') || '',
-        isVK: !!p.get('vk_app_id')
+        hash_tag: hashTag,                       // наш ручной тег из ссылки
+        // Источник для аналитики: приоритет hash → vk_ref → 'direct'
+        source: hashTag || p.get('vk_ref') || 'direct',
+        isVK: !!p.get('vk_app_id') || !!hashTag
       };
     })();
 
@@ -330,32 +336,32 @@
       } catch (e) {}
     })();
 
-    // Прокидываем VK launch params в utm для метрики
+    // Прокидываем VK launch params + hash-tag в utm для метрики
     (function () {
       try {
-        if (__vkParams.isVK) {
-          var url = new URL(window.location.href);
-          if (!url.searchParams.get('utm_source') && __vkParams.vk_ref) {
-            url.searchParams.set('utm_source', __vkParams.vk_ref);
-          }
-          if (!url.searchParams.get('utm_medium')) {
-            url.searchParams.set('utm_medium', 'vk_miniapp');
-          }
-          window.history.replaceState({}, '', url);
+        var url = new URL(window.location.href);
+        if (!url.searchParams.get('utm_source')) {
+          url.searchParams.set('utm_source', __vkParams.source);
+        }
+        if (!url.searchParams.get('utm_medium')) {
+          url.searchParams.set('utm_medium', 'vk_miniapp');
+        }
+        // Кладём в URL без перезагрузки
+        window.history.replaceState({}, '', url);
 
-          if (typeof ym === 'function') {
-            ym(108598378, 'params', {
-              utm_source: __vkParams.vk_ref || 'direct',
-              vk_miniapp: 1,
-              vk_platform: __vkParams.vk_platform
-            });
-            ym(108598378, 'reachGoal', 'vk_app_open', {
-              utm_source: __vkParams.vk_ref || 'direct',
-              vk_platform: __vkParams.vk_platform
-            });
-          }
-        } else {
-          if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_app_open');
+        // Метрика — параметры визита + цель открытия
+        if (typeof ym === 'function') {
+          ym(108598378, 'params', {
+            utm_source: __vkParams.source,
+            vk_miniapp: 1,
+            vk_platform: __vkParams.vk_platform || 'unknown',
+            vk_ref: __vkParams.vk_ref || '',
+            vk_hash: __vkParams.hash_tag || ''
+          });
+          ym(108598378, 'reachGoal', 'vk_app_open', {
+            utm_source: __vkParams.source,
+            vk_platform: __vkParams.vk_platform || 'unknown'
+          });
         }
       } catch (e) {}
     })();
