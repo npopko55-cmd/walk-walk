@@ -284,14 +284,15 @@
       }
     })();
 
-    // Хелпер для VK Ads pixel (VKWebAppTrackEvent)
-    // Используется параллельно Метрике для оптимизации VK Ads
-    window.__vkTrack = function (eventType, customEvent, attributes) {
+    // VK Ads tracking via VKWebAppTrackEvent
+    // Правильный формат VK Bridge: { event_name, custom_user_id, event_params }
+    // События автоматически попадают в VK Рекламу
+    window.__vkTrack = function (eventName, eventParams) {
       try {
         if (!window.vkBridge || typeof window.vkBridge.send !== 'function') return;
-        var payload = { event_type: eventType };
-        if (customEvent) payload.event = customEvent;
-        if (attributes) payload.attributes = attributes;
+        var payload = { event_name: eventName };
+        if (__vkParams && __vkParams.vk_user_id) payload.custom_user_id = String(__vkParams.vk_user_id);
+        if (eventParams) payload.event_params = eventParams;
         window.vkBridge.send('VKWebAppTrackEvent', payload).catch(function(){});
       } catch (e) {}
     };
@@ -376,8 +377,8 @@
           });
         }
 
-        // VK Ads pixel: открытие мини-аппа = view_content
-        window.__vkTrack && window.__vkTrack('view_content', 'app_open', {
+        // VK Ads: открытие мини-аппа = visit_website
+        window.__vkTrack && window.__vkTrack('visit_website', {
           utm_source: __vkParams.source
         });
       } catch (e) {}
@@ -397,8 +398,8 @@
         try {
           if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_cta_to_quiz');
         } catch (e) {}
-        // VK Ads pixel: клик на CTA = start_lead
-        window.__vkTrack && window.__vkTrack('start_lead', 'cta_to_quiz');
+        // VK Ads: клик на CTA → переход к take_test (квизу)
+        window.__vkTrack && window.__vkTrack('take_test', { step: 'cta_to_quiz' });
       });
     })();
   </script>

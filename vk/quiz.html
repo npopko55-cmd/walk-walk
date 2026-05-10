@@ -548,13 +548,14 @@
       }
     })();
 
-    // VK Ads pixel helper
-    window.__vkTrack = function (eventType, customEvent, attributes) {
+    // VK Ads tracking via VKWebAppTrackEvent
+    // Правильный формат: { event_name, custom_user_id, event_params }
+    window.__vkTrack = function (eventName, eventParams) {
       try {
         if (!window.vkBridge || typeof window.vkBridge.send !== 'function') return;
-        var payload = { event_type: eventType };
-        if (customEvent) payload.event = customEvent;
-        if (attributes) payload.attributes = attributes;
+        var payload = { event_name: eventName };
+        if (__vkParams && __vkParams.vk_user_id) payload.custom_user_id = String(__vkParams.vk_user_id);
+        if (eventParams) payload.event_params = eventParams;
         window.vkBridge.send('VKWebAppTrackEvent', payload).catch(function(){});
       } catch (e) {}
     };
@@ -781,8 +782,8 @@
             ym(108598378, 'reachGoal', 'vk_quiz_complete', state.answers);
           }
         } catch (e) {}
-        // VK Ads pixel: пройден квиз = lead (главное событие оптимизации)
-        window.__vkTrack && window.__vkTrack('lead', 'quiz_complete', state.answers);
+        // VK Ads: пройден квиз = lead (главное событие для оптимизации лидов)
+        window.__vkTrack && window.__vkTrack('lead', state.answers);
 
         saveAnswersLocal();
         var url = buildPlanUrl();
@@ -824,8 +825,8 @@
       try {
         if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_quiz_start');
       } catch (e) {}
-      // VK Ads pixel: начало квиза = start_lead
-      window.__vkTrack && window.__vkTrack('start_lead', 'quiz_start');
+      // VK Ads: начало квиза = take_test
+      window.__vkTrack && window.__vkTrack('take_test', { step: 'quiz_start' });
     })();
   </script>
 </body>

@@ -3520,18 +3520,18 @@
     if (_platformParam === 'vk' || _utmMediumParam === 'vk_miniapp') {
       if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_plan_view');
 
-      // VK Ads pixel: ленивая загрузка vkBridge только если пришли из VK
-      // Тогда trackEvent дойдёт до родительского VK-окна
+      // VK Ads: ленивая загрузка vkBridge только для VK-трафика
+      var _vkIdAttr = _qsPlan.get('vk_id') || '';
       var __vkScript = document.createElement('script');
       __vkScript.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
       __vkScript.onload = function () {
         try {
           if (window.vkBridge && typeof window.vkBridge.send === 'function') {
             window.vkBridge.send('VKWebAppInit').catch(function(){});
-            window.vkBridge.send('VKWebAppTrackEvent', {
-              event_type: 'view_offer',
-              event: 'plan_view'
-            }).catch(function(){});
+            // Просмотр плана = view_info_page (см. список event_name VK Bridge)
+            var payload = { event_name: 'view_info_page', event_params: { page: 'plan' } };
+            if (_vkIdAttr) payload.custom_user_id = String(_vkIdAttr);
+            window.vkBridge.send('VKWebAppTrackEvent', payload).catch(function(){});
           }
         } catch (_) {}
       };
@@ -3609,17 +3609,18 @@
                 tariff: a.dataset.tariff,
                 utm_source: utmSource
               });
-              // VK Ads pixel: клик на тариф = init_checkout (ключевое событие оптимизации)
+              // VK Ads: клик на тариф = add_to_cart (ключевое событие для оптимизации продаж)
               try {
                 if (window.vkBridge && typeof window.vkBridge.send === 'function') {
-                  window.vkBridge.send('VKWebAppTrackEvent', {
-                    event_type: 'init_checkout',
-                    event: 'tariff_click',
-                    attributes: {
+                  var _payload = {
+                    event_name: 'add_to_cart',
+                    event_params: {
                       tariff: a.dataset.tariff,
                       utm_source: utmSource
                     }
-                  }).catch(function(){});
+                  };
+                  if (vkIdParam) _payload.custom_user_id = String(vkIdParam);
+                  window.vkBridge.send('VKWebAppTrackEvent', _payload).catch(function(){});
                 }
               } catch (_) {}
             }
