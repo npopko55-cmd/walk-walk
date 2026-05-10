@@ -548,6 +548,17 @@
       }
     })();
 
+    // VK Ads pixel helper
+    window.__vkTrack = function (eventType, customEvent, attributes) {
+      try {
+        if (!window.vkBridge || typeof window.vkBridge.send !== 'function') return;
+        var payload = { event_type: eventType };
+        if (customEvent) payload.event = customEvent;
+        if (attributes) payload.attributes = attributes;
+        window.vkBridge.send('VKWebAppTrackEvent', payload).catch(function(){});
+      } catch (e) {}
+    };
+
     // Возвращенцы — сразу на plan.html
     (function () {
       try {
@@ -770,6 +781,8 @@
             ym(108598378, 'reachGoal', 'vk_quiz_complete', state.answers);
           }
         } catch (e) {}
+        // VK Ads pixel: пройден квиз = lead (главное событие оптимизации)
+        window.__vkTrack && window.__vkTrack('lead', 'quiz_complete', state.answers);
 
         saveAnswersLocal();
         var url = buildPlanUrl();
@@ -811,6 +824,8 @@
       try {
         if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_quiz_start');
       } catch (e) {}
+      // VK Ads pixel: начало квиза = start_lead
+      window.__vkTrack && window.__vkTrack('start_lead', 'quiz_start');
     })();
   </script>
 </body>

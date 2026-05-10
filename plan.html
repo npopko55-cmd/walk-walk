@@ -3519,6 +3519,23 @@
     }
     if (_platformParam === 'vk' || _utmMediumParam === 'vk_miniapp') {
       if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_plan_view');
+
+      // VK Ads pixel: ленивая загрузка vkBridge только если пришли из VK
+      // Тогда trackEvent дойдёт до родительского VK-окна
+      var __vkScript = document.createElement('script');
+      __vkScript.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
+      __vkScript.onload = function () {
+        try {
+          if (window.vkBridge && typeof window.vkBridge.send === 'function') {
+            window.vkBridge.send('VKWebAppInit').catch(function(){});
+            window.vkBridge.send('VKWebAppTrackEvent', {
+              event_type: 'view_offer',
+              event: 'plan_view'
+            }).catch(function(){});
+          }
+        } catch (_) {}
+      };
+      document.head.appendChild(__vkScript);
     }
   } catch (e) {}
 
@@ -3592,6 +3609,19 @@
                 tariff: a.dataset.tariff,
                 utm_source: utmSource
               });
+              // VK Ads pixel: клик на тариф = init_checkout (ключевое событие оптимизации)
+              try {
+                if (window.vkBridge && typeof window.vkBridge.send === 'function') {
+                  window.vkBridge.send('VKWebAppTrackEvent', {
+                    event_type: 'init_checkout',
+                    event: 'tariff_click',
+                    attributes: {
+                      tariff: a.dataset.tariff,
+                      utm_source: utmSource
+                    }
+                  }).catch(function(){});
+                }
+              } catch (_) {}
             }
           }
         } catch (_) {}

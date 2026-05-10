@@ -284,6 +284,18 @@
       }
     })();
 
+    // Хелпер для VK Ads pixel (VKWebAppTrackEvent)
+    // Используется параллельно Метрике для оптимизации VK Ads
+    window.__vkTrack = function (eventType, customEvent, attributes) {
+      try {
+        if (!window.vkBridge || typeof window.vkBridge.send !== 'function') return;
+        var payload = { event_type: eventType };
+        if (customEvent) payload.event = customEvent;
+        if (attributes) payload.attributes = attributes;
+        window.vkBridge.send('VKWebAppTrackEvent', payload).catch(function(){});
+      } catch (e) {}
+    };
+
     // Возврат пользователя, прошедшего квиз ранее: сразу на plan.html
     (function () {
       try {
@@ -363,6 +375,11 @@
             vk_platform: __vkParams.vk_platform || 'unknown'
           });
         }
+
+        // VK Ads pixel: открытие мини-аппа = view_content
+        window.__vkTrack && window.__vkTrack('view_content', 'app_open', {
+          utm_source: __vkParams.source
+        });
       } catch (e) {}
     })();
 
@@ -380,6 +397,8 @@
         try {
           if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_cta_to_quiz');
         } catch (e) {}
+        // VK Ads pixel: клик на CTA = start_lead
+        window.__vkTrack && window.__vkTrack('start_lead', 'cta_to_quiz');
       });
     })();
   </script>
