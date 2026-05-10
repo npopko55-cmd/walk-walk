@@ -3527,11 +3527,14 @@
       __vkScript.onload = function () {
         try {
           if (window.vkBridge && typeof window.vkBridge.send === 'function') {
-            window.vkBridge.send('VKWebAppInit').catch(function(){});
-            // Просмотр плана = view_info_page (см. список event_name VK Bridge)
-            var payload = { event_name: 'view_info_page', event_params: { page: 'plan' } };
-            if (_vkIdAttr) payload.custom_user_id = String(_vkIdAttr);
-            window.vkBridge.send('VKWebAppTrackEvent', payload).catch(function(){});
+            window.vkBridge.send('VKWebAppInit').then(function () {
+              // Просмотр плана = view_info_page (формат ads.vk.com)
+              var payload = { event_name: 'view_info_page' };
+              if (_vkIdAttr) payload.user_id = String(_vkIdAttr);
+              window.vkBridge.send('VKWebAppTrackEvent', payload)
+                .then(function (r) { try { console.log('[vk-track] view_info_page', r); } catch (_) {} })
+                .catch(function (err) { try { console.warn('[vk-track-err] view_info_page', err); } catch (_) {} });
+            }).catch(function(){});
           }
         } catch (_) {}
       };
@@ -3612,15 +3615,11 @@
               // VK Ads: клик на тариф = add_to_cart (ключевое событие для оптимизации продаж)
               try {
                 if (window.vkBridge && typeof window.vkBridge.send === 'function') {
-                  var _payload = {
-                    event_name: 'add_to_cart',
-                    event_params: {
-                      tariff: a.dataset.tariff,
-                      utm_source: utmSource
-                    }
-                  };
-                  if (vkIdParam) _payload.custom_user_id = String(vkIdParam);
-                  window.vkBridge.send('VKWebAppTrackEvent', _payload).catch(function(){});
+                  var _payload = { event_name: 'add_to_cart' };
+                  if (vkIdParam) _payload.user_id = String(vkIdParam);
+                  window.vkBridge.send('VKWebAppTrackEvent', _payload)
+                    .then(function (r) { try { console.log('[vk-track] add_to_cart', r); } catch (_) {} })
+                    .catch(function (err) { try { console.warn('[vk-track-err] add_to_cart', err); } catch (_) {} });
                 }
               } catch (_) {}
             }

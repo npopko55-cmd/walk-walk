@@ -542,14 +542,14 @@
       return Promise.resolve();
     })();
 
-    // VK Ads tracking via VKWebAppTrackEvent — после init
-    window.__vkTrack = function (eventName, eventParams) {
+    // VK Ads tracking via VKWebAppTrackEvent — отправляет в VK Рекламу
+    // Формат по рекламной документации (ads.vk.com): { event_name, user_id }
+    window.__vkTrack = function (eventName) {
       try {
         if (!window.vkBridge || typeof window.vkBridge.send !== 'function') return;
         window.__vkInitPromise.then(function () {
           var payload = { event_name: eventName };
-          if (__vkParams && __vkParams.vk_user_id) payload.custom_user_id = String(__vkParams.vk_user_id);
-          if (eventParams) payload.event_params = eventParams;
+          if (__vkParams && __vkParams.vk_user_id) payload.user_id = String(__vkParams.vk_user_id);
           window.vkBridge.send('VKWebAppTrackEvent', payload)
             .then(function (r) { try { console.log('[vk-track]', eventName, r); } catch (_) {} })
             .catch(function (err) { try { console.warn('[vk-track-err]', eventName, err); } catch (_) {} });
@@ -780,7 +780,7 @@
           }
         } catch (e) {}
         // VK Ads: пройден квиз = lead (главное событие для оптимизации лидов)
-        window.__vkTrack && window.__vkTrack('lead', state.answers);
+        window.__vkTrack && window.__vkTrack('lead');
 
         saveAnswersLocal();
         var url = buildPlanUrl();
@@ -823,7 +823,7 @@
         if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_quiz_start');
       } catch (e) {}
       // VK Ads: начало квиза = take_test
-      window.__vkTrack && window.__vkTrack('take_test', { step: 'quiz_start' });
+      window.__vkTrack && window.__vkTrack('take_test');
     })();
   </script>
 </body>

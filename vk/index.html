@@ -279,14 +279,14 @@
       return Promise.resolve();
     })();
 
-    // VK Ads tracking via VKWebAppTrackEvent — стреляет после init
-    window.__vkTrack = function (eventName, eventParams) {
+    // VK Ads tracking via VKWebAppTrackEvent — отправляет в VK Рекламу
+    // Формат по рекламной документации (ads.vk.com): { event_name, user_id }
+    window.__vkTrack = function (eventName) {
       try {
         if (!window.vkBridge || typeof window.vkBridge.send !== 'function') return;
         window.__vkInitPromise.then(function () {
           var payload = { event_name: eventName };
-          if (__vkParams && __vkParams.vk_user_id) payload.custom_user_id = String(__vkParams.vk_user_id);
-          if (eventParams) payload.event_params = eventParams;
+          if (__vkParams && __vkParams.vk_user_id) payload.user_id = String(__vkParams.vk_user_id);
           window.vkBridge.send('VKWebAppTrackEvent', payload)
             .then(function (r) { try { console.log('[vk-track]', eventName, r); } catch (_) {} })
             .catch(function (err) { try { console.warn('[vk-track-err]', eventName, err); } catch (_) {} });
@@ -375,9 +375,7 @@
         }
 
         // VK Ads: открытие мини-аппа = visit_website
-        window.__vkTrack && window.__vkTrack('visit_website', {
-          utm_source: __vkParams.source
-        });
+        window.__vkTrack && window.__vkTrack('visit_website');
       } catch (e) {}
     })();
 
@@ -395,8 +393,8 @@
         try {
           if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_cta_to_quiz');
         } catch (e) {}
-        // VK Ads: клик на CTA → переход к take_test (квизу)
-        window.__vkTrack && window.__vkTrack('take_test', { step: 'cta_to_quiz' });
+        // VK Ads: клик на CTA → переход к квизу = take_test
+        window.__vkTrack && window.__vkTrack('take_test');
       });
     })();
   </script>
