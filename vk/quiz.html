@@ -532,31 +532,28 @@
       };
     })();
 
-    // VK Bridge init
-    (function () {
-      function init() {
-        try {
-          if (window.vkBridge && typeof window.vkBridge.send === 'function') {
-            window.vkBridge.send('VKWebAppInit').catch(function(){});
-          }
-        } catch (e) {}
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-      } else {
-        init();
-      }
+    // VK Bridge init — обязательно до других событий
+    window.__vkInitPromise = (function () {
+      try {
+        if (window.vkBridge && typeof window.vkBridge.send === 'function') {
+          return window.vkBridge.send('VKWebAppInit').catch(function(){});
+        }
+      } catch (e) {}
+      return Promise.resolve();
     })();
 
-    // VK Ads tracking via VKWebAppTrackEvent
-    // Правильный формат: { event_name, custom_user_id, event_params }
+    // VK Ads tracking via VKWebAppTrackEvent — после init
     window.__vkTrack = function (eventName, eventParams) {
       try {
         if (!window.vkBridge || typeof window.vkBridge.send !== 'function') return;
-        var payload = { event_name: eventName };
-        if (__vkParams && __vkParams.vk_user_id) payload.custom_user_id = String(__vkParams.vk_user_id);
-        if (eventParams) payload.event_params = eventParams;
-        window.vkBridge.send('VKWebAppTrackEvent', payload).catch(function(){});
+        window.__vkInitPromise.then(function () {
+          var payload = { event_name: eventName };
+          if (__vkParams && __vkParams.vk_user_id) payload.custom_user_id = String(__vkParams.vk_user_id);
+          if (eventParams) payload.event_params = eventParams;
+          window.vkBridge.send('VKWebAppTrackEvent', payload)
+            .then(function (r) { try { console.log('[vk-track]', eventName, r); } catch (_) {} })
+            .catch(function (err) { try { console.warn('[vk-track-err]', eventName, err); } catch (_) {} });
+        }).catch(function(){});
       } catch (e) {}
     };
 
