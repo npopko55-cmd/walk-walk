@@ -2059,11 +2059,23 @@
       text-transform: uppercase;
       letter-spacing: .5px;
     }
+    /* Горизонтальная карусель наград со scroll-snap */
     .whyus__awards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      align-items: stretch;
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 4px 4px 14px;
+      margin: 0 -4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,182,0,.45) transparent;
+    }
+    .whyus__awards-grid::-webkit-scrollbar { height: 6px; }
+    .whyus__awards-grid::-webkit-scrollbar-track { background: transparent; }
+    .whyus__awards-grid::-webkit-scrollbar-thumb {
+      background: rgba(255,182,0,.45);
+      border-radius: 999px;
     }
     .whyus__award {
       font-size: 14px;
@@ -2074,11 +2086,13 @@
       align-items: center;
       gap: 14px;
       text-decoration: none;
-      transition: transform var(--transition);
+      transition: transform var(--transition), box-shadow var(--transition);
       background: #fff;
       padding: 20px;
       border-radius: var(--radius-card);
       box-shadow: var(--shadow-soft);
+      flex: 0 0 280px;
+      scroll-snap-align: start;
     }
     .whyus__award:hover {
       transform: translateY(-4px);
@@ -2107,7 +2121,8 @@
       text-align: center;
     }
     @media (max-width: 640px) {
-      .whyus__awards-grid { grid-template-columns: 1fr; gap: 20px; }
+      .whyus__award { flex-basis: 240px; padding: 16px; }
+      .whyus__award-img { aspect-ratio: 4/3; }
     }
     .whyus__award-caption em {
       display: block;
@@ -3287,6 +3302,22 @@
           <img class="whyus__award-img" src="./images/awards/zhit-zdorovo.jpg" alt="Наши тренеры в программе Жить здорово" loading="lazy">
           <span class="whyus__award-year">2023</span>
           <div class="whyus__award-caption">Нас пригласили в качестве экспертов<br>на программу «Жить здорово»</div>
+        </a>
+        <a class="whyus__award" href="https://premiaruneta.ru/" target="_blank" rel="noopener">
+          <img class="whyus__award-img" src="./images/awards/premia-runeta-2024.jpg" alt="Лауреат Премии Рунета 2024" loading="lazy">
+          <span class="whyus__award-year">2024</span>
+          <div class="whyus__award-caption">
+            Лауреаты Премии&nbsp;Рунета
+            <em>«Здоровье и спорт»</em>
+          </div>
+        </a>
+        <a class="whyus__award" href="https://awards.rehub.cc/about/winners-2025/" target="_blank" rel="noopener">
+          <img class="whyus__award-img" src="./images/awards/re-awards-2025.jpg" alt="Финалист Re:Awards 2025" loading="lazy">
+          <span class="whyus__award-year">2025</span>
+          <div class="whyus__award-caption">
+            Финалисты Re:Awards
+            <em>«Лучший спортивный проект»</em>
+          </div>
         </a>
         <a class="whyus__award" href="https://getaward.ru/results/gcchoice#school" target="_blank" rel="noopener">
           <img class="whyus__award-img" src="./images/awards/getaward-2025.jpg" alt="Лауреат GetAward 2025" loading="lazy">
