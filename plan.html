@@ -2850,7 +2850,7 @@
 
       <div class="calc__results">
         <div class="calc__result">
-          <div class="calc__result-label">Сбросишь без усилий<br>за 2 месяца</div>
+          <div class="calc__result-label">Сбросишь без усилий<br>за 1 месяц</div>
           <div class="calc__result-kg">−<span class="counter" id="counter2m"></span> кг</div>
         </div>
         <div class="calc__result calc__result--highlight">
@@ -3918,11 +3918,13 @@ class Counter {
   }
 }
 
+// kg2 = за 1 месяц, kg6 = за 3 месяца (имена сохранены чтобы не ломать Counter init)
+// База: 15 мин/день ≈ обещанию тарифа (3/5), дальше прогрессия
 const CALC_DATA = [
-  { min: 15, kg2: 5, kg6: 15 },
-  { min: 20, kg2: 6, kg6: 17 },
-  { min: 30, kg2: 7, kg6: 19 },
-  { min: 45, kg2: 8, kg6: 22 }
+  { min: 15, kg2: 3, kg6: 6 },
+  { min: 20, kg2: 4, kg6: 8 },
+  { min: 30, kg2: 5, kg6: 11 },
+  { min: 45, kg2: 6, kg6: 14 }
 ];
 
 const slider = document.getElementById('calcSlider');
