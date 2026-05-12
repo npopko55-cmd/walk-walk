@@ -3718,7 +3718,7 @@ window.__WEIGHT_SEGMENT__ = (function () {
   else seg = 'heavy';                                    // 75+
 
   var CONFIG = {
-    light:  { kg2: 1,    kg6: 2, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '',           pariKg: '',     tariff2mo: '−1 кг',   tariff6mo: '−2 кг', calcH2: 'Хочешь сбросить чуть больше?' },
+    light:  { kg2: 1,    kg6: 2, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '2 кг', tariff2mo: '−1 кг',   tariff6mo: '−2 кг', calcH2: 'Хочешь сбросить чуть больше?' },
     small:  { kg2: 1,    kg6: 3, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '3 кг', tariff2mo: '−1 кг',   tariff6mo: '−3 кг', calcH2: '3 кг мало?' },
     medium: { kg2: 2,    kg6: 4, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '4 кг', tariff2mo: '−2 кг',   tariff6mo: '−4 кг', calcH2: '4 кг мало?' },
     heavy:  { kg2: 2.5,  kg6: 5, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '5 кг', tariff2mo: '−2,5 кг', tariff6mo: '−5 кг', calcH2: '5 кг мало?' }
@@ -3751,18 +3751,13 @@ window.__WEIGHT_SEGMENT__ = (function () {
   if (tariff2moEl) tariff2moEl.textContent = c.tariff2mo + ' за 1 месяц';
   if (tariff6moEl) tariff6moEl.textContent = c.tariff6mo + ' за 3 месяца';
 
-  // Пари — обещание возврата под индивидуальные данные
+  // Пари — обещание возврата под индивидуальные данные (для всех сегментов)
   var pariSection = document.querySelector('section.pari');
   var pariKgEl = document.querySelector('[data-seg-pari-kg]');
   var pariPromiseEl = document.querySelector('[data-seg-pari-promise]');
-  if (!c.pariKg) {
-    // Для light-сегмента: скрываем весь блок пари — нет обещания возврата
-    if (pariSection) pariSection.style.display = 'none';
-  } else {
-    if (pariSection) pariSection.style.display = '';
-    if (pariKgEl) pariKgEl.textContent = c.pariKg;
-    if (pariPromiseEl) pariPromiseEl.textContent = c.pariPromise;
-  }
+  if (pariSection) pariSection.style.display = '';
+  if (pariKgEl && c.pariKg) pariKgEl.textContent = c.pariKg;
+  if (pariPromiseEl && c.pariPromise) pariPromiseEl.textContent = c.pariPromise;
 
   // Калькулятор — заголовок «N кг мало?»
   var calcH2El = document.querySelector('.calc h2 em');
