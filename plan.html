@@ -3718,10 +3718,14 @@ window.__WEIGHT_SEGMENT__ = (function () {
   else seg = 'heavy';                                    // 75+
 
   var CONFIG = {
-    light:  { kg2: 1,    kg6: 2, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '2 кг', tariff2mo: '−1 кг',   tariff6mo: '−2 кг', calcH2: 'Хочешь сбросить чуть больше?' },
-    small:  { kg2: 1,    kg6: 3, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '3 кг', tariff2mo: '−1 кг',   tariff6mo: '−3 кг', calcH2: '3 кг мало?' },
-    medium: { kg2: 2,    kg6: 4, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '4 кг', tariff2mo: '−2 кг',   tariff6mo: '−4 кг', calcH2: '4 кг мало?' },
-    heavy:  { kg2: 2.5,  kg6: 5, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '5 кг', tariff2mo: '−2,5 кг', tariff6mo: '−5 кг', calcH2: '5 кг мало?' }
+    light:  { kg2: 1,    kg6: 2, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '2 кг', tariff2mo: '−1 кг',   tariff6mo: '−2 кг', calcH2: 'Хочешь сбросить чуть больше?',
+            calcData: [{min:15,kg2:1,kg6:2},{min:20,kg2:1,kg6:2},{min:30,kg2:2,kg6:3},{min:45,kg2:2,kg6:3}] },
+    small:  { kg2: 1,    kg6: 3, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '3 кг', tariff2mo: '−1 кг',   tariff6mo: '−3 кг', calcH2: '3 кг мало?',
+            calcData: [{min:15,kg2:1,kg6:3},{min:20,kg2:2,kg6:4},{min:30,kg2:2,kg6:4},{min:45,kg2:3,kg6:5}] },
+    medium: { kg2: 2,    kg6: 4, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '4 кг', tariff2mo: '−2 кг',   tariff6mo: '−4 кг', calcH2: '4 кг мало?',
+            calcData: [{min:15,kg2:2,kg6:4},{min:20,kg2:2,kg6:5},{min:30,kg2:3,kg6:5},{min:45,kg2:3,kg6:6}] },
+    heavy:  { kg2: 2.5,  kg6: 5, kicker: 'Твоя персональная <span class="accent">программа похудения</span>', pariPromise: '3 месяца',   pariKg: '5 кг', tariff2mo: '−2,5 кг', tariff6mo: '−5 кг', calcH2: '5 кг мало?',
+            calcData: [{min:15,kg2:3,kg6:5},{min:20,kg2:3,kg6:6},{min:30,kg2:4,kg6:7},{min:45,kg2:5,kg6:8}] }
   };
 
   var c = CONFIG[seg];
@@ -3913,22 +3917,28 @@ class Counter {
   }
 }
 
-// kg2 = за 1 месяц, kg6 = за 3 месяца (имена переменных сохранены для совместимости с Counter)
-// База 15 мин = тарифное обещание heavy (округлённое вверх для слот-машинки): 3 / 5
-// Дальше прогрессия 10% / 25% / 50% от базы
-const CALC_DATA = [
-  { min: 15, kg2: 3, kg6: 5 },
-  { min: 20, kg2: 3, kg6: 6 },
-  { min: 30, kg2: 4, kg6: 7 },
-  { min: 45, kg2: 5, kg6: 8 }
-];
+// Калькулятор берёт цифры из активного weight-сегмента (config.calcData).
+// Если сегмент не определился (нет веса в URL) — fallback на heavy.
+// kg2 = за 1 месяц, kg6 = за 3 месяца (имена сохранены для совместимости с Counter).
+const CALC_DATA = (function () {
+  var seg = window.__WEIGHT_SEGMENT__;
+  if (seg && seg.config && Array.isArray(seg.config.calcData) && seg.config.calcData.length === 4) {
+    return seg.config.calcData;
+  }
+  return [
+    { min: 15, kg2: 3, kg6: 5 },
+    { min: 20, kg2: 3, kg6: 6 },
+    { min: 30, kg2: 4, kg6: 7 },
+    { min: 45, kg2: 5, kg6: 8 }
+  ];
+})();
 
 const slider = document.getElementById('calcSlider');
 
 // Создаём 3 каунтера: минуты (2 разряда), −кг за 2 мес (1 разряд), −кг за 6 мес (2 разряда)
 const counterMinutes = new Counter(document.getElementById('counterMinutes'), { places: [10, 1], fontSize: 72 });
 const counter2m      = new Counter(document.getElementById('counter2m'),      { places: [1],     fontSize: 48 });
-const counter6m      = new Counter(document.getElementById('counter6m'),      { places: [10, 1], fontSize: 48 });
+const counter6m      = new Counter(document.getElementById('counter6m'),      { places: [1],     fontSize: 48 });
 
 function updateCalc() {
   const idx = parseInt(slider.value, 10);
