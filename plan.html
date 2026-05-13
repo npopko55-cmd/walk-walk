@@ -2062,6 +2062,7 @@
     /* Горизонтальная карусель наград со scroll-snap */
     .whyus__awards-grid {
       display: flex;
+      align-items: flex-start;
       gap: 16px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -2101,11 +2102,16 @@
     .whyus__award-img {
       display: block;
       width: 100%;
-      aspect-ratio: 1/1;
-      object-fit: contain;
+      aspect-ratio: 16/9;
+      object-fit: cover;
       border-radius: 12px;
+      background: #f0f0f0;
+    }
+    /* Модификатор для вертикальных постеров (Re:Awards и т.п.) */
+    .whyus__award-img--portrait {
+      aspect-ratio: 3/4;
+      object-fit: cover;
       background: linear-gradient(135deg, #1f1300 0%, #3a2a10 100%);
-      padding: 8px;
     }
     .whyus__award-year {
       display: block;
@@ -3320,7 +3326,7 @@
           </div>
         </a>
         <a class="whyus__award" href="https://awards.rehub.cc/about/winners-2025/" target="_blank" rel="noopener">
-          <img class="whyus__award-img" src="./images/awards/re-awards-2026.jpg" alt="Финалист Re:Awards 2026" loading="lazy">
+          <img class="whyus__award-img whyus__award-img--portrait" src="./images/awards/re-awards-2026.jpg" alt="Финалист Re:Awards 2026" loading="lazy">
           <span class="whyus__award-year">2026</span>
           <div class="whyus__award-caption">
             Финалисты Re:Awards
