@@ -2062,7 +2062,7 @@
     /* Горизонтальная карусель наград со scroll-snap */
     .whyus__awards-grid {
       display: flex;
-      align-items: flex-start;
+      align-items: stretch;
       gap: 16px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -2126,6 +2126,11 @@
       color: #3a3020;
       line-height: 1.4;
       text-align: center;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     @media (max-width: 640px) {
       .whyus__award { flex-basis: 240px; padding: 16px; }
