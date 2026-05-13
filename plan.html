@@ -2101,10 +2101,11 @@
     .whyus__award-img {
       display: block;
       width: 100%;
-      aspect-ratio: 16/9;
-      object-fit: cover;
+      aspect-ratio: 1/1;
+      object-fit: contain;
       border-radius: 12px;
-      background: #f0f0f0;
+      background: linear-gradient(135deg, #1f1300 0%, #3a2a10 100%);
+      padding: 8px;
     }
     .whyus__award-year {
       display: block;
@@ -2122,7 +2123,6 @@
     }
     @media (max-width: 640px) {
       .whyus__award { flex-basis: 240px; padding: 16px; }
-      .whyus__award-img { aspect-ratio: 4/3; }
     }
     .whyus__award-caption em {
       display: block;
