@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Открываем приложение…</title>
+  <meta name="theme-color" content="#ce2c01">
+  <title>Шагай Дома — открываем приложение</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
@@ -28,48 +33,164 @@
   <!-- /Yandex.Metrika counter -->
 
   <style>
+    :root {
+      --red: #ce2c01;
+      --red-deep: #a52301;
+      --cream: #fff8ed;
+      --cream-soft: rgba(255, 248, 237, 0.7);
+      --cream-faint: rgba(255, 248, 237, 0.15);
+    }
+
+    * { box-sizing: border-box; }
     html, body {
       margin: 0; padding: 0;
-      background: #0f0f0f; color: #f0ece3;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       height: 100%;
-      display: flex; align-items: center; justify-content: center;
+      background: var(--red);
+      color: var(--cream);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow: hidden;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 130, 80, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 85% 90%, rgba(255, 90, 30, 0.22) 0%, transparent 55%),
+        var(--red);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: space-between;
+      padding: 32px 24px;
       text-align: center;
     }
-    .box { padding: 24px; }
+
+    .top {
+      width: 100%;
+      display: flex; justify-content: center;
+      padding-top: 16px;
+    }
+    .logo svg {
+      height: 44px; width: auto;
+      display: block;
+    }
+
+    .middle {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 28px;
+      max-width: 360px;
+    }
+
     .spinner {
-      width: 48px; height: 48px;
-      border: 3px solid rgba(240,236,227,0.2);
-      border-top-color: #f0ece3;
+      width: 56px; height: 56px;
+      position: relative;
+    }
+    .spinner::before {
+      content: '';
+      position: absolute; inset: 0;
+      border: 3px solid var(--cream-faint);
       border-radius: 50%;
-      margin: 0 auto 20px;
-      animation: spin 0.8s linear infinite;
+    }
+    .spinner::after {
+      content: '';
+      position: absolute; inset: 0;
+      border: 3px solid transparent;
+      border-top-color: var(--cream);
+      border-right-color: var(--cream);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    h1 { font-size: 16px; font-weight: 500; margin: 0 0 8px; opacity: 0.9; }
-    p  { font-size: 13px; margin: 0; opacity: 0.6; }
-    a  { color: #f0ece3; text-decoration: underline; }
+
+    h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 0;
+      color: var(--cream);
+    }
+    .sub {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--cream-soft);
+      margin: 0;
+    }
+
+    .bottom {
+      width: 100%;
+      max-width: 360px;
+      padding-bottom: 8px;
+    }
+    .manual-wrap {
+      font-size: 13px;
+      color: var(--cream-soft);
+      line-height: 1.5;
+    }
+    .manual-wrap a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 12px 22px;
+      background: var(--cream);
+      color: var(--red-deep);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      border-radius: 999px;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .manual-wrap a:hover { transform: translateY(-1px); }
+    .manual-wrap a:active { transform: translateY(0); }
+
+    @media (max-height: 600px) {
+      h1 { font-size: 22px; }
+      .spinner { width: 44px; height: 44px; }
+      body { padding: 20px; }
+    }
+    @media (max-width: 360px) {
+      h1 { font-size: 22px; }
+    }
   </style>
 </head>
 <body>
-  <div class="box">
-    <div class="spinner"></div>
-    <h1>Открываем приложение…</h1>
-    <p>Если ничего не произошло — <a id="manual" href="https://t.me/shagai_doma_bot/plan?startapp=yad">нажмите сюда</a></p>
+
+  <div class="top">
+    <div class="logo" aria-label="Шагай Дома">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 106.01385498046875 49.134765625" fill="none" role="img" aria-label="Шагай Дома">
+        <path d="M27.358808471536076 36.845925992647054L22.18969762487075 37.403434147662V20.220558865808822L14.264924992934283 20.601136132970474V38.25578554170497L8.678344057574105 38.857944237994026V20.867692381046073L0 21.284763358757466V45.81220368034812L34.60441893181296 41.41300286520565V19.62206700168026L27.357561249712777 19.970216501436123L27.358808471536076 36.845925992647054Z" fill="#fff8ed"/>
+        <path d="M45.937923640136724 19.079450675235524L37.7968079107307 41.010649105009186L44.663512381089156 40.137593828699444L45.69421649586397 36.553577197265625L52.87871308679917 35.734152459357766L53.87150165814568 38.966951425350416L60.1128491063017 38.173219457002524L52.835559211713004 18.748537781077665L45.937923640136724 19.079450675235524ZM47.099586046358 31.89495424287684L49.355061991613056 24.26163240660903L51.595571274988515 31.457678271627987L47.099586046358 31.89495424287684Z" fill="#fff8ed"/>
+        <path d="M76.12243787454044 17.63037847205308L62.29498840834674 18.294249704159007V37.896835100959336L67.86932162540211 37.187415327866496V22.732463617934286L76.12343565199909 22.175030296228748L76.12243787454044 17.63037847205308Z" fill="#fff8ed"/>
+        <path d="M87.00295161664177 34.7560811055262L91.74987787612018 34.15242574304917L86.21795020105698 17.14698023777861L81.01204631060432 17.39732260215131L74.91412937212776 36.294653946748625L80.0541799503102 35.640860266974954L80.82845525821462 32.54949625574449L86.2508768571921 31.93087423138787L87.00295161664177 34.7560811055262ZM81.88460269818474 28.522715877039293L83.5848154877068 21.91663087887753L85.27729550192441 28.19344931568819L81.88460269818474 28.522715877039293Z" fill="#fff8ed"/>
+        <path d="M102.20209564410041 23.793126000904756V32.82363561250574L105.91682112261604 32.3514374302045V16.19824354123104L102.22304897073185 16.375623428940717L97.21096335161994 25.932735038775277V16.61733501829619L93.15998686954275 16.811926567167394V33.973075244858684L97.21420612836053 33.45722429874196L102.20209564410041 23.793126000904756Z" fill="#fff8ed"/>
+        <path d="M99.07356442253563 18.224255615435432L103.82448179184858 6.7536562842945775L100.66801280144188 6.764806447394876L101.31906259320426 0L96.4785946969784 11.33480181901999L99.57694315041935 11.257773399213006L99.07356442253563 18.224255615435432Z" fill="#fff8ed"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="middle">
+    <div class="spinner" role="status" aria-label="Загрузка"></div>
+    <h1>Открываем приложение</h1>
+    <p class="sub">Запускаем&nbsp;Шагай&nbsp;Дома — буквально пара секунд.</p>
+  </div>
+
+  <div class="bottom">
+    <div class="manual-wrap">
+      Ничего не происходит?
+      <br>
+      <a id="manual" href="https://t.me/shagai_doma_bot/plan?startapp=yad">Открыть вручную</a>
+    </div>
   </div>
 
   <script>
   (function () {
     var p = new URLSearchParams(window.location.search);
 
-    // dest=tg|vk|max  — куда редиректим. По умолчанию tg.
     var dest = (p.get('dest') || 'tg').toLowerCase();
-
-    // startapp — что положить в стартап мини-аппа.
-    // По умолчанию 'yad' (yandex ads). Можно переопределить из URL.
     var startapp = p.get('startapp') || 'yad';
 
-    // Собираем всё что прислал Я.Директ
     var trackedKeys = [
       'utm_source','utm_medium','utm_campaign','utm_content','utm_term',
       'cm_id','yclid','_openstat',
@@ -82,23 +203,18 @@
       if (v) data[k] = v;
     });
 
-    // Если utm_source не передан, но мы пришли через эту страницу — считаем yandex
     if (!data.utm_source) data.utm_source = 'yandex';
     if (!data.utm_medium) data.utm_medium = 'cpc';
 
-    // Делаем короткий маркер кампании для startapp (TG лимит 64 символа, [A-Za-z0-9_-]).
-    // Если startapp пришёл в URL — оставляем его. Иначе пытаемся слепить из cm_id/campaign_id.
     if (!p.get('startapp')) {
       var cmid = data.cm_id || '';
       var campId = data.campaign_id || (cmid.split('_')[0] || '');
       if (campId) {
-        // sanitize: только [A-Za-z0-9_-]
         var clean = String(campId).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 20);
         if (clean) startapp = 'yad-' + clean;
       }
     }
 
-    // Отдаём всё в Метрику
     try {
       if (typeof ym === 'function') {
         ym(108598378, 'params', { ad_click: data });
@@ -107,14 +223,11 @@
       }
     } catch (e) {}
 
-    // Кладём UTM в localStorage — если мини-апп откроет ту же страницу walk-walk.ru
-    // в WebView с теми же cookies, мы их подхватим
     try {
       localStorage.setItem('last_ad_utm', JSON.stringify(data));
       localStorage.setItem('last_ad_utm_ts', String(Date.now()));
     } catch (e) {}
 
-    // Целевые ссылки
     var encStart = encodeURIComponent(startapp);
     var targets = {
       tg:  'https://t.me/shagai_doma_bot/plan?startapp=' + encStart,
@@ -123,17 +236,15 @@
     };
     var target = targets[dest] || targets.tg;
 
-    // Подменяем «ручную» ссылку на случай если автоматический редирект не сработал
     var manual = document.getElementById('manual');
-    if (manual) {
-      manual.href = target;
-      manual.textContent = 'нажмите сюда';
-    }
+    if (manual) manual.href = target;
 
-    // Даём Метрике 350мс отправить хит, потом редирект
+    // Дебаг-режим: ?preview=1 — не редиректить, чтобы видеть страницу
+    if (p.get('preview') === '1') return;
+
     setTimeout(function () {
       window.location.replace(target);
-    }, 350);
+    }, 600);
   })();
   </script>
 </body>
