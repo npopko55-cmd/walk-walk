@@ -44,6 +44,44 @@
       })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108598378', 'ym');
 
       ym(108598378, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+
+      // ── Парные цели (источник × мессенджер) ── см. /index.html
+      (function () {
+        var BL = /^(retake|reset|test|debug|dev)$/i;
+        function srcKey(){
+          var src='', sp='';
+          try { src = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase(); } catch(e){}
+          try { sp  = ((window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){}
+          if (!sp) { try { sp = ((window.max&&max.initDataUnsafe&&max.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){} }
+          if (!sp && window.__vkParams) sp = String(window.__vkParams.startapp || window.__vkParams.start_param || '').toLowerCase();
+          if (src === 'yandex' || sp.indexOf('yad') === 0) return 'yad';
+          if (src === 'vk_ads' || src === 'vk_target' || src === 'vk_targ' || /^cpc_vk|^cpm_vk/.test(src)) return 'targ';
+          if (sp && !BL.test(sp) && sp.indexOf('yad') !== 0) return 'seed';
+          if (src.indexOf('seed') === 0) return 'seed';
+          return null;
+        }
+        function msgKey(){
+          try {
+            var med = (new URLSearchParams(location.search).get('utm_medium') || '').toLowerCase();
+            if (med === 'vk_miniapp')  return 'vk';
+            if (med === 'max_miniapp') return 'max';
+            if (med === 'tg_miniapp')  return 'tg';
+          } catch(e){}
+          if (window.__msgPlatform) return window.__msgPlatform;
+          if (window.__vkParams || (window.vkBridge && window.vkBridge.send)) return 'vk';
+          if (window.max && window.max.initDataUnsafe) return 'max';
+          if (window.Telegram && window.Telegram.WebApp) return 'tg';
+          return null;
+        }
+        window.__pairGoal = function (event, params) {
+          try {
+            if (typeof ym !== 'function') return;
+            var s = srcKey(), m = msgKey();
+            if (!s || !m) return;
+            ym(108598378, 'reachGoal', s + '_' + m + '_' + event, params || {});
+          } catch(e){}
+        };
+      })();
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   <!-- /Yandex.Metrika counter -->
@@ -3549,7 +3587,10 @@
   }
 
   // Goal: user seen plan (fires once on load)
-  try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'plan_view'); } catch (e) {}
+  try {
+    if (typeof ym === 'function') ym(108598378, 'reachGoal', 'plan_view');
+    if (window.__pairGoal) window.__pairGoal('plan_view');
+  } catch (e) {}
 
   // Если пришли из MAX-воронки — отдельная цель для аналитики платформы
   try {
@@ -3638,6 +3679,10 @@
         try {
           if (typeof ym === 'function') {
             ym(108598378, 'reachGoal', 'tariff_click', {
+              tariff: a.dataset.tariff,
+              utm_source: utmSource
+            });
+            if (window.__pairGoal) window.__pairGoal('tariff_click', {
               tariff: a.dataset.tariff,
               utm_source: utmSource
             });

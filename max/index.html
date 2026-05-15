@@ -34,6 +34,45 @@
   <script type="text/javascript">
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for (var j=0;j<document.scripts.length;j++){if (document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=108598378','ym');
     ym(108598378,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",accurateTrackBounce:true,trackLinks:true});
+
+    // ── Парные цели (источник × мессенджер) ── см. /index.html
+    window.__msgPlatform = 'max';
+    (function () {
+      var BL = /^(retake|reset|test|debug|dev)$/i;
+      function srcKey(){
+        var src='', sp='';
+        try { src = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase(); } catch(e){}
+        try { sp  = ((window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){}
+        if (!sp) { try { sp = ((window.max&&max.initDataUnsafe&&max.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){} }
+        if (!sp && window.__vkParams) sp = String(window.__vkParams.startapp || window.__vkParams.start_param || '').toLowerCase();
+        if (src === 'yandex' || sp.indexOf('yad') === 0) return 'yad';
+        if (src === 'vk_ads' || src === 'vk_target' || src === 'vk_targ' || /^cpc_vk|^cpm_vk/.test(src)) return 'targ';
+        if (sp && !BL.test(sp) && sp.indexOf('yad') !== 0) return 'seed';
+        if (src.indexOf('seed') === 0) return 'seed';
+        return null;
+      }
+      function msgKey(){
+        try {
+          var med = (new URLSearchParams(location.search).get('utm_medium') || '').toLowerCase();
+          if (med === 'vk_miniapp')  return 'vk';
+          if (med === 'max_miniapp') return 'max';
+          if (med === 'tg_miniapp')  return 'tg';
+        } catch(e){}
+        if (window.__msgPlatform) return window.__msgPlatform;
+        if (window.__vkParams || (window.vkBridge && window.vkBridge.send)) return 'vk';
+        if (window.max && window.max.initDataUnsafe) return 'max';
+        if (window.Telegram && window.Telegram.WebApp) return 'tg';
+        return null;
+      }
+      window.__pairGoal = function (event, params) {
+        try {
+          if (typeof ym !== 'function') return;
+          var s = srcKey(), m = msgKey();
+          if (!s || !m) return;
+          ym(108598378, 'reachGoal', s + '_' + m + '_' + event, params || {});
+        } catch(e){}
+      };
+    })();
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
 
@@ -354,10 +393,14 @@
             if (typeof ym === 'function') {
               ym(108598378, 'params', { utm_source: startParam, max_miniapp: 1 });
               ym(108598378, 'reachGoal', 'max_app_open', { utm_source: startParam });
+              if (window.__pairGoal) window.__pairGoal('app_open', { utm_source: startParam });
             }
           } catch (e) {}
         } else {
-          try { if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_app_open'); } catch (e) {}
+          try {
+            if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_app_open');
+            if (window.__pairGoal) window.__pairGoal('app_open');
+          } catch (e) {}
         }
       } catch (e) {}
     })();
@@ -375,6 +418,7 @@
         updateHref();
         try {
           if (typeof ym === 'function') ym(108598378, 'reachGoal', 'max_cta_to_quiz');
+          if (window.__pairGoal) window.__pairGoal('cta_to_quiz');
         } catch (e) {}
       });
     })();
