@@ -189,7 +189,15 @@
     var p = new URLSearchParams(window.location.search);
 
     var dest = (p.get('dest') || 'tg').toLowerCase();
-    var startapp = p.get('startapp') || 'yad';
+
+    // Любой кастомный startapp из URL префиксуем 'yad-' для детектора в мини-аппе.
+    // Так событие гарантированно попадёт в воронку yad_<msg>_*.
+    var rawStartapp = p.get('startapp');
+    var startapp = 'yad';
+    if (rawStartapp) {
+      var cleanCustom = String(rawStartapp).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 50);
+      startapp = /^yad/i.test(cleanCustom) ? cleanCustom : ('yad-' + cleanCustom);
+    }
 
     var trackedKeys = [
       'utm_source','utm_medium','utm_campaign','utm_content','utm_term',
