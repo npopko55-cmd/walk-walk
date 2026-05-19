@@ -453,8 +453,8 @@
           });
         }
 
-        // VK Ads: открытие мини-аппа = visit_website
-        window.__vkTrack && window.__vkTrack('visit_website');
+        // VK Ads: открытие мини-аппа = view_content (для оптимизации на просмотры)
+        window.__vkTrack && window.__vkTrack('view_content');
       } catch (e) {}
     })();
 
@@ -473,8 +473,8 @@
           if (typeof ym === 'function') ym(108598378, 'reachGoal', 'vk_cta_to_quiz');
           if (window.__pairGoal) window.__pairGoal('cta_to_quiz');
         } catch (e) {}
-        // VK Ads: клик на CTA → переход к квизу = take_test
-        window.__vkTrack && window.__vkTrack('take_test');
+        // VK Ads: клик на CTA → переход к квизу = start_lead (старт лидовой воронки)
+        window.__vkTrack && window.__vkTrack('start_lead');
       });
     })();
   </script>
