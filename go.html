@@ -239,43 +239,15 @@
       localStorage.setItem('last_ad_utm_ts', String(Date.now()));
     } catch (e) {}
 
-    // ── Кодируем UTM в startapp в формате base64url ──
-    // Salebot декодирует это и сохраняет UTM в карточку юзера для CRM-атрибуции.
-    // Используем КОРОТКИЕ ключи (1 буква), чтобы уложиться в TG-лимит 64 симв.
-    //   f = from (y=yandex, s=seed)
-    //   c = campaign_id (или короткий идентификатор кампании)
-    //   e = erid (для ОРД-маркировки в посевах)
-    // Полный UTM-хвост остаётся в Метрике на стороне go.html через ad_click + params.
-    // ВСЕГДА передаём все 3 ключа в фиксированном порядке (f, c, e), даже если пустые.
-    // Это упрощает парсинг на стороне Salebot — массив всегда длиной 3 элемента,
-    // не нужны проверки длины и работают простые цепочки splitter.
-    var campShort = data.campaign_id || (data.cm_id ? data.cm_id.split('_')[0] : '') || (rawStartapp || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 30);
-    var shortPayload = [
-      'f=' + (from === 'seed' ? 's' : 'y'),
-      'c=' + encodeURIComponent(String(campShort || '').slice(0, 20)),
-      'e=' + encodeURIComponent(String(data.erid || '').slice(0, 20))
-    ];
+    // ── /start команда: простое короткое слово, отдельное на каждый канал ──
+    // Salebot ловит /start <слово> через 2 отдельных триггера и шлёт нужный welcome.
+    // Полный UTM-хвост остаётся в Метрике (через ad_click + params) — анализируется на сайте.
+    // Метка для аналитики в мини-аппе пробрасывается через URL кнопки welcome.
+    var encStart = from === 'seed' ? 'tg' : 'yad';
 
-    var encStart;
-    try {
-      var b64 = btoa(shortPayload.join('&'))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-      // Префикс 'u' = маркер что это base64-payload. Проверяем что укладывается в 63 симв.
-      if (b64.length <= 62) {
-        encStart = 'u' + b64;
-      } else {
-        // Если не влезает — fallback на читаемый префикс
-        encStart = encodeURIComponent(startapp);
-      }
-    } catch (e) {
-      encStart = encodeURIComponent(startapp);
-    }
-
-    // ── Целевые URL: tg:// deeplink на ЧАТ БОТА (не мини-апп) ──
-    // Открываем чат с ботом и сразу шлём команду /start с base64-UTM.
-    // Salebot ловит /start, парсит параметр, создаёт клиента в базе с UTM-метками.
-    // После /start Salebot шлёт welcome с кнопкой запуска мини-аппа (там продолжается воронка).
-    // VK/MAX продолжают вести в мини-апп напрямую (там Salebot не используется).
+    // ── Целевые URL: tg:// deeplink на ЧАТ БОТА ──
+    // /start tg  — для трафика из посевов TG (welcome 1)
+    // /start yad — для трафика из Я.Директа (welcome 2)
     var deeplinks = {
       tg:  'tg://resolve?domain=shagai_doma_bot&start=' + encStart,
       vk:  'vk://vk.com/app54574304#startapp=' + encStart,
