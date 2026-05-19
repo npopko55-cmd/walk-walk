@@ -51,41 +51,73 @@
 
       // ── Парные цели (источник × мессенджер) ── см. /index.html
       (function () {
-        var BL = /^(retake|reset|test|debug|dev)$/i;
-        function srcKey(){
-          var src='', sp='';
-          try { src = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase(); } catch(e){}
-          try { sp  = ((window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){}
-          if (!sp) { try { sp = ((window.max&&max.initDataUnsafe&&max.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){} }
-          if (!sp && window.__vkParams) sp = String(window.__vkParams.startapp || window.__vkParams.start_param || '').toLowerCase();
-          if (src === 'yandex' || sp.indexOf('yad') === 0) return 'yad';
-          if (src === 'vk_ads' || src === 'vk_target' || src === 'vk_targ' || /^cpc_vk|^cpm_vk/.test(src)) return 'targ';
-          if (sp && !BL.test(sp) && sp.indexOf('yad') !== 0) return 'seed';
-          if (src.indexOf('seed') === 0) return 'seed';
-          return null;
-        }
-        function msgKey(){
-          try {
-            var med = (new URLSearchParams(location.search).get('utm_medium') || '').toLowerCase();
-            if (med === 'vk_miniapp')  return 'vk';
-            if (med === 'max_miniapp') return 'max';
-            if (med === 'tg_miniapp')  return 'tg';
-          } catch(e){}
-          if (window.__msgPlatform) return window.__msgPlatform;
-          if (window.__vkParams || (window.vkBridge && window.vkBridge.send)) return 'vk';
-          if (window.max && window.max.initDataUnsafe) return 'max';
-          if (window.Telegram && window.Telegram.WebApp) return 'tg';
-          return null;
-        }
-        window.__pairGoal = function (event, params) {
-          try {
-            if (typeof ym !== 'function') return;
-            var s = srcKey(), m = msgKey();
-            if (!s || !m) return;
-            ym(108598378, 'reachGoal', s + '_' + m + '_' + event, params || {});
-          } catch(e){}
-        };
-      })();
+      // Декодер base64-payload из startapp (формат go.html: u<base64>).
+      // Возвращает {utm_source, utm_campaign, erid, source_key} или null если не u-формат.
+      window.__decodeStartappUtm = function (sp) {
+        if (!sp || sp.charAt(0) !== 'u' || sp.length < 4) return null;
+        try {
+          var b64 = sp.slice(1).replace(/-/g, '+').replace(/_/g, '/');
+          while (b64.length % 4) b64 += '=';
+          var decoded = atob(b64);
+          var parts = decoded.split('&');
+          var out = {};
+          parts.forEach(function (kv) {
+            var ix = kv.indexOf('=');
+            if (ix > 0) {
+              var k = kv.slice(0, ix);
+              var v = decodeURIComponent(kv.slice(ix + 1));
+              if (k === 'f') {
+                out.source_key = (v === 's') ? 'seed' : 'yad';
+                out.utm_source = (v === 's') ? 'tg_seed' : 'yandex';
+              } else if (k === 'c') {
+                out.utm_campaign = v;
+              } else if (k === 'e') {
+                out.erid = v;
+              }
+            }
+          });
+          return out.source_key ? out : null;
+        } catch (e) { return null; }
+      };
+
+      var BL = /^(retake|reset|test|debug|dev)$/i;
+      function srcKey(){
+        var src='', sp='';
+        try { src = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase(); } catch(e){}
+        try { sp  = ((window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){}
+        if (!sp) { try { sp = ((window.max&&max.initDataUnsafe&&max.initDataUnsafe.start_param) || '').toLowerCase(); } catch(e){} }
+        if (!sp && window.__vkParams) sp = String(window.__vkParams.startapp || window.__vkParams.start_param || '').toLowerCase();
+        // Если startapp в формате u<base64> — декодируем
+        var dec = window.__decodeStartappUtm(sp);
+        if (dec && dec.source_key) return dec.source_key;
+        if (src === 'yandex' || sp.indexOf('yad') === 0) return 'yad';
+        if (src === 'vk_ads' || src === 'vk_target' || src === 'vk_targ' || /^cpc_vk|^cpm_vk/.test(src)) return 'targ';
+        if (sp && !BL.test(sp) && sp.indexOf('yad') !== 0) return 'seed';
+        if (src.indexOf('seed') === 0) return 'seed';
+        return null;
+      }
+      function msgKey(){
+        try {
+          var med = (new URLSearchParams(location.search).get('utm_medium') || '').toLowerCase();
+          if (med === 'vk_miniapp')  return 'vk';
+          if (med === 'max_miniapp') return 'max';
+          if (med === 'tg_miniapp')  return 'tg';
+        } catch(e){}
+        if (window.__msgPlatform) return window.__msgPlatform;
+        if (window.__vkParams || (window.vkBridge && window.vkBridge.send)) return 'vk';
+        if (window.max && window.max.initDataUnsafe) return 'max';
+        if (window.Telegram && window.Telegram.WebApp) return 'tg';
+        return null;
+      }
+      window.__pairGoal = function (event, params) {
+        try {
+          if (typeof ym !== 'function') return;
+          var s = srcKey(), m = msgKey();
+          if (!s || !m) return;
+          ym(108598378, 'reachGoal', s + '_' + m + '_' + event, params || {});
+        } catch(e){}
+      };
+    })();
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108598378" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   <!-- /Yandex.Metrika counter -->

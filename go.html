@@ -239,31 +239,67 @@
       localStorage.setItem('last_ad_utm_ts', String(Date.now()));
     } catch (e) {}
 
-    // startapp = читаемый префикс yad-<id> или seed-<id>.
-    // Детектор в мини-аппе срабатывает по префиксу.
-    // Полный UTM-хвост остаётся в Метрике через ad_click + params на этой странице.
-    var encStart = encodeURIComponent(startapp);
+    // ── Кодируем UTM в startapp в формате base64url ──
+    // Salebot декодирует это и сохраняет UTM в карточку юзера для CRM-атрибуции.
+    // Используем КОРОТКИЕ ключи (1 буква), чтобы уложиться в TG-лимит 64 симв.
+    //   f = from (y=yandex, s=seed)
+    //   c = campaign_id (или короткий идентификатор кампании)
+    //   e = erid (для ОРД-маркировки в посевах)
+    // Полный UTM-хвост остаётся в Метрике на стороне go.html через ad_click + params.
+    var shortPayload = [];
+    shortPayload.push('f=' + (from === 'seed' ? 's' : 'y'));
+    var campShort = data.campaign_id || (data.cm_id ? data.cm_id.split('_')[0] : '') || (rawStartapp || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 30);
+    if (campShort) shortPayload.push('c=' + encodeURIComponent(String(campShort).slice(0, 20)));
+    if (data.erid)  shortPayload.push('e=' + encodeURIComponent(String(data.erid).slice(0, 20)));
 
-    var targets = {
+    var encStart;
+    try {
+      var b64 = btoa(shortPayload.join('&'))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+      // Префикс 'u' = маркер что это base64-payload. Проверяем что укладывается в 63 симв.
+      if (b64.length <= 62) {
+        encStart = 'u' + b64;
+      } else {
+        // Если не влезает — fallback на читаемый префикс
+        encStart = encodeURIComponent(startapp);
+      }
+    } catch (e) {
+      encStart = encodeURIComponent(startapp);
+    }
+
+    // ── Целевые URL: tg:// deeplink (нативное открытие приложения) + t.me/ fallback ──
+    // tg:// открывает Telegram-приложение напрямую, минуя браузерное окно "Open in Telegram",
+    // что критично для конверсии на мобильных. Если TG не установлен — fallback на t.me/.
+    var deeplinks = {
+      tg:  'tg://resolve?domain=shagai_doma_bot&appname=plan&startapp=' + encStart,
+      vk:  'vk://vk.com/app54574304#startapp=' + encStart,
+      max: 'max://max.ru/id222391942312_bot?startapp=' + encStart
+    };
+    var webFallbacks = {
       tg:  'https://t.me/shagai_doma_bot/plan?startapp=' + encStart,
       vk:  'https://vk.com/app54574304#startapp=' + encStart,
       max: 'https://max.ru/id222391942312_bot?startapp=' + encStart
     };
-    var target = targets[dest] || targets.tg;
+    var deeplink = deeplinks[dest] || deeplinks.tg;
+    var webFallback = webFallbacks[dest] || webFallbacks.tg;
 
     var manual = document.getElementById('manual');
-    if (manual) manual.href = target;
+    if (manual) manual.href = webFallback;
 
     // Дебаг-режим: ?preview=1 — не редиректить, чтобы видеть страницу
     if (p.get('preview') === '1') return;
 
     // Редирект ПОСЛЕ подтверждения отправки цели в Метрику (callback в 4-м аргументе).
-    // Решает проблему потерь хитов при быстром редиректе на мобильных сетях.
     var redirected = false;
     function doRedirect() {
       if (redirected) return;
       redirected = true;
-      window.location.replace(target);
+      // Сначала пробуем tg:// (нативный intent на мобиле и desktop с установленным TG)
+      window.location.href = deeplink;
+      // Через 1.2 сек, если страница ещё открыта (TG не сработал) — fallback на t.me/
+      setTimeout(function () {
+        try { window.location.replace(webFallback); } catch (e) {}
+      }, 1200);
     }
     try {
       if (typeof ym === 'function') {
