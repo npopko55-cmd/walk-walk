@@ -246,11 +246,15 @@
     //   c = campaign_id (или короткий идентификатор кампании)
     //   e = erid (для ОРД-маркировки в посевах)
     // Полный UTM-хвост остаётся в Метрике на стороне go.html через ad_click + params.
-    var shortPayload = [];
-    shortPayload.push('f=' + (from === 'seed' ? 's' : 'y'));
+    // ВСЕГДА передаём все 3 ключа в фиксированном порядке (f, c, e), даже если пустые.
+    // Это упрощает парсинг на стороне Salebot — массив всегда длиной 3 элемента,
+    // не нужны проверки длины и работают простые цепочки splitter.
     var campShort = data.campaign_id || (data.cm_id ? data.cm_id.split('_')[0] : '') || (rawStartapp || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 30);
-    if (campShort) shortPayload.push('c=' + encodeURIComponent(String(campShort).slice(0, 20)));
-    if (data.erid)  shortPayload.push('e=' + encodeURIComponent(String(data.erid).slice(0, 20)));
+    var shortPayload = [
+      'f=' + (from === 'seed' ? 's' : 'y'),
+      'c=' + encodeURIComponent(String(campShort || '').slice(0, 20)),
+      'e=' + encodeURIComponent(String(data.erid || '').slice(0, 20))
+    ];
 
     var encStart;
     try {
