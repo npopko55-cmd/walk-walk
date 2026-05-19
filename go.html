@@ -190,31 +190,42 @@
 
     var dest = (p.get('dest') || 'tg').toLowerCase();
 
-    // Любой кастомный startapp из URL префиксуем 'yad-' для детектора в мини-аппе.
-    // Так событие гарантированно попадёт в воронку yad_<msg>_*.
+    // from=yad (по умолчанию) / from=seed — определяет префикс startapp.
+    // Это нужно чтобы Сергей (посевы) тоже мог использовать прокладку
+    // и тем самым получать ERID-маркировку и трекинг через Метрику.
+    var from = (p.get('from') || 'yad').toLowerCase();
+    var prefix = from === 'seed' ? 'seed-' : 'yad-';
+
+    // Кастомный startapp из URL префиксуем правильным префиксом для детектора.
     var rawStartapp = p.get('startapp');
-    var startapp = 'yad';
+    var startapp = from === 'seed' ? 'seed' : 'yad';
     if (rawStartapp) {
       var cleanCustom = String(rawStartapp).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 50);
-      startapp = /^yad/i.test(cleanCustom) ? cleanCustom : ('yad-' + cleanCustom);
+      if (new RegExp('^' + prefix.slice(0, -1), 'i').test(cleanCustom)) {
+        startapp = cleanCustom; // уже с правильным префиксом
+      } else {
+        startapp = prefix + cleanCustom;
+      }
     }
 
     var trackedKeys = [
       'utm_source','utm_medium','utm_campaign','utm_content','utm_term',
-      'cm_id','yclid','_openstat',
+      'cm_id','yclid','_openstat','erid',
       'gbid','ad_id','phrase_id','retargeting_id','source','source_type',
       'device_type','position_type','position','region_id','keyword','campaign_id'
     ];
-    var data = { dest: dest, startapp_sent: startapp };
+    var data = { dest: dest, from: from, startapp_sent: startapp };
     trackedKeys.forEach(function (k) {
       var v = p.get(k);
       if (v) data[k] = v;
     });
 
-    if (!data.utm_source) data.utm_source = 'yandex';
-    if (!data.utm_medium) data.utm_medium = 'cpc';
+    // Дефолты по источнику
+    if (!data.utm_source) data.utm_source = from === 'seed' ? 'tg_seed' : 'yandex';
+    if (!data.utm_medium) data.utm_medium = from === 'seed' ? 'seed' : 'cpc';
 
-    if (!p.get('startapp')) {
+    // Если startapp не задан вручную, для yad собираем из cm_id/campaign_id
+    if (!p.get('startapp') && from === 'yad') {
       var cmid = data.cm_id || '';
       var campId = data.campaign_id || (cmid.split('_')[0] || '');
       if (campId) {
@@ -224,19 +235,15 @@
     }
 
     try {
-      if (typeof ym === 'function') {
-        ym(108598378, 'params', { ad_click: data });
-        ym(108598378, 'reachGoal', 'ad_click', data);
-        ym(108598378, 'reachGoal', 'ad_click_' + dest, data);
-      }
-    } catch (e) {}
-
-    try {
       localStorage.setItem('last_ad_utm', JSON.stringify(data));
       localStorage.setItem('last_ad_utm_ts', String(Date.now()));
     } catch (e) {}
 
+    // startapp = читаемый префикс yad-<id> или seed-<id>.
+    // Детектор в мини-аппе срабатывает по префиксу.
+    // Полный UTM-хвост остаётся в Метрике через ad_click + params на этой странице.
     var encStart = encodeURIComponent(startapp);
+
     var targets = {
       tg:  'https://t.me/shagai_doma_bot/plan?startapp=' + encStart,
       vk:  'https://vk.com/app54574304#startapp=' + encStart,
@@ -250,9 +257,27 @@
     // Дебаг-режим: ?preview=1 — не редиректить, чтобы видеть страницу
     if (p.get('preview') === '1') return;
 
-    setTimeout(function () {
+    // Редирект ПОСЛЕ подтверждения отправки цели в Метрику (callback в 4-м аргументе).
+    // Решает проблему потерь хитов при быстром редиректе на мобильных сетях.
+    var redirected = false;
+    function doRedirect() {
+      if (redirected) return;
+      redirected = true;
       window.location.replace(target);
-    }, 600);
+    }
+    try {
+      if (typeof ym === 'function') {
+        ym(108598378, 'params', { ad_click: data });
+        ym(108598378, 'reachGoal', 'ad_click', data, doRedirect);
+        ym(108598378, 'reachGoal', 'ad_click_' + dest, data);
+      } else {
+        setTimeout(doRedirect, 400);
+      }
+    } catch (e) {
+      setTimeout(doRedirect, 400);
+    }
+    // Страховочный таймаут — если callback не вернётся за 1.5 сек, всё равно редиректим
+    setTimeout(doRedirect, 1500);
   })();
   </script>
 </body>
