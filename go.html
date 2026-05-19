@@ -239,22 +239,44 @@
       localStorage.setItem('last_ad_utm_ts', String(Date.now()));
     } catch (e) {}
 
-    // ── /start команда: простое короткое слово, отдельное на каждый канал ──
-    // Salebot ловит /start <слово> через 2 отдельных триггера и шлёт нужный welcome.
-    // Полный UTM-хвост остаётся в Метрике (через ad_click + params) — анализируется на сайте.
-    // Метка для аналитики в мини-аппе пробрасывается через URL кнопки welcome.
-    var encStart = from === 'seed' ? 'tg' : 'yad';
+    // ── Salebot прокси: захват UTM в переменные сделки + редирект в TG бот ──
+    // Salebot ловит utm_source / utm_campaign / erid из URL прокси-ссылки,
+    // сохраняет их в переменные сделки клиента, потом редиректит юзера в TG.
+    // В welcome-сообщении кнопка с URL t.me/.../plan?startapp=#{utm_campaign}
+    // автоматически подставляет наше значение → мини-апп получает метку для Метрики.
 
-    // ── Целевые URL: tg:// deeplink на ЧАТ БОТА ──
-    // /start tg  — для трафика из посевов TG (welcome 1)
-    // /start yad — для трафика из Я.Директа (welcome 2)
+    // utm_campaign для Salebot: для Директа префикс "yad-", для посевов префикс "seed-"
+    // или просто имя канала. Детектор в мини-аппе различит источник по префиксу.
+    var sbCampaign;
+    if (from === 'seed') {
+      // Посев: используем имя канала (startapp) или campaign_id
+      sbCampaign = rawStartapp || (data.cm_id ? data.cm_id.split('_')[0] : '') || 'seed';
+    } else {
+      // Я.Директ: префиксуем "yad-" + campaign_id (или кастомное слово)
+      var campId = data.campaign_id || (data.cm_id ? data.cm_id.split('_')[0] : '') || rawStartapp || '';
+      sbCampaign = campId ? ('yad-' + String(campId).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 30)) : 'yandex';
+    }
+
+    // Собираем UTM-параметры для Salebot прокси-ссылки
+    var sbParams = new URLSearchParams();
+    sbParams.set('utm_source', from === 'seed' ? 'tg_seed' : 'yandex');
+    sbParams.set('utm_campaign', sbCampaign);
+    if (data.utm_term)    sbParams.set('utm_term', data.utm_term);
+    if (data.utm_content) sbParams.set('utm_content', data.utm_content);
+    if (data.erid)        sbParams.set('erid', data.erid);
+
+    var salebotProxy = 'https://s.salebot.pro/walkwalk_1?' + sbParams.toString();
+
+    // Для TG используем Salebot прокси (он сам ловит UTM и редиректит в бот)
+    // Для VK/MAX продолжаем использовать прямые deeplinks (там Salebot не используется)
+    var encStart = sbCampaign;
     var deeplinks = {
-      tg:  'tg://resolve?domain=shagai_doma_bot&start=' + encStart,
+      tg:  salebotProxy, // Salebot сам всё разрулит
       vk:  'vk://vk.com/app54574304#startapp=' + encStart,
       max: 'max://max.ru/id222391942312_bot?startapp=' + encStart
     };
     var webFallbacks = {
-      tg:  'https://t.me/shagai_doma_bot?start=' + encStart,
+      tg:  salebotProxy,
       vk:  'https://vk.com/app54574304#startapp=' + encStart,
       max: 'https://max.ru/id222391942312_bot?startapp=' + encStart
     };
