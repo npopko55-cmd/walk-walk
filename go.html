@@ -267,16 +267,18 @@
       encStart = encodeURIComponent(startapp);
     }
 
-    // ── Целевые URL: tg:// deeplink (нативное открытие приложения) + t.me/ fallback ──
-    // tg:// открывает Telegram-приложение напрямую, минуя браузерное окно "Open in Telegram",
-    // что критично для конверсии на мобильных. Если TG не установлен — fallback на t.me/.
+    // ── Целевые URL: tg:// deeplink на ЧАТ БОТА (не мини-апп) ──
+    // Открываем чат с ботом и сразу шлём команду /start с base64-UTM.
+    // Salebot ловит /start, парсит параметр, создаёт клиента в базе с UTM-метками.
+    // После /start Salebot шлёт welcome с кнопкой запуска мини-аппа (там продолжается воронка).
+    // VK/MAX продолжают вести в мини-апп напрямую (там Salebot не используется).
     var deeplinks = {
-      tg:  'tg://resolve?domain=shagai_doma_bot&appname=plan&startapp=' + encStart,
+      tg:  'tg://resolve?domain=shagai_doma_bot&start=' + encStart,
       vk:  'vk://vk.com/app54574304#startapp=' + encStart,
       max: 'max://max.ru/id222391942312_bot?startapp=' + encStart
     };
     var webFallbacks = {
-      tg:  'https://t.me/shagai_doma_bot/plan?startapp=' + encStart,
+      tg:  'https://t.me/shagai_doma_bot?start=' + encStart,
       vk:  'https://vk.com/app54574304#startapp=' + encStart,
       max: 'https://max.ru/id222391942312_bot?startapp=' + encStart
     };
