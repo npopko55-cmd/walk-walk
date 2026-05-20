@@ -825,20 +825,8 @@
       }
 
       function doRedirectWithTgAccess(url) {
-        // Telegram Mini App: нативный попап разрешения → редирект
-        if (tg && typeof tg.requestWriteAccess === 'function') {
-          try {
-            tg.requestWriteAccess(function (granted) {
-              try {
-                if (typeof ym === 'function') {
-                  ym(108598378, 'reachGoal', granted ? 'tg_write_granted' : 'tg_write_denied');
-                }
-              } catch (e) {}
-              window.location.href = url;
-            });
-            return;
-          } catch (e) {}
-        }
+        // Попап requestWriteAccess убран — юзер уже в Salebot базе через welcome.
+        // Просто переходим на план.
         window.location.href = url;
       }
 
