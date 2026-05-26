@@ -264,6 +264,9 @@
     if (data.utm_term)    sbParams.set('utm_term', data.utm_term);
     if (data.utm_content) sbParams.set('utm_content', data.utm_content);
     if (data.erid)        sbParams.set('erid', data.erid);
+    if (data.utm_medium)  sbParams.set('utm_medium', data.utm_medium);
+    if (data.yclid)       sbParams.set('yclid', data.yclid);
+    if (data.cm_id)       sbParams.set('cm_id', data.cm_id);
 
     // buildAndRedirect вызывается после получения ym_client_id.
     // ymClientId передаётся в Salebot → startapp → plan.html, где используется
