@@ -47,7 +47,25 @@
           k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
       })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108598378', 'ym');
 
-      ym(108598378, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+      // Вытаскиваем ym_client_id из startapp (формат "...--u<base64url>"),
+      // передан из go.html через Salebot. Связывает TMA-сессию с браузерной
+      // → конверсии TMA попадают в атрибуцию Я.Директа.
+      var _ymInitOpts = {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true};
+      try {
+        var _sp = '';
+        try { _sp = (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.start_param) || ''; } catch(e){}
+        if (!_sp) { try { _sp = (window.max && max.initDataUnsafe && max.initDataUnsafe.start_param) || ''; } catch(e){} }
+        var _ix = _sp.lastIndexOf('--u');
+        if (_ix >= 0 && _sp.length > _ix + 3) {
+          var _b64 = _sp.slice(_ix + 3).replace(/-/g, '+').replace(/_/g, '/');
+          while (_b64.length % 4) _b64 += '=';
+          var _cid = atob(_b64);
+          if (_cid && /^\d+$/.test(_cid)) {
+            _ymInitOpts.clientID = _cid;
+          }
+        }
+      } catch(e){}
+      ym(108598378, 'init', _ymInitOpts);
 
       // ── Парные цели (источник × мессенджер) ── см. /index.html
       (function () {
