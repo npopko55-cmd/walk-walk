@@ -265,55 +265,71 @@
     if (data.utm_content) sbParams.set('utm_content', data.utm_content);
     if (data.erid)        sbParams.set('erid', data.erid);
 
-    var salebotProxy = 'https://s.salebot.pro/walkwalk_1?' + sbParams.toString();
+    // buildAndRedirect вызывается после получения ym_client_id.
+    // ymClientId передаётся в Salebot → startapp → plan.html, где используется
+    // для инициализации Метрики с тем же clientID — это связывает браузерную сессию
+    // (с yclid, атрибутированную к Директу) с TMA-сессией, делая TMA-цели видимыми
+    // в статистике рекламной кампании.
+    function buildAndRedirect(ymClientId) {
+      if (ymClientId) {
+        var b64cid = btoa(String(ymClientId)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        sbParams.set('ym_cid', b64cid);
+      }
 
-    // Для TG используем Salebot прокси (он сам ловит UTM и редиректит в бот)
-    // Для VK/MAX продолжаем использовать прямые deeplinks (там Salebot не используется)
-    var encStart = sbCampaign;
-    var deeplinks = {
-      tg:  salebotProxy, // Salebot сам всё разрулит
-      vk:  'vk://vk.com/app54574304#startapp=' + encStart,
-      max: 'max://max.ru/id222391942312_bot?startapp=' + encStart
-    };
-    var webFallbacks = {
-      tg:  salebotProxy,
-      vk:  'https://vk.com/app54574304#startapp=' + encStart,
-      max: 'https://max.ru/id222391942312_bot?startapp=' + encStart
-    };
-    var deeplink = deeplinks[dest] || deeplinks.tg;
-    var webFallback = webFallbacks[dest] || webFallbacks.tg;
+      var salebotProxy = 'https://s.salebot.pro/walkwalk_1?' + sbParams.toString();
 
-    var manual = document.getElementById('manual');
-    if (manual) manual.href = webFallback;
+      var encStart = sbCampaign;
+      var deeplinks = {
+        tg:  salebotProxy,
+        vk:  'vk://vk.com/app54574304#startapp=' + encStart,
+        max: 'max://max.ru/id222391942312_bot?startapp=' + encStart
+      };
+      var webFallbacks = {
+        tg:  salebotProxy,
+        vk:  'https://vk.com/app54574304#startapp=' + encStart,
+        max: 'https://max.ru/id222391942312_bot?startapp=' + encStart
+      };
+      var deeplink = deeplinks[dest] || deeplinks.tg;
+      var webFallback = webFallbacks[dest] || webFallbacks.tg;
 
-    // Дебаг-режим: ?preview=1 — не редиректить, чтобы видеть страницу
-    if (p.get('preview') === '1') return;
+      var manual = document.getElementById('manual');
+      if (manual) manual.href = webFallback;
 
-    // Редирект ПОСЛЕ подтверждения отправки цели в Метрику (callback в 4-м аргументе).
-    var redirected = false;
-    function doRedirect() {
-      if (redirected) return;
-      redirected = true;
-      // Сначала пробуем tg:// (нативный intent на мобиле и desktop с установленным TG)
-      window.location.href = deeplink;
-      // Через 1.2 сек, если страница ещё открыта (TG не сработал) — fallback на t.me/
-      setTimeout(function () {
-        try { window.location.replace(webFallback); } catch (e) {}
-      }, 1200);
-    }
-    try {
-      if (typeof ym === 'function') {
-        ym(108598378, 'params', { ad_click: data });
-        ym(108598378, 'reachGoal', 'ad_click', data, doRedirect);
-        ym(108598378, 'reachGoal', 'ad_click_' + dest, data);
-      } else {
+      if (p.get('preview') === '1') return;
+
+      var redirected = false;
+      function doRedirect() {
+        if (redirected) return;
+        redirected = true;
+        window.location.href = deeplink;
+        setTimeout(function () {
+          try { window.location.replace(webFallback); } catch (e) {}
+        }, 1200);
+      }
+      try {
+        if (typeof ym === 'function') {
+          ym(108598378, 'params', { ad_click: data });
+          ym(108598378, 'reachGoal', 'ad_click', data, doRedirect);
+          ym(108598378, 'reachGoal', 'ad_click_' + dest, data);
+        } else {
+          setTimeout(doRedirect, 400);
+        }
+      } catch (e) {
         setTimeout(doRedirect, 400);
       }
-    } catch (e) {
-      setTimeout(doRedirect, 400);
+      setTimeout(doRedirect, 1500);
     }
-    // Страховочный таймаут — если callback не вернётся за 1.5 сек, всё равно редиректим
-    setTimeout(doRedirect, 1500);
+
+    // getClientID читает куку _ym_uid — отвечает за <50мс на инициализированном счётчике.
+    // Ждём максимум 500мс, потом редиректим без ym_cid (не блокируем пользователя).
+    var _cidDone = false;
+    function _oncid(id) { if (!_cidDone) { _cidDone = true; buildAndRedirect(id || ''); } }
+    if (typeof ym === 'function') {
+      ym(108598378, 'getClientID', _oncid);
+      setTimeout(function() { _oncid(''); }, 500);
+    } else {
+      buildAndRedirect('');
+    }
   })();
   </script>
 </body>
