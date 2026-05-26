@@ -3640,6 +3640,12 @@
     } catch (e) {}
   }
 
+  // Goal: TMA opened (fires on every open, before plan_view)
+  try {
+    if (typeof ym === 'function') ym(108598378, 'reachGoal', 'app_open');
+    if (window.__pairGoal) window.__pairGoal('app_open');
+  } catch (e) {}
+
   // Goal: user seen plan (fires once on load)
   try {
     if (typeof ym === 'function') ym(108598378, 'reachGoal', 'plan_view');
