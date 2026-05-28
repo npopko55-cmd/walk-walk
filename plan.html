@@ -2,9 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <!-- Pixel-fallback для гарантированного pageview-хита в TG/VK/MAX WebView -->
   <link rel="preconnect" href="https://mc.yandex.ru">
-  <script>new Image().src = 'https://mc.yandex.ru/watch/108598378?rn=' + Date.now();</script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
@@ -50,7 +48,8 @@
       // Вытаскиваем ym_client_id из startapp (формат "...--u<base64url>"),
       // передан из go.html через Salebot. Связывает TMA-сессию с браузерной
       // → конверсии TMA попадают в атрибуцию Я.Директа.
-      var _ymInitOpts = {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true};
+      var _ymInitOpts = {webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true};
+      var _sp_src = '', _sp_camp = '';
       try {
         var _sp = '';
         try { _sp = (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.start_param) || ''; } catch(e){}
@@ -64,8 +63,24 @@
             _ymInitOpts.clientID = _cid;
           }
         }
+        // Извлекаем utm_source и utm_campaign из startapp для явного hit
+        var _yadMatch = _sp.match(/^yad-([0-9]+)--u/);
+        if (_yadMatch) {
+          _sp_src = 'yandex';
+          _sp_camp = _yadMatch[1];
+        }
       } catch(e){}
       ym(108598378, 'init', _ymInitOpts);
+      // Явный hit с правильными UTM — переопределяет источник tgWebAppStartParam
+      // который Метрика иначе берёт автоматически из URL/hash TMA как utm_source.
+      try {
+        var _hp = new URLSearchParams(window.location.search);
+        _hp.delete('tgWebAppStartParam');
+        if (_sp_src)  _hp.set('utm_source',   _sp_src);
+        if (_sp_camp) _hp.set('utm_campaign', _sp_camp);
+        var _hitUrl = window.location.pathname + (_hp.toString() ? '?' + _hp.toString() : '');
+        ym(108598378, 'hit', _hitUrl);
+      } catch(e){}
 
       // ── Парные цели (источник × мессенджер) ── см. /index.html
       (function () {
