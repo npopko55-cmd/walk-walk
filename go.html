@@ -324,12 +324,13 @@
     }
 
     // getClientID читает куку _ym_uid — отвечает за <50мс на инициализированном счётчике.
-    // Ждём максимум 500мс, потом редиректим без ym_cid (не блокируем пользователя).
+    // На мобильных/во встроенных webview Метрика инициализируется медленнее — 500мс не хватало,
+    // ym_cid уходил пустым. Ждём максимум 1500мс, потом редиректим без ym_cid (не блокируем пользователя).
     var _cidDone = false;
     function _oncid(id) { if (!_cidDone) { _cidDone = true; buildAndRedirect(id || ''); } }
     if (typeof ym === 'function') {
       ym(108598378, 'getClientID', _oncid);
-      setTimeout(function() { _oncid(''); }, 500);
+      setTimeout(function() { _oncid(''); }, 1500);
     } else {
       buildAndRedirect('');
     }
