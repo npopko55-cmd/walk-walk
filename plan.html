@@ -3724,6 +3724,16 @@
     var vkIdParam = urlParams.get('vk_id') || '';
     var platformParam = urlParams.get('platform') || '';
 
+    // Сквозная аналитика: ID человека едет в utm_term (utm_content занят тарифом).
+    // Приоритет: живой Telegram WebApp → tg_id/vk_id из URL → utm_term как пришёл.
+    var personKey = '';
+    try {
+      var _wau = window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user;
+      if (_wau && _wau.id) personKey = 'tg:' + _wau.id;
+    } catch (_) {}
+    if (!personKey && tgIdParam) personKey = 'tg:' + tgIdParam;
+    if (!personKey && vkIdParam) personKey = 'vk:' + vkIdParam;
+
     document.querySelectorAll('a[data-tariff]').forEach(function (a) {
       try {
         var href = a.getAttribute('href');
@@ -3739,7 +3749,8 @@
           u.searchParams.set('utm_campaign', a.dataset.tariff);
         }
         if (utmContent && !u.searchParams.get('utm_content')) u.searchParams.set('utm_content', utmContent);
-        if (utmTerm) u.searchParams.set('utm_term', utmTerm);
+        if (personKey) { u.searchParams.set('utm_term', personKey); }
+        else if (utmTerm) { u.searchParams.set('utm_term', utmTerm); }
         if (tgIdParam) u.searchParams.set('tg_id', tgIdParam);
         if (maxIdParam) u.searchParams.set('max_id', maxIdParam);
         if (vkIdParam) u.searchParams.set('vk_id', vkIdParam);
